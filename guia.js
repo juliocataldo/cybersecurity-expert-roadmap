@@ -84,7 +84,7 @@ document.querySelectorAll('[data-tf]').forEach(box => {
       const show = (!cat || c.dataset.cat === cat) && (!term || text.get(c).includes(term));
       c.hidden = !show; if (show) n++;
     });
-    count.textContent = `${n} de ${cards.length} ferramentas`;
+    count.textContent = `${n} de ${cards.length} ${box.dataset.noun || 'ferramentas'}`;
     empty.hidden = n > 0;
   }
   chips.forEach(b => b.addEventListener('click', () => {
