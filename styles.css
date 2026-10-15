@@ -1,8 +1,8 @@
-/* ===== Tokens: preto + magenta, neutro ===== */
+/* ===== Tokens: preto + laranja, neutro ===== */
 :root{
   --bg:#0a0a0a;--s1:#121212;--s2:#1a1a1a;--line:#2b2b2b;--line2:#424242;
   --tx:#f2f2f2;--tx2:#d0d0d0;--mut:#a6a6a6;
-  --acc:#ff2e93;--acc2:#d4006f;--accbg:#ff2e9314;
+  --acc:#ff7a1a;--acc2:#d95f00;--accbg:#ff7a1a14;
   --r:10px;
   --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,monospace
@@ -11,13 +11,13 @@
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:var(--acc);text-underline-offset:3px}
-a:hover{color:#ff6db3}
+a:hover{color:#ffa05c}
 .mut{color:var(--mut)}.small{font-size:13px}
 .mono{font-family:var(--mono)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 button,.btn{display:inline-block;background:var(--acc);color:#0a0a0a;border:1px solid var(--acc);border-radius:8px;padding:9px 16px;font:600 14px/1.2 var(--sans);cursor:pointer;text-decoration:none}
-button:hover,.btn:hover{background:#ff5aa9;color:#0a0a0a}
+button:hover,.btn:hover{background:#ff9440;color:#0a0a0a}
 button.sec,.btn.sec{background:transparent;color:var(--tx);border-color:var(--line2)}
 button.sec:hover,.btn.sec:hover{border-color:var(--acc);color:var(--tx)}
 button:disabled{opacity:.4;cursor:not-allowed}
@@ -66,10 +66,10 @@ input[type=text]{background:var(--bg);color:var(--tx);border:1px solid var(--lin
 .area .branches::after{content:"";position:absolute;top:-14px;left:50%;width:1px;height:14px;background:var(--line2)}
 .area.js .area-tab{cursor:pointer}
 .area.js .area-tab:hover{border-color:#6b6b6b;background:#202020;color:var(--tx)}
-.area.js .area-tab[aria-selected=true]{background:#2b0d1d;border-color:var(--acc)}
+.area.js .area-tab[aria-selected=true]{background:#2b1606;border-color:var(--acc)}
 .area.js .area-tab[aria-selected=true] small{color:var(--acc)}
 .area.js .area-tab[aria-selected=true] b{color:#fff}
-.area.js .area-tab[aria-selected=true] span{color:#f0d6e3}
+.area.js .area-tab[aria-selected=true] span{color:#f3e0cf}
 .area.js .area-tab[aria-selected=true]::after{content:"";position:absolute;left:18px;right:18px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--acc)}
 .area.js .br[aria-selected=true]{transform:translateY(-3px)}
 .area[data-sel=fund] .branches::before{border-color:var(--acc)}
@@ -189,7 +189,7 @@ a.card:hover{border-color:var(--acc);color:var(--tx)}
 .game h3{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin:26px 0 10px}
 .lockmsg{border:1px solid var(--line2);border-left:2px solid var(--acc);border-radius:8px;padding:10px 14px;margin:12px 0;color:var(--tx2);font-size:14px}
 .mis{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;border:1px solid var(--line);background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.mis.chefao{border-color:#ff2e9355}
+.mis.chefao{border-color:#ff7a1a55}
 .mis.feita .mt{color:var(--mut);text-decoration:line-through;text-decoration-color:#8f8f8f88}
 .mis input{width:18px;height:18px;margin-top:4px;accent-color:var(--acc);cursor:pointer}
 .mis input:disabled{cursor:not-allowed}
