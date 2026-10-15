@@ -29,11 +29,11 @@ const TRILHA = {
 
   fases: [
   /* ------------------------------------------------------------------ */
-  { id: 'F00', icone: '🚀', titulo: 'Base de lançamento',
+  { id: 'F00', titulo: 'Base de lançamento',
     subtitulo: 'Ética, lei e o seu laboratório',
     objetivo: 'Entender os limites legais e éticos da profissão e montar um ambiente seguro para praticar.',
     carreiras: ['Todas: ética é pré-requisito de qualquer área'],
-    badge: { icone: '🧭', nome: 'Código de conduta' },
+    badge: { nome: 'Código de conduta' },
     missoes: [
       { id: 'F00-M1', tipo: 'estudo', titulo: 'Leia a Lei 12.737/2012 (Lei Carolina Dieckmann)',
         descricao: 'Ela criou o art. 154-A do Código Penal: invadir dispositivo alheio sem autorização é crime. Anote o que caracteriza a conduta.',
@@ -64,11 +64,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F01', icone: '💻', titulo: 'Fundamentos de computação',
+  { id: 'F01', titulo: 'Fundamentos de computação',
     subtitulo: 'Hardware, sistema operacional e privilégios',
     objetivo: 'Saber o que é um processo, um serviço e uma conta, e por que privilégio demais é risco.',
     carreiras: ['Suporte e infraestrutura', 'Base para SOC e forense'],
-    badge: { icone: '🧩', nome: 'Peça por peça' },
+    badge: { nome: 'Peça por peça' },
     missoes: [
       { id: 'F01-M1', tipo: 'estudo', titulo: 'Como um computador funciona',
         descricao: 'Assista às primeiras aulas do CS50 (legendas em português): bits, memória e como o software conversa com o hardware.',
@@ -99,11 +99,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F02', icone: '🌐', titulo: 'Redes',
+  { id: 'F02', titulo: 'Redes',
     subtitulo: 'Como os dados viajam',
     objetivo: 'Ler um tráfego de rede e entender IP, portas, DNS e HTTP, a base de quase todo alerta de segurança.',
     carreiras: ['Analista de redes', 'SOC', 'Pentest'],
-    badge: { icone: '🦈', nome: 'Farejador de pacotes' },
+    badge: { nome: 'Farejador de pacotes' },
     missoes: [
       { id: 'F02-M1', tipo: 'estudo', titulo: 'Modelos OSI e TCP/IP',
         descricao: 'Faça o curso gratuito de fundamentos de redes da Cisco Networking Academy e desenhe as camadas com um exemplo de cada.',
@@ -134,11 +134,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F03', icone: '🐧', titulo: 'Linux e terminal',
+  { id: 'F03', titulo: 'Linux e terminal',
     subtitulo: 'A linha de comando é sua ferramenta principal',
     objetivo: 'Navegar, buscar e investigar um sistema Linux pelo terminal, incluindo permissões e logs.',
     carreiras: ['SOC', 'Pentest', 'Cloud', 'DevSecOps'],
-    badge: { icone: '🐧', nome: 'Pinguim' },
+    badge: { nome: 'Pinguim' },
     missoes: [
       { id: 'F03-M1', tipo: 'estudo', titulo: 'Linux Journey',
         descricao: 'Siga o módulo inicial do Linux Journey: sistema de arquivos, comandos básicos, usuários e permissões.',
@@ -169,11 +169,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F04', icone: '🐍', titulo: 'Python para segurança',
+  { id: 'F04', titulo: 'Python para segurança',
     subtitulo: 'Automatize o que é repetitivo',
     objetivo: 'Escrever pequenos scripts úteis em segurança e aprender, desde o início, a programar de forma segura.',
     carreiras: ['AppSec', 'Automação de SOC', 'Pentest'],
-    badge: { icone: '🐍', nome: 'Encantador de serpentes' },
+    badge: { nome: 'Encantador de serpentes' },
     missoes: [
       { id: 'F04-M1', tipo: 'estudo', titulo: 'Python básico',
         descricao: 'Variáveis, laços, funções, listas e dicionários. O tutorial oficial está em português, e o Curso em Vídeo também é gratuito.',
@@ -204,11 +204,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F05', icone: '🔐', titulo: 'Princípios e criptografia',
+  { id: 'F05', titulo: 'Princípios e criptografia',
     subtitulo: 'CID, hash, chaves e certificados',
     objetivo: 'Explicar a tríade CID e escolher entre hash, criptografia simétrica e assimétrica para cada problema.',
     carreiras: ['Todas as áreas', 'Arquitetura de segurança'],
-    badge: { icone: '🔑', nome: 'Guardião das chaves' },
+    badge: { nome: 'Guardião das chaves' },
     missoes: [
       { id: 'F05-M1', tipo: 'estudo', titulo: 'Tríade CID',
         descricao: 'Confidencialidade, Integridade e Disponibilidade. Para cada uma, descreva um ataque que a quebra e um controle que a protege.',
@@ -239,11 +239,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F06', icone: '🕸️', titulo: 'Segurança de aplicações web',
+  { id: 'F06', titulo: 'Segurança de aplicações web',
     subtitulo: 'OWASP Top 10 na prática',
     objetivo: 'Reconhecer as falhas mais comuns em aplicações web, explorá-las em ambiente autorizado e saber como corrigi-las.',
     carreiras: ['AppSec', 'Pentest web', 'Desenvolvimento seguro'],
-    badge: { icone: '🐞', nome: 'Caçador de bugs' },
+    badge: { nome: 'Caçador de bugs' },
     missoes: [
       { id: 'F06-M1', tipo: 'estudo', titulo: 'OWASP Top 10',
         descricao: 'Leia a lista atual e, para cada item, escreva em uma linha o que é e como se previne.',
@@ -277,11 +277,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F07', icone: '🛡️', titulo: 'Blue Team e SOC',
+  { id: 'F07', titulo: 'Blue Team e SOC',
     subtitulo: 'Detectar, triar e responder',
     objetivo: 'Triar alertas com contexto, correlacionar eventos em uma cadeia de ataque e conduzir a resposta a incidentes.',
     carreiras: ['Analista de SOC', 'Resposta a incidentes', 'Threat hunting'],
-    badge: { icone: '🛡️', nome: 'Turno completo' },
+    badge: { nome: 'Turno completo' },
     missoes: [
       { id: 'F07-M1', tipo: 'estudo', titulo: 'O ciclo de resposta a incidentes',
         descricao: 'Resuma o ciclo clássico (preparar; detectar e analisar; conter, erradicar e recuperar; lições aprendidas) e veja como a Rev. 3 do NIST o encaixa nas funções do CSF 2.0.',
@@ -315,11 +315,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F08', icone: '🗡️', titulo: 'Red Team: introdução',
+  { id: 'F08', titulo: 'Red Team: introdução',
     subtitulo: 'Pense como atacante, aja com autorização',
     objetivo: 'Conhecer as fases de um teste de intrusão e praticar reconhecimento em ambientes autorizados.',
     carreiras: ['Pentest', 'Red Team', 'Bug bounty'],
-    badge: { icone: '🗡️', nome: 'Hacker ético' },
+    badge: { nome: 'Hacker ético' },
     missoes: [
       { id: 'F08-M1', tipo: 'estudo', titulo: 'Metodologia e regras de engajamento',
         descricao: 'Estude as fases de um teste (escopo, reconhecimento, exploração, relatório) no guia de testes da OWASP. Sem escopo assinado não há teste.',
@@ -350,11 +350,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F09', icone: '☁️', titulo: 'Segurança em nuvem',
+  { id: 'F09', titulo: 'Segurança em nuvem',
     subtitulo: 'Responsabilidade compartilhada e identidade',
     objetivo: 'Entender o que é responsabilidade do provedor e o que é sua, e evitar as falhas de configuração mais comuns.',
     carreiras: ['Cloud Security', 'DevSecOps', 'Arquitetura'],
-    badge: { icone: '☁️', nome: 'Acima das nuvens' },
+    badge: { nome: 'Acima das nuvens' },
     missoes: [
       { id: 'F09-M1', tipo: 'estudo', titulo: 'Modelo de responsabilidade compartilhada',
         descricao: 'Leia como a AWS divide as responsabilidades e faça uma tabela "provedor x cliente" para IaaS, PaaS e SaaS.',
@@ -385,11 +385,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F10', icone: '📋', titulo: 'Governança, risco e compliance',
+  { id: 'F10', titulo: 'Governança, risco e compliance',
     subtitulo: 'Segurança como decisão de negócio',
     objetivo: 'Usar frameworks (NIST CSF, ISO 27001, CIS) e gestão de riscos para priorizar a segurança de uma organização.',
     carreiras: ['GRC', 'Auditoria', 'Privacidade e proteção de dados'],
-    badge: { icone: '⚖️', nome: 'Balança do risco' },
+    badge: { nome: 'Balança do risco' },
     missoes: [
       { id: 'F10-M1', tipo: 'estudo', titulo: 'NIST Cybersecurity Framework 2.0',
         descricao: 'Conheça as 6 funções (Governar, Identificar, Proteger, Detectar, Responder, Recuperar) e dê um exemplo de controle para cada.',
@@ -420,11 +420,11 @@ const TRILHA = {
     ] },
 
   /* ------------------------------------------------------------------ */
-  { id: 'F11', icone: '🎓', titulo: 'Carreira',
+  { id: 'F11', titulo: 'Carreira',
     subtitulo: 'Do estudo ao primeiro emprego',
     objetivo: 'Escolher uma área para aprofundar, montar um portfólio público e planejar as primeiras certificações.',
     carreiras: ['Todas'],
-    badge: { icone: '🏅', nome: 'Pronto para o mercado' },
+    badge: { nome: 'Pronto para o mercado' },
     missoes: [
       { id: 'F11-M1', tipo: 'estudo', titulo: 'Mapa das áreas',
         descricao: 'Use o NICE Framework para comparar SOC, AppSec, Pentest, GRC, Cloud e Forense. Escolha 2 áreas e justifique a escolha.',
@@ -455,15 +455,15 @@ const TRILHA = {
     ] }
   ],
 
-  /* Conquistas especiais (as de fase vêm do campo "badge" de cada fase) */
+  /* Conquistas especiais (as de fase vêm do campo "badge" de cada fase). "marca" é o texto curto do selo. */
   conquistas: [
-    { id: 'primeira', icone: '👣', nome: 'Primeiro passo', desc: 'Conclua sua primeira missão.' },
-    { id: 'chefoes', icone: '🏆', nome: 'Matador de chefões', desc: 'Vença todos os chefões (labs da disciplina).' },
-    { id: 'gabarito', icone: '🎯', nome: 'Mira certeira', desc: 'Acerte todas as questões de 3 checkpoints.' },
-    { id: 'seq3', icone: '🔥', nome: 'Em chamas', desc: 'Estude 3 dias seguidos.' },
-    { id: 'seq7', icone: '☄️', nome: 'Imparável', desc: 'Estude 7 dias seguidos.' },
-    { id: 'metade', icone: '🌗', nome: 'Metade do caminho', desc: 'Conclua 50% de todas as missões.' },
-    { id: 'tudo', icone: '👑', nome: 'Cybersecurity Expert', desc: 'Conclua todas as missões e checkpoints.' }
+    { id: 'primeira', marca: '1º', nome: 'Primeiro passo', desc: 'Conclua sua primeira missão.' },
+    { id: 'chefoes', marca: 'CF', nome: 'Matador de chefões', desc: 'Vença todos os chefões (labs da disciplina).' },
+    { id: 'gabarito', marca: '3/3', nome: 'Mira certeira', desc: 'Acerte todas as questões de 3 checkpoints.' },
+    { id: 'seq3', marca: '3d', nome: 'Em chamas', desc: 'Estude 3 dias seguidos.' },
+    { id: 'seq7', marca: '7d', nome: 'Imparável', desc: 'Estude 7 dias seguidos.' },
+    { id: 'metade', marca: '50%', nome: 'Metade do caminho', desc: 'Conclua 50% de todas as missões.' },
+    { id: 'tudo', marca: '100%', nome: 'Cybersecurity Expert', desc: 'Conclua todas as missões e checkpoints.' }
   ],
 
   creditos: [

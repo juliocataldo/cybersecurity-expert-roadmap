@@ -16,8 +16,8 @@ const HTTP_OK = new Set(['http://flaws.cloud/', 'http://scanme.nmap.org/']); // 
 T.fases.forEach((f, i) => {
   unico(f.id);
   ok(f.id === `F${String(i).padStart(2, '0')}`, `${f.id}: ids de fase devem seguir a ordem (esperado F${String(i).padStart(2, '0')})`);
-  for (const k of ['icone', 'titulo', 'subtitulo', 'objetivo']) ok(typeof f[k] === 'string' && f[k], `${f.id}: falta ${k}`);
-  ok(f.badge && f.badge.icone && f.badge.nome, `${f.id}: falta badge`);
+  for (const k of ['titulo', 'subtitulo', 'objetivo']) ok(typeof f[k] === 'string' && f[k], `${f.id}: falta ${k}`);
+  ok(f.badge && f.badge.nome, `${f.id}: falta badge`);
   ok(f.missoes.length >= 3, `${f.id}: poucas missões`);
   f.missoes.forEach(m => {
     unico(m.id); ok(m.id.startsWith(f.id + '-M'), `${m.id}: prefixo errado`);

@@ -90,7 +90,7 @@ function streaks() {
 }
 /* Fases são desbloqueadas em sequência e o desbloqueio é permanente (desmarcar não tranca de novo). */
 function updateUnlocks() {
-  FASES.forEach((f, i) => { if (i > 0 && !S.open[f.id] && isOpen(FASES[i - 1]) && phasePct(FASES[i - 1]) >= T.desbloqueioPct) { S.open[f.id] = Date.now(); toast(`🔓 Fase desbloqueada: ${f.icone} ${f.titulo}`, 'lv'); } });
+  FASES.forEach((f, i) => { if (i > 0 && !S.open[f.id] && isOpen(FASES[i - 1]) && phasePct(FASES[i - 1]) >= T.desbloqueioPct) { S.open[f.id] = Date.now(); toast(`Fase desbloqueada: ${f.titulo}`, 'lv'); } });
 }
 function earnedBadges() {
   const out = [];
@@ -108,8 +108,8 @@ function earnedBadges() {
   return out;
 }
 function badgeInfo(id) {
-  if (id.startsWith('fase:')) { const f = FASES.find(x => x.id === id.slice(5)); return f && { icone: f.badge.icone, nome: f.badge.nome, desc: `Conclua a fase ${f.titulo}.` }; }
-  return T.conquistas.find(c => c.id === id);
+  if (id.startsWith('fase:')) { const f = FASES.find(x => x.id === id.slice(5)); return f && { marca: f.id.slice(1), nome: f.badge.nome, desc: `Conclua a fase ${f.titulo}.` }; }
+  const c = T.conquistas.find(c => c.id === id); return c && { ...c, marca: c.marca };
 }
 
 /* Chamado depois de toda ação do aluno: registra o dia, desbloqueia, premia e salva. */
@@ -118,8 +118,8 @@ function afterAction(prevXp, prevLevel) {
   updateUnlocks();
   const xp = xpTotal(); const lv = levelOf(xp);
   if (xp > prevXp) toast(`+${xp - prevXp} XP`);
-  if (lv.i > prevLevel) toast(`⬆️ Subiu de nível! Agora você é ${lv.cur.nome}`, 'lv');
-  for (const b of earnedBadges()) if (!S.badges[b]) { S.badges[b] = Date.now(); const i = badgeInfo(b); if (i) toast(`${i.icone} Conquista: ${i.nome}`); }
+  if (lv.i > prevLevel) toast(`Novo nível: ${lv.cur.nome}`, 'lv');
+  for (const b of earnedBadges()) if (!S.badges[b]) { S.badges[b] = Date.now(); const i = badgeInfo(b); if (i) toast(`Conquista: ${i.nome}`); }
   save(); render();
 }
 
@@ -137,11 +137,11 @@ function renderMap() {
   const ol = $('#map'); ol.replaceChildren();
   FASES.forEach((f, i) => {
     const open = isOpen(f), done = isDone(f), pct = phasePct(f);
-    const orb = h('span', { class: 'orb', 'aria-hidden': 'true' }, h('i', null, open ? f.icone : '🔒'));
+    const orb = h('span', { class: 'orb', 'aria-hidden': 'true' }, h('i', null, String(i).padStart(2, '0')));
     orb.style.setProperty('--p', pct);
     const btn = h('button', { class: `node ${open ? 'open' : 'lock'}${done ? ' done' : ''}${selected === f.id ? ' sel' : ''}`, 'aria-current': selected === f.id ? 'step' : false,
       'aria-label': `Fase ${i}: ${f.titulo}. ${open ? (done ? 'concluída' : pct + '% das missões') : 'bloqueada'}`, onclick: () => select(f.id, true) },
-      orb, h('span', { class: 'nt' }, h('b', null, `${i}. ${f.titulo}`), h('span', null, open ? (done ? '✔ concluída' : `${missDone(f)}/${f.missoes.length} missões`) : 'bloqueada')));
+      orb, h('span', { class: 'nt' }, h('b', null, f.titulo), h('span', null, open ? (done ? 'concluída' : `${missDone(f)}/${f.missoes.length} missões`) : 'bloqueada')));
     ol.append(h('li', null, btn));
   });
 }
@@ -151,21 +151,21 @@ function renderPhase() {
   const i = FASES.indexOf(f), open = isOpen(f), pct = phasePct(f);
   const bar = h('span'); setW(bar, pct);
   box.append(
-    h('div', { class: 'ph-head' }, h('span', { class: 'ph-icon', 'aria-hidden': 'true' }, f.icone),
+    h('div', { class: 'ph-head' }, h('span', { class: 'ph-icon', 'aria-hidden': 'true' }, String(i).padStart(2, '0')),
       h('div', null, h('p', { class: 'mut small' }, `Fase ${i} de ${FASES.length - 1}`), h('h2', null, f.titulo), h('p', { class: 'mut' }, f.subtitulo))),
     h('p', null, h('b', null, 'Objetivo: '), f.objetivo),
-    h('div', { class: 'chips' }, ...f.carreiras.map(c => h('span', { class: 'chip' }, '💼 ' + c))),
+    h('div', { class: 'chips' }, ...f.carreiras.map(c => h('span', { class: 'chip' }, c))),
     h('div', { class: 'bar', 'aria-hidden': 'true' }, bar), h('p', { class: 'mut small' }, `${missDone(f)}/${f.missoes.length} missões · checkpoint ${quizAnswered(f)}/${f.checkpoint.length}`));
   if (!open) {
     const prev = FASES[i - 1];
-    box.append(h('div', { class: 'lockmsg' }, `🔒 Fase bloqueada. Conclua ${T.desbloqueioPct}% das missões de "${prev.titulo}" para liberar. Você já pode ler o conteúdo para se planejar.`));
+    box.append(h('div', { class: 'lockmsg' }, `Fase bloqueada. Conclua ${T.desbloqueioPct}% das missões de "${prev.titulo}" para liberar. Você já pode ler o conteúdo para se planejar.`));
   }
   box.append(h('h3', null, 'Missões'));
   f.missoes.forEach(m => {
     const done = !!S.done[m.id];
     const cb = h('input', { type: 'checkbox', id: 'cb-' + m.id, checked: done, disabled: !open, 'aria-describedby': 'ds-' + m.id,
       onchange: e => { const px = xpTotal(), pl = levelOf(px).i; if (e.target.checked) S.done[m.id] = Date.now(); else delete S.done[m.id]; afterAction(px, pl); } });
-    const tipo = { estudo: '📖 Estudo', pratica: '🛠️ Prática', chefao: '👾 Chefão' }[m.tipo];
+    const tipo = { estudo: 'Estudo', pratica: 'Prática', chefao: 'Chefão' }[m.tipo];
     box.append(h('div', { class: `mis ${m.tipo}${done ? ' feita' : ''}` }, cb,
       h('div', null,
         h('label', { for: 'cb-' + m.id, class: 'mt' }, m.titulo), ' ',
@@ -177,7 +177,7 @@ function renderPhase() {
     h('p', { class: 'mut small' }, 'Cada questão pode ser respondida uma única vez. Leia a explicação: ela vale mais que o ponto.'));
   f.checkpoint.forEach((q, qi) => box.append(buildQuestion(q, qi, open)));
   const got = isDone(f);
-  box.append(h('div', { class: `reward ${got ? 'got' : 'no'}` }, h('span', { class: 'big', 'aria-hidden': 'true' }, f.badge.icone),
+  box.append(h('div', { class: `reward ${got ? 'got' : 'no'}` }, h('span', { class: 'big', 'aria-hidden': 'true' }, f.id.slice(1)),
     h('div', null, h('b', null, got ? `Conquista desbloqueada: ${f.badge.nome}` : `Recompensa da fase: ${f.badge.nome}`),
       h('div', { class: 'mut small' }, got ? `Fase concluída (+${T.xp.bonusFase} XP de bônus).` : `Conclua todas as missões e responda o checkpoint para ganhar a conquista e +${T.xp.bonusFase} XP.`))));
   box.append(h('div', { class: 'navrow' },
@@ -192,7 +192,7 @@ function buildQuestion(q, qi, open) {
     fs.append(h('label', { class: cls }, h('input', { type: 'radio', name, value: k, checked: ans && ans.a === k }), h('span', null, `${'ABCD'[k]}) ${txt}`)));
   });
   const box = h('div', { class: 'q' }, fs);
-  if (ans) box.append(h('p', { class: 'exp' }, h('b', { class: ans.ok ? 'ok' : 'no' }, ans.ok ? '✔ Correto. ' : `✘ Resposta certa: ${'ABCD'[q.c]}. `), q.e));
+  if (ans) box.append(h('p', { class: 'exp' }, h('b', { class: ans.ok ? 'ok' : 'no' }, ans.ok ? 'Correto. ' : `Resposta certa: ${'ABCD'[q.c]}. `), q.e));
   else if (open) {
     const err = h('span', { class: 'mut small', role: 'alert' });
     box.append(h('div', { class: 'row' }, h('button', { onclick: () => {
@@ -224,32 +224,32 @@ function openBadges() {
   const got = new Set(earnedBadges());
   const all = [...FASES.map(f => 'fase:' + f.id), ...T.conquistas.map(c => c.id)];
   const { cur, max } = streaks();
-  dialog(h('h2', null, '🏅 Conquistas'),
+  dialog(h('h2', null, 'Conquistas'),
     h('p', { class: 'mut' }, `${all.filter(b => got.has(b)).length} de ${all.length} desbloqueadas · sequência atual ${cur} dia(s), recorde ${max}.`),
     h('div', { class: 'badges' }, ...all.map(b => { const i = badgeInfo(b); const y = got.has(b);
-      return h('div', { class: 'bdg ' + (y ? 'yes' : 'no') }, h('span', { class: 'big', 'aria-hidden': 'true' }, i.icone), h('b', null, i.nome), h('small', null, y ? 'Desbloqueada' : i.desc)); })));
+      return h('div', { class: 'bdg ' + (y ? 'yes' : 'no') }, h('span', { class: 'big', 'aria-hidden': 'true' }, i.marca), h('b', null, i.nome), h('small', null, y ? 'Desbloqueada' : i.desc)); })));
 }
 function openSave() {
   const who = h('input', { type: 'text', maxlength: '60', autocomplete: 'off', value: S.who, placeholder: 'Opcional: só aparece no arquivo exportado',
     oninput: e => { S.who = e.target.value.slice(0, 60); save(); } });
-  dialog(h('h2', null, '💾 Seu progresso'),
+  dialog(h('h2', null, 'Seu progresso'),
     h('p', null, 'O progresso fica salvo ', h('b', null, 'só neste navegador'), '. Se trocar de computador, limpar os dados do navegador ou usar janela anônima, ele não vai junto. Exporte de vez em quando.'),
     h('label', null, 'Nome ou RM (opcional)'), who,
     h('div', { class: 'row' },
-      h('button', { onclick: exportJson }, '⬇️ Exportar .json'),
-      h('button', { class: 'sec', onclick: () => $('#fileIn').click() }, '⬆️ Importar .json'),
-      h('button', { class: 'sec', onclick: resetAll }, '🗑️ Recomeçar do zero')),
+      h('button', { onclick: exportJson }, 'Exportar .json'),
+      h('button', { class: 'sec', onclick: () => $('#fileIn').click() }, 'Importar .json'),
+      h('button', { class: 'sec', onclick: resetAll }, 'Recomeçar do zero')),
     h('p', { class: 'mut small' }, 'O arquivo exportado serve para restaurar seu progresso em outro computador e, se o professor pedir, para ele ver quais conceitos a turma precisa reforçar. Não vale nota.'));
 }
 function openAbout() {
   const xr = (t, v) => h('tr', null, h('td', null, t), h('td', null, `+${v} XP`));
-  dialog(h('h2', null, 'ℹ️ Como funciona'),
+  dialog(h('h2', null, 'Como funciona'),
     h('p', null, `A trilha tem ${FASES.length} fases. Cada fase tem missões (estudo, prática e chefões, que são os labs da disciplina) e um checkpoint de 3 questões.`),
     h('table', null, h('tr', null, h('th', null, 'Ação'), h('th', null, 'Recompensa')),
-      xr('📖 Missão de estudo', T.xp.estudo), xr('🛠️ Missão prática', T.xp.pratica), xr('👾 Chefão (lab da disciplina)', T.xp.chefao),
-      xr('✔ Acerto no checkpoint', T.xp.questao), xr('🏁 Fase concluída (bônus)', T.xp.bonusFase)),
-    h('p', null, `🔓 A próxima fase abre quando você conclui ${T.desbloqueioPct}% das missões da fase atual. Fases bloqueadas podem ser lidas, mas não marcadas.`),
-    h('p', null, '🔥 A sequência conta os dias seguidos em que você concluiu ao menos uma missão ou respondeu uma questão.'),
+      xr('Missão de estudo', T.xp.estudo), xr('Missão prática', T.xp.pratica), xr('Chefão (lab da disciplina)', T.xp.chefao),
+      xr('Acerto no checkpoint', T.xp.questao), xr('Fase concluída (bônus)', T.xp.bonusFase)),
+    h('p', null, `A próxima fase abre quando você conclui ${T.desbloqueioPct}% das missões da fase atual. Fases bloqueadas podem ser lidas, mas não marcadas.`),
+    h('p', null, 'A sequência conta os dias seguidos em que você concluiu ao menos uma missão ou respondeu uma questão.'),
     h('div', { class: 'warn' }, h('b', null, 'Ética: '), 'pratique só no que é seu ou em plataformas feitas para isso (labs, CTFs, VMs). Testar sistemas de terceiros sem autorização é crime (Lei 12.737/2012).'),
     h('h3', null, 'Privacidade'),
     h('p', null, 'Este site não tem servidor, cookies nem rastreamento. Tudo fica no seu navegador; o nome/RM é opcional e só vai no arquivo que você mesmo exportar.'),
