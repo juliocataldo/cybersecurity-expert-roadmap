@@ -8,7 +8,7 @@ O site tem duas partes:
 
 | Página | Para quê |
 |---|---|
-| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, podcasts e canais, certificações e combinados. |
+| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, ferramentas de análise (com filtro e busca), podcasts e canais, certificações e combinados. |
 | **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 62 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 
 > Atividade formativa, **sem nota**.
@@ -58,7 +58,7 @@ O site é estático: não tem servidor, login, cookies nem rastreamento. O progr
 ## Para o professor
 
 ### Editar o guia
-O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos. Na seção 01, cada área tem um botão (`role="tab"`) e um painel (`role="tabpanel"`) no próprio HTML; o `guia.js` só alterna entre eles e roda o teste rápido. Sem JavaScript, todos os painéis aparecem abertos.
+O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos. Para incluir uma ferramenta na seção 04, copie um `<a class="card tool" data-cat="...">`; o `data-cat` precisa ser uma das categorias dos botões de filtro. Na seção 01, cada área tem um botão (`role="tab"`) e um painel (`role="tabpanel"`) no próprio HTML; o `guia.js` só alterna entre eles e roda o teste rápido. Sem JavaScript, todos os painéis aparecem abertos.
 
 ### Editar a trilha
 Todo o conteúdo da trilha está em **`trilha.js`**. Dá para mudar textos, links, XP, níveis, a regra de desbloqueio (`desbloqueioPct`) e acrescentar fases ou missões sem mexer no código.

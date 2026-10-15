@@ -65,3 +65,36 @@
   });
   form.addEventListener('reset', () => { out.textContent = ''; });
 })();
+
+/* Ferramentas: filtro por categoria + busca (sem acento, sem maiúscula). Sem JS, tudo aparece. */
+(function () {
+  const grid = document.getElementById('toolsGrid');
+  if (!grid) return;
+  const cards = [...grid.querySelectorAll('.tool')];
+  const chips = [...document.querySelectorAll('.chip-f')];
+  const q = document.getElementById('toolsQ');
+  const count = document.getElementById('toolsCount');
+  const empty = document.getElementById('toolsEmpty');
+  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const text = new Map(cards.map(c => [c, norm(c.textContent)]));
+  let cat = '';
+
+  function apply() {
+    const term = norm(q.value.trim());
+    let n = 0;
+    cards.forEach(c => {
+      const show = (!cat || c.dataset.cat === cat) && (!term || text.get(c).includes(term));
+      c.hidden = !show; if (show) n++;
+    });
+    count.textContent = `${n} de ${cards.length} ferramentas`;
+    empty.hidden = n > 0;
+  }
+  chips.forEach(b => b.addEventListener('click', () => {
+    cat = b.dataset.f;
+    chips.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    apply();
+  }));
+  q.addEventListener('input', apply);
+  document.getElementById('toolsCtl').hidden = false;
+  apply();
+})();

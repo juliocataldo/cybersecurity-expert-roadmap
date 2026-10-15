@@ -34,10 +34,11 @@
     <a href="#area"><b>01</b>Entenda a área</a>
     <a href="#comece"><b>02</b>Comece por aqui</a>
     <a href="#labs"><b>03</b>Onde praticar</a>
-    <a href="#ouvir"><b>04</b>Para ouvir e assistir</a>
-    <a href="#certs"><b>05</b>Certificações</a>
-    <a href="#trilha"><b>06</b>Trilha gamificada</a>
-    <a href="#regras"><b>07</b>Combinados</a>
+    <a href="#ferramentas"><b>04</b>Ferramentas</a>
+    <a href="#ouvir"><b>05</b>Para ouvir e assistir</a>
+    <a href="#certs"><b>06</b>Certificações</a>
+    <a href="#trilha"><b>07</b>Trilha gamificada</a>
+    <a href="#regras"><b>08</b>Combinados</a>
   </nav>
 
   <!-- 01 -->
@@ -205,8 +206,90 @@
   </section>
 
   <!-- 04 -->
+  <section class="sec-g" id="ferramentas">
+    <div class="sec-h"><span class="n">04</span><h2>Ferramentas</h2></div>
+    <p class="sec-intro">Ferramentas reais e, em geral, gratuitas para analisar IPs, domínios, sites, arquivos e e-mails. Elas são o dia a dia de quem trabalha com SOC e threat intelligence. Para treinar, comece pesquisando coisas suas (o seu domínio, o seu e-mail) ou indicadores públicos e benignos, como 8.8.8.8.</p>
+    <div class="warn-box">
+      <b>Antes de usar</b>
+      <ul>
+        <li>OSINT é investigar <b>ameaças e infraestrutura</b>, não pessoas. Rastrear ou expor alguém pode violar a LGPD e ser crime.</li>
+        <li>O que você envia pode ficar <b>público</b>: arquivos no VirusTotal e scans do urlscan, por exemplo. Prefira buscar pelo hash e nunca envie arquivos ou dados da empresa.</li>
+        <li>Não abra links suspeitos no seu navegador: deixe o urlscan ou uma sandbox visitar por você.</li>
+      </ul>
+    </div>
+    <div class="tools-ctl" id="toolsCtl" hidden>
+      <input type="search" id="toolsQ" placeholder="Buscar (ex.: hash, DNS, certificado)" aria-label="Buscar ferramenta" autocomplete="off">
+      <div class="chips-f" role="group" aria-label="Filtrar por categoria">
+        <button type="button" class="chip-f" data-f="" aria-pressed="true">Todas</button>
+        <button type="button" class="chip-f" data-f="ip" aria-pressed="false">IP</button>
+        <button type="button" class="chip-f" data-f="dns" aria-pressed="false">Domínio e DNS</button>
+        <button type="button" class="chip-f" data-f="url" aria-pressed="false">URL e sites</button>
+        <button type="button" class="chip-f" data-f="mal" aria-pressed="false">Arquivos e malware</button>
+        <button type="button" class="chip-f" data-f="cti" aria-pressed="false">Threat intel</button>
+        <button type="button" class="chip-f" data-f="mail" aria-pressed="false">E-mail</button>
+        <button type="button" class="chip-f" data-f="busca" aria-pressed="false">Busca e arquivos da web</button>
+        <button type="button" class="chip-f" data-f="img" aria-pressed="false">Imagens e metadados</button>
+        <button type="button" class="chip-f" data-f="mon" aria-pressed="false">Monitoramento</button>
+        <button type="button" class="chip-f" data-f="cripto" aria-pressed="false">Cripto</button>
+        <button type="button" class="chip-f" data-f="ref" aria-pressed="false">Decodificação e referência</button>
+        <button type="button" class="chip-f" data-f="col" aria-pressed="false">Coleções</button>
+      </div>
+      <p class="mut small" id="toolsCount" role="status"></p>
+    </div>
+    <div class="cards tools" id="toolsGrid">
+      <a class="card tool" data-cat="ip" href="https://www.abuseipdb.com/" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>AbuseIPDB </h3><p>Reputação de IP por denúncias da comunidade.</p></a>
+      <a class="card tool" data-cat="ip" href="https://viz.greynoise.io/" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>GreyNoise </h3><p>Diz se o IP é scanner em massa (&quot;ruído&quot;) ou atividade direcionada.</p></a>
+      <a class="card tool" data-cat="ip" href="https://ipinfo.io/" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>IPinfo </h3><p>Geolocalização, ASN e tipo de rede (hosting, residencial, VPN).</p></a>
+      <a class="card tool" data-cat="ip" href="https://talosintelligence.com/reputation_center" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>Cisco Talos </h3><p>Reputação de IP e domínio para web e e-mail.</p></a>
+      <a class="card tool" data-cat="ip" href="https://www.shodan.io/" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>Shodan <span class="pill">conta</span></h3><p>Serviços e portas expostos na internet.</p></a>
+      <a class="card tool" data-cat="ip" href="https://search.censys.io/" target="_blank" rel="noopener noreferrer"><span class="k">IP</span><h3>Censys <span class="pill">conta</span></h3><p>Hosts, serviços e certificados expostos.</p></a>
+      <a class="card tool" data-cat="dns" href="https://lookup.icann.org/" target="_blank" rel="noopener noreferrer"><span class="k">Domínio e DNS</span><h3>ICANN Lookup </h3><p>WHOIS/RDAP oficial: criação, registrar e status do domínio.</p></a>
+      <a class="card tool" data-cat="dns" href="https://whois.domaintools.com/" target="_blank" rel="noopener noreferrer"><span class="k">Domínio e DNS</span><h3>DomainTools Whois </h3><p>WHOIS rápido, com idade do domínio e servidores de nome.</p></a>
+      <a class="card tool" data-cat="dns" href="https://crt.sh/" target="_blank" rel="noopener noreferrer"><span class="k">Domínio e DNS</span><h3>crt.sh </h3><p>Certificate Transparency: certificados e subdomínios.</p></a>
+      <a class="card tool" data-cat="dns" href="https://dnsdumpster.com/" target="_blank" rel="noopener noreferrer"><span class="k">Domínio e DNS</span><h3>DNSDumpster </h3><p>Mapa de registros DNS e subdomínios.</p></a>
+      <a class="card tool" data-cat="dns" href="https://securitytrails.com/" target="_blank" rel="noopener noreferrer"><span class="k">Domínio e DNS</span><h3>SecurityTrails <span class="pill">conta</span></h3><p>Histórico de DNS: para onde o domínio já apontou.</p></a>
+      <a class="card tool" data-cat="url" href="https://urlscan.io/" target="_blank" rel="noopener noreferrer"><span class="k">URL e sites</span><h3>urlscan.io </h3><p>Visita a URL por você: print, requisições e redirecionamentos.</p></a>
+      <a class="card tool" data-cat="url" href="https://transparencyreport.google.com/safe-browsing/search" target="_blank" rel="noopener noreferrer"><span class="k">URL e sites</span><h3>Google Safe Browsing </h3><p>Verifica se o site está marcado como inseguro.</p></a>
+      <a class="card tool" data-cat="url" href="https://urlhaus.abuse.ch/" target="_blank" rel="noopener noreferrer"><span class="k">URL e sites</span><h3>URLhaus </h3><p>URLs usadas para distribuir malware.</p></a>
+      <a class="card tool" data-cat="url" href="https://www.urlvoid.com/" target="_blank" rel="noopener noreferrer"><span class="k">URL e sites</span><h3>URLVoid </h3><p>Reputação de um site em várias listas de bloqueio.</p></a>
+      <a class="card tool" data-cat="mal" href="https://www.virustotal.com/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos e malware</span><h3>VirusTotal </h3><p>Hash, URL, domínio e IP analisados por dezenas de engines.</p></a>
+      <a class="card tool" data-cat="mal" href="https://bazaar.abuse.ch/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos e malware</span><h3>MalwareBazaar </h3><p>Amostras de malware por hash, com família e tags.</p></a>
+      <a class="card tool" data-cat="mal" href="https://www.hybrid-analysis.com/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos e malware</span><h3>Hybrid Analysis </h3><p>Relatórios de sandbox: o que o arquivo faz ao executar.</p></a>
+      <a class="card tool" data-cat="mal" href="https://any.run/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos e malware</span><h3>ANY.RUN <span class="pill">conta</span></h3><p>Sandbox interativa; análises gratuitas são públicas.</p></a>
+      <a class="card tool" data-cat="cti" href="https://otx.alienvault.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>AlienVault OTX </h3><p>Pulses da comunidade ligando IOCs a campanhas.</p></a>
+      <a class="card tool" data-cat="cti" href="https://threatfox.abuse.ch/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>ThreatFox </h3><p>IOCs de C2 e malware compartilhados pela comunidade.</p></a>
+      <a class="card tool" data-cat="cti" href="https://pulsedive.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>Pulsedive </h3><p>Enriquecimento e score de risco de IOCs.</p></a>
+      <a class="card tool" data-cat="cti" href="https://exchange.xforce.ibmcloud.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>IBM X-Force Exchange <span class="pill">conta</span></h3><p>Reputação de IP, URL e hash e relatórios de ameaças.</p></a>
+      <a class="card tool" data-cat="mail" href="https://mxtoolbox.com/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>MXToolbox </h3><p>SPF, DKIM, DMARC, blocklists e análise de cabeçalho.</p></a>
+      <a class="card tool" data-cat="mail" href="https://toolbox.googleapps.com/apps/messageheader/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>Google Messageheader </h3><p>Lê o cabeçalho bruto e mostra o caminho do e-mail.</p></a>
+      <a class="card tool" data-cat="mail" href="https://haveibeenpwned.com/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>Have I Been Pwned </h3><p>Mostra se o SEU e-mail apareceu em vazamentos.</p></a>
+      <a class="card tool" data-cat="busca" href="https://support.google.com/websearch/answer/2466433" target="_blank" rel="noopener noreferrer"><span class="k">Busca e arquivos da web</span><h3>Operadores do Google </h3><p>site:, filetype:, aspas e outros filtros de busca.</p></a>
+      <a class="card tool" data-cat="busca" href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener noreferrer"><span class="k">Busca e arquivos da web</span><h3>Google Hacking Database </h3><p>Buscas prontas que revelam exposições. Use no seu domínio.</p></a>
+      <a class="card tool" data-cat="busca" href="https://web.archive.org/" target="_blank" rel="noopener noreferrer"><span class="k">Busca e arquivos da web</span><h3>Wayback Machine </h3><p>Versões antigas de sites: veja o que mudou e quando.</p></a>
+      <a class="card tool" data-cat="busca" href="https://archive.ph/" target="_blank" rel="noopener noreferrer"><span class="k">Busca e arquivos da web</span><h3>archive.today </h3><p>Salva uma cópia de uma página como evidência.</p></a>
+      <a class="card tool" data-cat="img" href="https://tineye.com/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e metadados</span><h3>TinEye </h3><p>Busca reversa: onde mais essa imagem aparece.</p></a>
+      <a class="card tool" data-cat="img" href="https://lens.google/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e metadados</span><h3>Google Lens </h3><p>Busca reversa e identificação de objetos e lugares.</p></a>
+      <a class="card tool" data-cat="img" href="https://exiftool.org/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e metadados</span><h3>ExifTool </h3><p>Lê metadados de arquivos: câmera, data, software, GPS.</p></a>
+      <a class="card tool" data-cat="img" href="https://www.suncalc.org/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e metadados</span><h3>SunCalc </h3><p>Posição do sol por local e hora: ajuda a checar uma foto.</p></a>
+      <a class="card tool" data-cat="mon" href="https://www.google.com/alerts" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Google Alertas </h3><p>Avisa quando um termo novo aparece na web.</p></a>
+      <a class="card tool" data-cat="mon" href="https://visualping.io/" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Visualping </h3><p>Monitora mudanças em uma página.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://blockchair.com/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>Blockchair </h3><p>Explorador de várias blockchains: endereços e transações.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://mempool.space/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>mempool.space </h3><p>Explorador de Bitcoin, open source.</p></a>
+      <a class="card tool" data-cat="ref" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer"><span class="k">Decodificação e referência</span><h3>CyberChef </h3><p>Decodifica Base64, hex, URL e muito mais, no navegador.</p></a>
+      <a class="card tool" data-cat="ref" href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer"><span class="k">Decodificação e referência</span><h3>MITRE ATT&amp;CK </h3><p>Táticas e técnicas usadas por atacantes.</p></a>
+      <a class="card tool" data-cat="ref" href="https://lolbas-project.github.io/" target="_blank" rel="noopener noreferrer"><span class="k">Decodificação e referência</span><h3>LOLBAS </h3><p>Binários do Windows que atacantes abusam.</p></a>
+      <a class="card tool" data-cat="ref" href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer"><span class="k">Decodificação e referência</span><h3>GTFOBins </h3><p>O mesmo para binários do Linux.</p></a>
+      <a class="card tool" data-cat="col" href="https://osintframework.com/" target="_blank" rel="noopener noreferrer"><span class="k">Coleções</span><h3>OSINT Framework </h3><p>Mapa clicável de ferramentas OSINT por tema.</p></a>
+      <a class="card tool" data-cat="col" href="https://bellingcat.gitbook.io/toolkit" target="_blank" rel="noopener noreferrer"><span class="k">Coleções</span><h3>Bellingcat Toolkit </h3><p>Ferramentas usadas em investigações jornalísticas.</p></a>
+      <a class="card tool" data-cat="col" href="https://start.me/p/0Pqbdg/osint-500-tools" target="_blank" rel="noopener noreferrer"><span class="k">Coleções</span><h3>OSINT +500 Tools </h3><p>Coleção grande, de terceiros. Tem itens que evitamos (veja o aviso).</p></a>
+    </div>
+    <p class="mut small" id="toolsEmpty" hidden>Nenhuma ferramenta encontrada. Tente outra palavra ou a categoria "Todas".</p>
+    <p class="note">Sobre a coleção <a href="https://start.me/p/0Pqbdg/osint-500-tools" target="_blank" rel="noopener noreferrer">OSINT +500 Tools</a>: ela é ótima para explorar, mas mistura ferramentas de investigação com outras que não recomendamos para estudo, como geradores de conversas falsas, câmeras particulares expostas, consulta de cartões e rastreamento de pessoas. Use com critério e ética.</p>
+  </section>
+
+  <!-- 05 -->
   <section class="sec-g" id="ouvir">
-    <div class="sec-h"><span class="n">04</span><h2>Para ouvir e assistir</h2></div>
+    <div class="sec-h"><span class="n">05</span><h2>Para ouvir e assistir</h2></div>
     <p class="sec-intro">Para os momentos fora da mesa de estudo. A maior parte está em inglês, o que também é um ótimo treino.</p>
     <div class="feature">
       <div>
@@ -231,9 +314,9 @@
     </div>
   </section>
 
-  <!-- 05 -->
+  <!-- 06 -->
   <section class="sec-g" id="certs">
-    <div class="sec-h"><span class="n">05</span><h2>Certificações</h2></div>
+    <div class="sec-h"><span class="n">06</span><h2>Certificações</h2></div>
     <p class="sec-intro">No começo, o foco são os fundamentos; certificação vem depois, para comprovar o que você já sabe. Esta tabela serve para você entender o mapa e não se assustar com as siglas das vagas. Preços e condições mudam: confira sempre no site oficial.</p>
     <div class="table-scroll">
       <table class="cert">
@@ -253,9 +336,9 @@
     </div>
   </section>
 
-  <!-- 06 -->
+  <!-- 07 -->
   <section class="sec-g" id="trilha">
-    <div class="sec-h"><span class="n">06</span><h2>Trilha gamificada</h2></div>
+    <div class="sec-h"><span class="n">07</span><h2>Trilha gamificada</h2></div>
     <div class="callout">
       <div>
         <h3>Quer ir fazendo e marcando o progresso?</h3>
@@ -266,9 +349,9 @@
     </div>
   </section>
 
-  <!-- 07 -->
+  <!-- 08 -->
   <section class="sec-g" id="regras">
-    <div class="sec-h"><span class="n">07</span><h2>Combinados</h2></div>
+    <div class="sec-h"><span class="n">08</span><h2>Combinados</h2></div>
     <ul class="rules">
       <li>Pratique só no que é seu ou nas plataformas feitas para isso. Invadir dispositivo alheio sem autorização é crime no Brasil (<a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12737.htm" target="_blank" rel="noopener noreferrer">Lei 12.737/2012</a>).</li>
       <li>Crie as contas de estudo com o seu e-mail pessoal, nunca com o corporativo.</li>
