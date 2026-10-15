@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Trilha gamificada de Cyber Security para estudantes: fases, missões, XP, níveis e conquistas.">
+<title>Cybersecurity Expert Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%A1%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🛡️</span>
+    <div><h1>Cybersecurity Expert Roadmap</h1><p class="mut">Trilha gamificada · FIAP Cyber Security</p></div>
+  </div>
+  <div class="player" aria-label="Seu progresso">
+    <div class="lvl"><span class="mut">Nível <b id="lvNum">1</b></span><b id="lvName">Recruta</b></div>
+    <div class="xpwrap">
+      <div class="xpbar" role="progressbar" aria-label="XP até o próximo nível" aria-valuemin="0" aria-valuemax="100" id="xpBar"><span id="xpFill"></span></div>
+      <span class="mut small" id="xpTxt">0 XP</span>
+    </div>
+    <div class="stat" title="Dias seguidos estudando"><b id="streak">0</b><span>🔥 dias</span></div>
+    <div class="stat" title="Missões concluídas"><b id="missCount">0</b><span>missões</span></div>
+  </div>
+  <nav class="acts">
+    <button class="sec" id="bBadges">🏅 Conquistas</button>
+    <button class="sec" id="bSave">💾 Progresso</button>
+    <button class="sec" id="bAbout">ℹ️ Como funciona</button>
+  </nav>
+</header>
+
+<main>
+  <section class="panel map" aria-label="Mapa da trilha">
+    <h2 class="sr">Mapa da trilha</h2>
+    <ol id="map"></ol>
+  </section>
+  <section class="panel" id="phase" aria-live="polite"></section>
+</main>
+
+<footer class="mut small">
+  Conteúdo original em português, inspirado na estrutura de <a id="credA" target="_blank" rel="noopener noreferrer"></a> e <a id="credB" target="_blank" rel="noopener noreferrer"></a>.
+  Seu progresso fica só neste navegador. Atividade formativa, sem nota.
+</footer>
+
+<div id="toasts" aria-live="polite" aria-atomic="false"></div>
+<dialog id="dlg"></dialog>
+<input type="file" id="fileIn" accept="application/json,.json" hidden>
+
+<script src="trilha.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
