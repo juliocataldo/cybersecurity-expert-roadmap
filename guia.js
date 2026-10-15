@@ -5,7 +5,7 @@
   const area = document.getElementById('areaMap');
   if (!area) return;
   const tabs = [...area.querySelectorAll('[role=tab]')];
-  const NOMES = { fund: 'Fundamentos', ofe: 'Ofensivo', def: 'Defensivo', grc: 'Governança', cld: 'Cloud e DevSecOps' };
+  const NOMES = { fund: 'Fundamentos', ofe: 'Ofensivo', def: 'Defensivo', cti: 'CTI e Forense', grc: 'Governança', cld: 'Cloud e DevSecOps' };
 
   function selectTab(tab, focus) {
     tabs.forEach(t => {
@@ -66,19 +66,17 @@
   form.addEventListener('reset', () => { out.textContent = ''; });
 })();
 
-/* Ferramentas: filtro por categoria + busca (sem acento, sem maiúscula). Sem JS, tudo aparece. */
-(function () {
-  const grid = document.getElementById('toolsGrid');
-  if (!grid) return;
-  const cards = [...grid.querySelectorAll('.tool')];
-  const chips = [...document.querySelectorAll('.chip-f')];
-  const q = document.getElementById('toolsQ');
-  const count = document.getElementById('toolsCount');
-  const empty = document.getElementById('toolsEmpty');
+/* Blocos de ferramentas ([data-tf]): filtro por categoria + busca (sem acento, sem maiúscula).
+   Sem JS, os controles ficam ocultos e todas as ferramentas aparecem. */
+document.querySelectorAll('[data-tf]').forEach(box => {
+  const cards = [...box.querySelectorAll('.tool')];
+  const chips = [...box.querySelectorAll('.chip-f')];
+  const q = box.querySelector('input[type=search]');
+  const count = box.querySelector('.tf-count');
+  const empty = box.querySelector('.tf-empty');
   const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const text = new Map(cards.map(c => [c, norm(c.textContent)]));
   let cat = '';
-
   function apply() {
     const term = norm(q.value.trim());
     let n = 0;
@@ -95,6 +93,6 @@
     apply();
   }));
   q.addEventListener('input', apply);
-  document.getElementById('toolsCtl').hidden = false;
+  box.querySelector('.tools-ctl').hidden = false;
   apply();
-})();
+});
