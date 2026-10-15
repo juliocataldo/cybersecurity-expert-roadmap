@@ -1,6 +1,6 @@
 # Cybersecurity Roadmap
 
-Guia de estudos e trilha gamificada de Cyber Security para estudantes do 1º ano.
+Guia de estudos e trilha gamificada para quem está começando em Cyber Security.
 
 **Acesse:** https://juliocataldo.github.io/cybersecurity-expert-roadmap/
 
