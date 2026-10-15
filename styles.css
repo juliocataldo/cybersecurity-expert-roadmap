@@ -266,3 +266,7 @@ dialog table{width:100%;border-collapse:collapse;margin:6px 0}dialog td,dialog t
 /* cursos */
 .card.tool .pills{margin-top:4px}
 .card.tool.pick{border-color:var(--acc);background:linear-gradient(var(--accbg),var(--accbg)),var(--s2)}
+/* laboratório e IA */
+code{font:13px var(--mono);color:var(--tx);background:var(--s1);border:1px solid var(--line);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+.train b{font-size:15px;color:var(--tx)}
+.sec-g>.links{margin-top:14px}
