@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Guia de estudos para começar em Cyber Security: por onde começar, laboratórios, podcasts, certificações e uma trilha gamificada.">
 <title>Cybersecurity Roadmap · Guia de estudos</title>
@@ -44,14 +44,107 @@
   <section class="sec-g" id="area">
     <div class="sec-h"><span class="n">01</span><h2>Entenda a área</h2></div>
     <p class="sec-intro">Cyber Security é bem mais amplo do que hacking ético. Todo mundo passa pelos mesmos fundamentos, e depois a carreira se ramifica. Não precisa escolher agora: conhecer o mapa ajuda a entender para que serve cada coisa que você estuda.</p>
-    <div class="area">
-      <div class="base"><b>Fundamentos (para todo mundo)</b><p>Redes, sistemas operacionais (Linux e Windows), criptografia, programação básica e os princípios de segurança (confidencialidade, integridade e disponibilidade).</p></div>
-      <div class="branches">
-        <div class="br"><h3>Ofensivo</h3><p>Pentest, AppSec, OWASP, red team. Ferramentas como Burp Suite e Nmap.</p></div>
-        <div class="br"><h3>Defensivo</h3><p>SOC, SIEM, resposta a incidentes, threat hunting, blue team.</p></div>
-        <div class="br"><h3>Governança</h3><p>Gestão de riscos, normas (ISO 27001, NIST), LGPD, auditoria.</p></div>
-        <div class="br"><h3>Cloud e DevSecOps</h3><p>Identidade, configuração segura de nuvem, containers e pipelines.</p></div>
+    <p class="hint mono small" id="areaHint" hidden>Clique em uma área para ver o dia a dia, os cargos e por onde começar.</p>
+    <div class="area" id="areaMap">
+      <div class="area-tabs" role="tablist" aria-label="Áreas de Cyber Security">
+        <button class="base area-tab" role="tab" id="t-fund" aria-controls="p-fund" data-area="fund"><b>Fundamentos (para todo mundo)</b><span>Redes, sistemas operacionais (Linux e Windows), criptografia, programação básica e os princípios de segurança (confidencialidade, integridade e disponibilidade).</span></button>
+        <div class="branches">
+          <button class="br area-tab" role="tab" id="t-ofe" aria-controls="p-ofe" data-area="ofe"><b>Ofensivo</b><span>Pentest, AppSec, OWASP, red team. Ferramentas como Burp Suite e Nmap.</span></button>
+          <button class="br area-tab" role="tab" id="t-def" aria-controls="p-def" data-area="def"><b>Defensivo</b><span>SOC, SIEM, resposta a incidentes, threat hunting, blue team.</span></button>
+          <button class="br area-tab" role="tab" id="t-grc" aria-controls="p-grc" data-area="grc"><b>Governança</b><span>Gestão de riscos, normas (ISO 27001, NIST), LGPD, auditoria.</span></button>
+          <button class="br area-tab" role="tab" id="t-cld" aria-controls="p-cld" data-area="cld"><b>Cloud e DevSecOps</b><span>Identidade, configuração segura de nuvem, containers e pipelines.</span></button>
+        </div>
       </div>
+
+      <div class="area-panel" role="tabpanel" id="p-fund" aria-labelledby="t-fund" tabindex="0">
+        <h3>Fundamentos</h3>
+        <p class="pitch">É a base que todo profissional usa, em qualquer área. Quem pula essa parte trava depois: não dá para investigar um ataque de rede sem entender redes.</p>
+        <dl>
+          <div><dt>O que estudar</dt><dd>Redes (TCP/IP, DNS, HTTP), Linux e Windows, criptografia, Python básico e a tríade CID.</dd></div>
+          <div><dt>Onde praticar</dt><dd><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener noreferrer">OverTheWire Bandit</a>, <a href="https://linuxjourney.com/" target="_blank" rel="noopener noreferrer">Linux Journey</a>, <a href="https://www.netacad.com/" target="_blank" rel="noopener noreferrer">Cisco NetAcad</a>.</dd></div>
+          <div><dt>Combina com você se</dt><dd>Você está começando. Ou seja: combina com todo mundo.</dd></div>
+          <div><dt>Na trilha</dt><dd><a href="trilha.html#F01">Fases 01 a 05</a>: computação, redes, Linux, Python e criptografia.</dd></div>
+        </dl>
+      </div>
+
+      <div class="area-panel" role="tabpanel" id="p-ofe" aria-labelledby="t-ofe" tabindex="0">
+        <h3>Ofensivo</h3>
+        <p class="pitch">Encontrar as falhas antes do atacante, sempre com autorização e escopo assinado. O produto final não é a invasão: é o relatório que mostra o risco e como corrigir.</p>
+        <dl>
+          <div><dt>No dia a dia</dt><dd>Testar aplicações, APIs e redes de clientes, validar vulnerabilidades e escrever relatórios técnicos e executivos.</dd></div>
+          <div><dt>Cargos</dt><dd>Pentester, analista de AppSec, red team, bug bounty hunter.</dd></div>
+          <div><dt>Ferramentas</dt><dd>Burp Suite, ZAP, Nmap, Kali Linux.</dd></div>
+          <div><dt>Certificação de entrada</dt><dd>eJPT ou CompTIA PenTest+. Mais adiante, OSCP+.</dd></div>
+          <div><dt>Combina com você se</dt><dd>Você gosta de desmontar as coisas para entender como funcionam e tem paciência para tentar de novo.</dd></div>
+          <div><dt>Na trilha</dt><dd><a href="trilha.html#F06">Fase 06, Web</a> e <a href="trilha.html#F08">Fase 08, Red Team</a>.</dd></div>
+        </dl>
+      </div>
+
+      <div class="area-panel" role="tabpanel" id="p-def" aria-labelledby="t-def" tabindex="0">
+        <h3>Defensivo</h3>
+        <p class="pitch">Detectar, investigar e conter ataques enquanto eles acontecem. É onde está a maior parte das vagas de entrada, principalmente em SOC.</p>
+        <dl>
+          <div><dt>No dia a dia</dt><dd>Triar alertas, separar falso positivo de ataque real, correlacionar eventos e conduzir a resposta a incidentes.</dd></div>
+          <div><dt>Cargos</dt><dd>Analista de SOC (N1, N2, N3), resposta a incidentes, threat hunter, perito forense.</dd></div>
+          <div><dt>Ferramentas</dt><dd>SIEM (Splunk, Elastic, Wazuh), EDR, Wireshark, MITRE ATT&amp;CK.</dd></div>
+          <div><dt>Certificação de entrada</dt><dd>CompTIA Security+ ou Google Cybersecurity.</dd></div>
+          <div><dt>Combina com você se</dt><dd>Você gosta de investigação, de achar padrões no meio do ruído e de trabalhar em equipe.</dd></div>
+          <div><dt>Na trilha</dt><dd><a href="trilha.html#F07">Fase 07, Blue Team e SOC</a>, com os labs da disciplina.</dd></div>
+        </dl>
+      </div>
+
+      <div class="area-panel" role="tabpanel" id="p-grc" aria-labelledby="t-grc" tabindex="0">
+        <h3>Governança, risco e compliance</h3>
+        <p class="pitch">Transformar segurança em decisão de negócio: o que proteger primeiro, quanto investir e como provar que a empresa cumpre leis e normas.</p>
+        <dl>
+          <div><dt>No dia a dia</dt><dd>Avaliar riscos, escrever políticas, preparar auditorias e cuidar da adequação à LGPD.</dd></div>
+          <div><dt>Cargos</dt><dd>Analista de GRC, auditor de TI, analista de privacidade, gestor de riscos.</dd></div>
+          <div><dt>Ferramentas</dt><dd>NIST CSF, ISO/IEC 27001, CIS Controls, matrizes de risco.</dd></div>
+          <div><dt>Certificação de entrada</dt><dd>ISC2 CC. Mais adiante, formações em ISO 27001 e privacidade.</dd></div>
+          <div><dt>Combina com você se</dt><dd>Você escreve bem, gosta de entender o negócio e de conversar com áreas diferentes.</dd></div>
+          <div><dt>Na trilha</dt><dd><a href="trilha.html#F10">Fase 10, Governança, risco e compliance</a>.</dd></div>
+        </dl>
+      </div>
+
+      <div class="area-panel" role="tabpanel" id="p-cld" aria-labelledby="t-cld" tabindex="0">
+        <h3>Cloud e DevSecOps</h3>
+        <p class="pitch">Quase tudo roda em nuvem e é entregue por pipelines automatizados. A segurança precisa estar no código e na configuração, desde o começo.</p>
+        <dl>
+          <div><dt>No dia a dia</dt><dd>Revisar permissões (IAM), corrigir configurações expostas, colocar varreduras de segurança no pipeline.</dd></div>
+          <div><dt>Cargos</dt><dd>Cloud security engineer, DevSecOps, arquiteto de segurança.</dd></div>
+          <div><dt>Ferramentas</dt><dd>AWS, Azure e Google Cloud, Terraform, Docker, Trivy, Checkov.</dd></div>
+          <div><dt>Certificação de entrada</dt><dd>Microsoft SC-900 ou AWS Cloud Practitioner.</dd></div>
+          <div><dt>Combina com você se</dt><dd>Você gosta de infraestrutura, automação e programação.</dd></div>
+          <div><dt>Na trilha</dt><dd><a href="trilha.html#F09">Fase 09, Segurança em nuvem</a> e <a href="trilha.html#F04">Fase 04, Python</a>.</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="area-quiz" id="areaQuiz" hidden>
+      <h3>Teste rápido: qual área tem mais a ver com você?</h3>
+      <p class="mut small">3 perguntas, sem resposta certa. Não é uma escolha definitiva: é só um ponto de partida para explorar.</p>
+      <form id="aq">
+        <fieldset><legend>1. Num trabalho em grupo, você costuma ser quem...</legend>
+          <label><input type="radio" name="q1" value="ofe"> testa tudo para achar o que pode dar errado</label>
+          <label><input type="radio" name="q1" value="def"> investiga quando algo dá errado</label>
+          <label><input type="radio" name="q1" value="grc"> organiza o plano e conversa com todo mundo</label>
+          <label><input type="radio" name="q1" value="cld"> automatiza a parte chata com alguma ferramenta</label>
+        </fieldset>
+        <fieldset><legend>2. Qual destas tarefas parece mais divertida?</legend>
+          <label><input type="radio" name="q2" value="ofe"> Encontrar uma falha num site feito para treino</label>
+          <label><input type="radio" name="q2" value="def"> Descobrir o que aconteceu a partir de logs</label>
+          <label><input type="radio" name="q2" value="grc"> Avaliar os riscos de uma empresa e priorizar</label>
+          <label><input type="radio" name="q2" value="cld"> Montar um servidor na nuvem do jeito certo</label>
+        </fieldset>
+        <fieldset><legend>3. Qual destas séries ou documentários você escolheria?</legend>
+          <label><input type="radio" name="q3" value="ofe"> Um grupo planejando um assalto perfeito</label>
+          <label><input type="radio" name="q3" value="def"> Uma investigação policial cheia de pistas</label>
+          <label><input type="radio" name="q3" value="grc"> Os bastidores de uma grande empresa em crise</label>
+          <label><input type="radio" name="q3" value="cld"> Como funciona a infraestrutura de uma big tech</label>
+        </fieldset>
+        <div class="row"><button type="submit">Ver resultado</button><button type="reset" class="sec">Limpar</button></div>
+        <p class="aq-out" id="aqOut" role="status"></p>
+      </form>
     </div>
   </section>
 
@@ -191,5 +284,6 @@
   <a href="https://jansen-moreira.notion.site/CyberSecurity-RoadMap-1123f61008cd806e9ae8d6c57bc5d2d9" target="_blank" rel="noopener noreferrer">CyberSecurity RoadMap (Jansen Moreira)</a>.
   Este site não usa cookies nem rastreamento.
 </p></div>
+<script src="guia.js"></script>
 </body>
 </html>

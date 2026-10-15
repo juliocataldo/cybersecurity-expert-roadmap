@@ -58,7 +58,7 @@ O site é estático: não tem servidor, login, cookies nem rastreamento. O progr
 ## Para o professor
 
 ### Editar o guia
-O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos.
+O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos. Na seção 01, cada área tem um botão (`role="tab"`) e um painel (`role="tabpanel"`) no próprio HTML; o `guia.js` só alterna entre eles e roda o teste rápido. Sem JavaScript, todos os painéis aparecem abertos.
 
 ### Editar a trilha
 Todo o conteúdo da trilha está em **`trilha.js`**. Dá para mudar textos, links, XP, níveis, a regra de desbloqueio (`desbloqueioPct`) e acrescentar fases ou missões sem mexer no código.
