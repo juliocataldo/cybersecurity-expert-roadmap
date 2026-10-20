@@ -4,12 +4,14 @@ Guia de estudos e trilha gamificada para quem está começando em Cyber Security
 
 **Acesse:** https://juliocataldo.github.io/cybersecurity-expert-roadmap/
 
-O site tem duas partes:
+O site tem quatro partes:
 
 | Página | Para quê |
 |---|---|
-| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, ferramentas de análise e de OSINT (com filtro e busca), IA e segurança, podcasts e canais, certificações e combinados. |
-| **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 62 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
+| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, podcasts e canais, certificações e combinados. As coletâneas de ferramentas viraram páginas próprias, reunidas na seção **Recursos**. |
+| **Recursos** (`ferramentas.html`, `osint.html`, `ia.html`, `ransomware.html`) | Coletâneas de consulta: ferramentas de análise (SOC/threat intel), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). Linkadas na seção **Recursos** do guia. |
+| **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
+| **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 63 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 
 > Atividade formativa, **sem nota**.
 
@@ -58,7 +60,14 @@ O site é estático: não tem servidor, login, cookies nem rastreamento. O progr
 ## Para o professor
 
 ### Editar o guia
-O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos. Para incluir um curso ou uma ferramenta nas seções 05 (Cursos), 06 (Ferramentas de análise) ou 07 (OSINT), copie um `<a class="card tool" data-cat="...">` dentro do bloco certo; o `data-cat` precisa ser uma das categorias dos botões de filtro daquele bloco. Na seção 01, cada área tem um botão (`role="tab"`) e um painel (`role="tabpanel"`) no próprio HTML; o `guia.js` só alterna entre eles e roda o teste rápido. Sem JavaScript, todos os painéis aparecem abertos.
+O guia é HTML estático em **`index.html`**: cada seção está marcada com um comentário (`<!-- 01 -->`, `<!-- 02 -->`...). Para incluir uma plataforma, copie um `<a class="card">` e troque os textos. As coletâneas com filtro (ferramentas e OSINT) agora são páginas próprias — **`ferramentas.html`** e **`osint.html`** —; para incluir uma ferramenta, copie um `<a class="card tool" data-cat="...">` dentro do bloco certo, com `data-cat` igual a uma das categorias dos botões de filtro (o `guia.js` cuida da busca e do filtro). Na seção 01, cada área tem um botão (`role="tab"`) e um painel (`role="tabpanel"`); o `guia.js` só alterna entre eles e roda o teste rápido. Sem JavaScript, todos os painéis aparecem abertos.
+
+### Editar o checklist
+Todo o conteúdo do **Checklist de Privacidade** está no objeto `CHECKLIST` em **`checklist.js`** (18 categorias → itens com `nivel` e descrição). Não renomeie ids já publicados (o progresso é salvo por id). Depois de editar, rode o validador (confere 18 categorias, ids únicos e níveis válidos):
+```
+node tests/validar-checklist.mjs
+```
+O conteúdo é adaptado do projeto open source de Alicia Sykes sob **CC BY-NC-SA 4.0**: ao republicar, mantenha o crédito e a mesma licença (uso não comercial).
 
 ### Editar a trilha
 Todo o conteúdo da trilha está em **`trilha.js`**. Dá para mudar textos, links, XP, níveis, a regra de desbloqueio (`desbloqueioPct`) e acrescentar fases ou missões sem mexer no código.

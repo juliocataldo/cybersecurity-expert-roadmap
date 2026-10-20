@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Simuladores de ransomware para validar deteccao (EDR/XDR/SIEM) em laboratorio isolado. Tema avancado de Blue Team.">
+<title>Simuladores de ransomware · Cybersecurity Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>ROADMAP</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="checklist.html">Checklist</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="./#recursos">← Guia</a> · Recursos</p>
+  <section class="sec-g">
+    <p class="eyebrow">Recurso</p>
+    <h1>Simuladores de ransomware</h1>
+    <p class="sec-intro">Tema avançado, do lado Blue Team (SOC, DFIR, Threat Hunting): um passo além do resto do guia. A ideia não é "fazer ransomware", e sim reproduzir o <b>comportamento</b> dele num laboratório para medir se os controles reagem — se o EDR/XDR bloqueia, se a regra do SIEM dispara, qual a telemetria gerada e quanto tempo o SOC leva para responder. Uma coisa é o fabricante dizer que detecta; outra é colocar para rodar e ver se grita a tempo.</p>
+    <div class="warn-box">
+      <b>Antes de rodar qualquer um destes</b>
+      <ul>
+        <li>Só em <b>VM isolada</b>, em rede host-only e com <b>snapshot</b> antes de cada teste (veja a <a href="index.html#montar">seção 04</a>). Nunca na sua máquina, na rede de casa, da empresa ou da faculdade.</li>
+        <li>Use <b>dados fictícios e descartáveis</b>. Gratuito não é sinônimo de inofensivo: alguns destes criptografam arquivos de verdade.</li>
+        <li><b>Leia o código e a documentação</b> antes de executar, e baixe só do repositório oficial. Trate o binário como não confiável até conferir origem e hash.</li>
+        <li>Rode apenas em ambiente <b>seu ou autorizado</b>. Se receber um artefato cifrado de um incidente real, não tente decifrá-lo aqui: isso é feito em ambiente forense controlado.</li>
+      </ul>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://www.knowbe4.com/ransomware-simulator" target="_blank" rel="noopener noreferrer"><span class="k">Não cifra arquivos</span><h3>KnowBe4 RanSim</h3><p>Roda ~20 cenários no Windows e diz se o endpoint protection bloquearia. Não altera seus arquivos: bom ponto de partida.</p><span class="go">Abrir ↗</span></a>
+      <a class="card" href="https://github.com/NextronSystems/ransomware-simulator" target="_blank" rel="noopener noreferrer"><span class="k">Comportamento</span><h3>Nextron ransomware-simulator</h3><p>O "QuickBuck" simula o roteiro (apaga shadow copies, solta nota de resgate) e cifra só arquivos que ele mesmo cria. Ótimo para gerar telemetria e regras Sigma.</p><span class="go">Abrir ↗</span></a>
+      <a class="card" href="https://github.com/redcanaryco/atomic-red-team" target="_blank" rel="noopener noreferrer"><span class="k">MITRE ATT&amp;CK</span><h3>Atomic Red Team</h3><p>Não é só de ransomware: testes atômicos mapeados ao ATT&amp;CK, incluindo técnicas usadas em ataques de ransomware. Valida se a detecção dispara.</p><span class="go">Abrir ↗</span></a>
+      <a class="card" href="https://github.com/lawndoc/RanSim" target="_blank" rel="noopener noreferrer"><span class="k">Cifra de verdade</span><h3>RanSim (PowerShell)</h3><p>Script que criptografa recursivamente uma pasta com AES-256. Poderoso para medir detecção e backup, mas perigoso: só com dados descartáveis e depois de ler o script.</p><span class="go">Abrir ↗</span></a>
+    </div>
+    <p class="note">Essa lista circula na comunidade (a origem foi um post de SOC/Blue Team no LinkedIn) com outras ferramentas — como RansomSim em C#, "Safe Ransomware Simulator" e o EduRansW. Deixei de fora as que não consegui confirmar um repositório oficial, e principalmente o <b>EduRansW</b>, que é uma amostra de ransomware vulnerável de verdade (malware para engenharia reversa), não um simulador de telemetria. Se for atrás delas, trate como malware: procure a fonte oficial, revise o código e rode só no laboratório isolado.</p>
+  </section>
+</main>
+</body>
+</html>

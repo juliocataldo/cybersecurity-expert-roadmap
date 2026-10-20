@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Checklist de Privacidade: hábitos práticos para proteger suas contas, seu celular, seu dinheiro e seus dados. Marque o que já faz e acompanhe seu progresso.">
+<title>Checklist de Privacidade · Cybersecurity Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>ROADMAP</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="checklist.html" aria-current="page">Checklist</a>
+  </nav>
+</header>
+
+<main class="wrap cl">
+  <section class="cl-hero">
+    <p class="eyebrow">Autoavaliação</p>
+    <h1>Checklist de Privacidade</h1>
+    <p class="lead">Segurança digital não é só coisa de especialista: a maior parte dos golpes e vazamentos é evitada com hábitos simples. Este checklist reúne esses hábitos em 18 temas do dia a dia — contas, celular, PIX, redes sociais, família, LGPD e o que fazer quando algo dá errado. Marque o que você já faz e use o resto como lista de pendências.</p>
+    <p class="mut small">Cada item tem um nível: <b class="nv-essencial-tx">Essencial</b> (o básico para todo mundo), <b class="nv-opcional-tx">Opcional</b> (um passo a mais) e <b class="nv-avancado-tx">Avançado</b> (para quem quer ou precisa ir além). Comece pelos essenciais. Seu progresso fica salvo só neste navegador.</p>
+  </section>
+
+  <section class="cl-prog" aria-label="Seu progresso">
+    <div class="cl-prog-top">
+      <strong id="clProgTxt">Você marcou 0 de 0 itens</strong>
+      <b id="clPct" class="cl-pct">0%</b>
+    </div>
+    <div class="cl-bar" role="progressbar" aria-label="Progresso geral" aria-valuemin="0" aria-valuemax="100"><span id="clFill"></span></div>
+  </section>
+
+  <div class="cl-ctl" hidden>
+    <div class="lvl-chips" role="group" aria-label="Filtrar por nível">
+      <button type="button" class="lvl-chip" data-lvl="" aria-pressed="true">Todos</button>
+      <button type="button" class="lvl-chip nv-essencial" data-lvl="essencial" aria-pressed="false">Essencial</button>
+      <button type="button" class="lvl-chip nv-opcional" data-lvl="opcional" aria-pressed="false">Opcional</button>
+      <button type="button" class="lvl-chip nv-avancado" data-lvl="avancado" aria-pressed="false">Avançado</button>
+    </div>
+    <div class="cl-acts">
+      <button type="button" class="sec" id="clOpen">Expandir tudo</button>
+      <button type="button" class="sec" id="clClose">Recolher tudo</button>
+      <button type="button" class="sec" id="clPdf">Baixar PDF</button>
+      <button type="button" class="sec" id="clReset">Limpar progresso</button>
+    </div>
+  </div>
+
+  <section id="cats" class="cats" aria-label="Checklists"></section>
+
+  <p class="foot">
+    Réplica em português do <a href="https://checklist.wmartins.app/" target="_blank" rel="noopener noreferrer">Checklist de Privacidade</a>, que por sua vez adapta o projeto open source
+    <a href="https://github.com/Lissy93/personal-security-checklist" target="_blank" rel="noopener noreferrer">personal-security-checklist</a>, de Alicia Sykes.
+    Conteúdo sob licença <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt-br" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>; textos reescritos para fins educacionais.
+    As marcações ficam só neste navegador — nada é enviado para ninguém.
+  </p>
+</main>
+
+<script src="checklist.js"></script>
+</body>
+</html>

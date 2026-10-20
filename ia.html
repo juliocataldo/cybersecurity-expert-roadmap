@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Como sistemas com LLM são atacados (prompt injection, vazamento) e como usar IA sem vazar dados.">
+<title>IA e segurança · Cybersecurity Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>ROADMAP</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="checklist.html">Checklist</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="./#recursos">← Guia</a> · Recursos</p>
+  <section class="sec-g">
+    <p class="eyebrow">Recurso</p>
+    <h1>IA e segurança</h1>
+    <p class="sec-intro">A IA virou ferramenta de trabalho e também superfície de ataque. Vale saber duas coisas desde já: como sistemas com LLM são atacados e como usar IA sem vazar dados.</p>
+    <div class="osint-top">
+      <div class="osint-box">
+        <span class="k mono small">Ataques que você vai ver por aí</span>
+        <ul class="train">
+          <li><b>Prompt injection</b><span>Instruções escondidas num texto (site, e-mail, PDF) fazem o modelo ignorar as regras originais. É o primeiro item do OWASP Top 10 para LLM.</span></li>
+          <li><b>Vazamento de dados sensíveis</b><span>O modelo devolve o prompt de sistema, dados de outros usuários ou segredos que recebeu.</span></li>
+          <li><b>Saída usada sem validação</b><span>A resposta do modelo vai direto para o navegador, o shell ou o banco, e vira XSS ou injeção.</span></li>
+          <li><b>Autonomia demais</b><span>Um agente com permissões além do necessário executa ações que ninguém pediu.</span></li>
+        </ul>
+      </div>
+      <div class="osint-box">
+        <span class="k mono small">Onde estudar</span>
+        <ul class="train">
+          <li><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 para LLM (2025)</a><span>A lista de referência dos riscos em aplicações com IA generativa.</span></li>
+          <li><a href="https://portswigger.net/web-security/llm-attacks" target="_blank" rel="noopener noreferrer">PortSwigger: Web LLM attacks</a><span>Explicação e laboratórios gratuitos de prompt injection.</span></li>
+          <li><a href="https://atlas.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATLAS</a><span>Táticas e técnicas contra sistemas de IA, no estilo do ATT&amp;CK.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn-box">
+      <b>Usando IA no dia a dia</b>
+      <ul>
+        <li><b>Não cole dados reais em chats de IA:</b> dados pessoais, código ou documentos da empresa, logs de clientes, senhas e chaves de API. Dependendo do serviço, o que você envia fica guardado e pode ser usado para treinar modelos.</li>
+        <li>Precisa de um exemplo? Anonimize ou invente os dados antes de colar.</li>
+        <li>Estude com a sua conta pessoal. No trabalho, use só as ferramentas de IA aprovadas pela empresa.</li>
+        <li>Confira tudo: a IA erra com confiança e chega a inventar comandos, CVEs e até nomes de pacotes, que atacantes depois registram com código malicioso.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+</body>
+</html>

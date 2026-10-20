@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="OSINT (inteligência de fontes abertas): método, onde treinar e ferramentas, com ética e respeito à LGPD.">
+<title>OSINT · Cybersecurity Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>ROADMAP</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="checklist.html">Checklist</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="./#recursos">← Guia</a> · Recursos</p>
+  <section class="sec-g">
+    <p class="eyebrow">Recurso</p>
+    <h1>OSINT</h1>
+    <p class="sec-intro">OSINT (Open Source Intelligence) é produzir inteligência a partir de fontes abertas: buscadores, sites, imagens, registros públicos. Ela é usada em threat intelligence, em jornalismo investigativo, no reconhecimento de um pentest e na verificação de fatos.</p>
+    <div class="osint-top">
+      <div class="osint-box">
+        <span class="k mono small">O método</span>
+        <ol class="cycle">
+          <li><b>Pergunte</b><span>Qual é exatamente a dúvida? Sem pergunta, vira navegação sem fim.</span></li>
+          <li><b>Colete</b><span>Busque em fontes variadas e salve evidências (archive.today, prints com data).</span></li>
+          <li><b>Verifique</b><span>Confirme cada informação em pelo menos duas fontes independentes.</span></li>
+          <li><b>Analise</b><span>Separe fato de suposição e diga o grau de confiança.</span></li>
+          <li><b>Relate</b><span>Escreva a resposta com as fontes, para outra pessoa conseguir conferir.</span></li>
+        </ol>
+      </div>
+      <div class="osint-box">
+        <span class="k mono small">Onde treinar</span>
+        <ul class="train">
+          <li><a href="https://tryhackme.com/room/ohsint" target="_blank" rel="noopener noreferrer">TryHackMe: OhSINT</a><span>Sala introdutória, a partir de uma única imagem.</span></li>
+          <li><a href="https://tryhackme.com/room/sakura" target="_blank" rel="noopener noreferrer">TryHackMe: Sakura Room</a><span>Investigação guiada um pouco mais longa.</span></li>
+          <li><a href="https://www.geoguessr.com/" target="_blank" rel="noopener noreferrer">GeoGuessr</a><span>Jogo que treina geolocalização por imagens de rua.</span></li>
+          <li><a href="https://bellingcat.gitbook.io/toolkit" target="_blank" rel="noopener noreferrer">Guias da Bellingcat</a><span>Como jornalistas verificam fotos, vídeos e locais.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn-box">
+      <b>Ética em OSINT</b>
+      <ul>
+        <li>Investigue <b>ameaças, organizações e fatos</b>, não pessoas. Rastrear ou expor alguém pode violar a LGPD e ser crime.</li>
+        <li>Não interaja com o alvo (não envie mensagem, não crie perfil falso): observar não é o mesmo que se infiltrar.</li>
+        <li>Para praticar reconhecimento de infraestrutura, use um domínio seu ou os desafios acima.</li>
+      </ul>
+    </div>
+    <div class="tf" data-tf>
+      <div class="tools-ctl" hidden>
+        <input type="search" placeholder="Buscar (ex.: imagem, sombra, bitcoin)" aria-label="Buscar ferramenta de OSINT" autocomplete="off">
+        <div class="chips-f" role="group" aria-label="Filtrar por categoria">
+          <button type="button" class="chip-f" data-f="" aria-pressed="true">Todas</button>
+        <button type="button" class="chip-f" data-f="guia" aria-pressed="false">Guias e comunidades</button>
+        <button type="button" class="chip-f" data-f="busca" aria-pressed="false">Buscadores e dorks</button>
+        <button type="button" class="chip-f" data-f="arq" aria-pressed="false">Arquivos da web</button>
+        <button type="button" class="chip-f" data-f="geo" aria-pressed="false">Imagens e geolocalização</button>
+        <button type="button" class="chip-f" data-f="mon" aria-pressed="false">Monitoramento</button>
+        <button type="button" class="chip-f" data-f="cripto" aria-pressed="false">Cripto</button>
+        <button type="button" class="chip-f" data-f="infra" aria-pressed="false">Infraestrutura</button>
+        </div>
+        <p class="mut small tf-count" role="status"></p>
+      </div>
+      <div class="cards tools">
+      <a class="card tool" data-cat="guia" href="https://bellingcat.gitbook.io/toolkit" target="_blank" rel="noopener noreferrer"><span class="k">Guias e comunidades</span><h3>Bellingcat Toolkit</h3><p>Ferramentas e guias usados em investigações jornalísticas.</p></a>
+      <a class="card tool" data-cat="guia" href="https://osintframework.com/" target="_blank" rel="noopener noreferrer"><span class="k">Guias e comunidades</span><h3>OSINT Framework</h3><p>Mapa clicável de ferramentas por tipo de informação.</p></a>
+      <a class="card tool" data-cat="guia" href="https://osintcuriou.us/" target="_blank" rel="noopener noreferrer"><span class="k">Guias e comunidades</span><h3>OSINTCurious</h3><p>Comunidade com artigos e vídeos para quem está começando.</p></a>
+      <a class="card tool" data-cat="guia" href="https://github.com/jivoi/awesome-osint" target="_blank" rel="noopener noreferrer"><span class="k">Guias e comunidades</span><h3>awesome-osint</h3><p>Lista colaborativa e muito completa no GitHub.</p></a>
+      <a class="card tool" data-cat="busca" href="https://www.faganfinder.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Fagan Finder</h3><p>Indica qual buscador usar para cada tipo de pergunta.</p></a>
+      <a class="card tool" data-cat="busca" href="https://isearchfrom.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>isearchfrom</h3><p>Faz a busca no Google como se você estivesse em outro país.</p></a>
+      <a class="card tool" data-cat="busca" href="https://dorksearch.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>DorkSearch</h3><p>Monta buscas avançadas (dorks) sem decorar operadores.</p></a>
+      <a class="card tool" data-cat="busca" href="https://support.google.com/websearch/answer/2466433" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Operadores do Google</h3><p>site:, filetype:, aspas e outros filtros.</p></a>
+      <a class="card tool" data-cat="busca" href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Google Hacking Database</h3><p>Buscas prontas que revelam exposições. Use no seu domínio.</p></a>
+      <a class="card tool" data-cat="busca" href="https://yandex.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Yandex</h3><p>Buscador com bons resultados em outras regiões e em imagens.</p></a>
+      <a class="card tool" data-cat="busca" href="https://www.bing.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Bing</h3><p>Índice diferente do Google: vale comparar os resultados.</p></a>
+      <a class="card tool" data-cat="busca" href="https://www.mojeek.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Mojeek</h3><p>Buscador com índice próprio e sem rastreamento.</p></a>
+      <a class="card tool" data-cat="busca" href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"><span class="k">Buscadores e dorks</span><h3>Google Scholar</h3><p>Artigos acadêmicos: ótimo para embasar relatórios.</p></a>
+      <a class="card tool" data-cat="arq" href="https://web.archive.org/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos da web</span><h3>Wayback Machine</h3><p>Versões antigas de sites: veja o que mudou e quando.</p></a>
+      <a class="card tool" data-cat="arq" href="https://archive.ph/" target="_blank" rel="noopener noreferrer"><span class="k">Arquivos da web</span><h3>archive.today</h3><p>Salva uma cópia de uma página como evidência.</p></a>
+      <a class="card tool" data-cat="geo" href="https://tineye.com/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>TinEye</h3><p>Busca reversa: onde mais essa imagem aparece.</p></a>
+      <a class="card tool" data-cat="geo" href="https://lens.google/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>Google Lens</h3><p>Busca reversa e identificação de objetos e lugares.</p></a>
+      <a class="card tool" data-cat="geo" href="https://exiftool.org/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>ExifTool</h3><p>Lê metadados de arquivos: câmera, data, software, GPS.</p></a>
+      <a class="card tool" data-cat="geo" href="https://www.suncalc.org/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>SunCalc</h3><p>Posição do sol por local e hora: ajuda a datar uma foto.</p></a>
+      <a class="card tool" data-cat="geo" href="https://shadowcalculator.eu/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>ShadowCalculator</h3><p>Calcula a direção e o tamanho das sombras.</p></a>
+      <a class="card tool" data-cat="geo" href="https://shademap.app/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>ShadeMap</h3><p>Simula sombras de prédios e relevo em qualquer horário.</p></a>
+      <a class="card tool" data-cat="geo" href="https://www.mapillary.com/" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>Mapillary</h3><p>Fotos de rua colaborativas para conferir um local.</p></a>
+      <a class="card tool" data-cat="geo" href="https://www.wunderground.com/history" target="_blank" rel="noopener noreferrer"><span class="k">Imagens e geolocalização</span><h3>Weather Underground</h3><p>Histórico do clima: chovia no dia daquela foto?</p></a>
+      <a class="card tool" data-cat="mon" href="https://www.google.com/alerts" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Google Alertas</h3><p>Avisa quando um termo novo aparece na web.</p></a>
+      <a class="card tool" data-cat="mon" href="https://trends.google.com/" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Google Trends</h3><p>O que as pessoas estão buscando, por região e período.</p></a>
+      <a class="card tool" data-cat="mon" href="https://liveuamap.com/" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Liveuamap</h3><p>Mapa de eventos e conflitos atualizado com fontes abertas.</p></a>
+      <a class="card tool" data-cat="mon" href="https://visualping.io/" target="_blank" rel="noopener noreferrer"><span class="k">Monitoramento</span><h3>Visualping</h3><p>Monitora mudanças em uma página.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://blockchair.com/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>Blockchair</h3><p>Explorador de várias blockchains: endereços e transações.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://blockstream.info/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>Blockstream Explorer</h3><p>Explorador de Bitcoin.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://mempool.space/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>mempool.space</h3><p>Explorador de Bitcoin, open source.</p></a>
+      <a class="card tool" data-cat="cripto" href="https://www.walletexplorer.com/" target="_blank" rel="noopener noreferrer"><span class="k">Cripto</span><h3>WalletExplorer</h3><p>Agrupa endereços de Bitcoin em carteiras e serviços.</p></a>
+      <a class="card tool" data-cat="infra" href="https://github.com/smicallef/spiderfoot" target="_blank" rel="noopener noreferrer"><span class="k">Infraestrutura</span><h3>SpiderFoot</h3><p>Automatiza a coleta OSINT sobre um domínio ou IP. Use no que é seu.</p></a>
+      <a class="card tool" data-cat="infra" href="https://www.shodan.io/" target="_blank" rel="noopener noreferrer"><span class="k">Infraestrutura</span><h3>Shodan <span class="pill">conta</span></h3><p>O que uma organização expõe na internet.</p></a>
+      <a class="card tool" data-cat="infra" href="https://crt.sh/" target="_blank" rel="noopener noreferrer"><span class="k">Infraestrutura</span><h3>crt.sh</h3><p>Subdomínios revelados por certificados.</p></a>
+      </div>
+      <p class="mut small tf-empty" hidden>Nada encontrado. Tente outra palavra ou a categoria "Todas".</p>
+    </div>
+    <p class="note">Quer mais? A coleção <a href="https://start.me/p/0Pqbdg/osint-500-tools" target="_blank" rel="noopener noreferrer">OSINT +500 Tools</a> reúne centenas de links e foi a fonte de vários desta lista. Ela mistura ferramentas de investigação com outras que não recomendamos para estudo, como geradores de conversas falsas, câmeras particulares expostas, consulta de cartões e rastreamento de pessoas. Use com critério e ética.</p>
+  </section>
+</main>
+<script src="guia.js"></script>
+</body>
+</html>

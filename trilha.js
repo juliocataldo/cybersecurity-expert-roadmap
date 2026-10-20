@@ -42,8 +42,8 @@ const TRILHA = {
         descricao: 'Leia o art. 5º da LGPD e diferencie dado pessoal de dado pessoal sensível. Você vai lidar com isso em todo incidente.',
         links: [['LGPD - Lei 13.709/2018 (Planalto)', 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm']] },
       { id: 'F00-M3', tipo: 'pratica', titulo: 'Monte seu laboratório com uma máquina virtual',
-        descricao: 'Instale o VirtualBox e crie uma VM Linux (Ubuntu ou Kali). Tire um snapshot limpo: é o seu botão de "desfazer".',
-        links: [['VirtualBox', 'https://www.virtualbox.org/'], ['Ubuntu Desktop', 'https://ubuntu.com/download/desktop'], ['Kali Linux', 'https://www.kali.org/get-kali/']] },
+        descricao: 'Instale o VirtualBox e crie uma VM com Ubuntu, isolada da sua rede. Tire um snapshot limpo: é o seu botão de "desfazer". O Kali, cheio de ferramentas ofensivas, fica para a Fase 08, quando você já souber usá-lo com responsabilidade.',
+        links: [['VirtualBox', 'https://www.virtualbox.org/'], ['Ubuntu Desktop', 'https://ubuntu.com/download/desktop']] },
       { id: 'F00-M4', tipo: 'pratica', titulo: 'Crie sua conta de prática',
         descricao: 'Crie uma conta gratuita no TryHackMe e explore o caminho "Pre Security". Use um e-mail pessoal, não o institucional.',
         links: [['TryHackMe', 'https://tryhackme.com/']] },
@@ -101,12 +101,12 @@ const TRILHA = {
   /* ------------------------------------------------------------------ */
   { id: 'F02', titulo: 'Redes',
     subtitulo: 'Como os dados viajam',
-    objetivo: 'Ler um tráfego de rede e entender IP, portas, DNS e HTTP, a base de quase todo alerta de segurança.',
+    objetivo: 'Ler um tráfego de rede e entender LAN/WAN, IP, portas, DNS e HTTP, a base de quase todo alerta de segurança.',
     carreiras: ['Analista de redes', 'SOC', 'Pentest'],
     badge: { nome: 'Farejador de pacotes' },
     missoes: [
-      { id: 'F02-M1', tipo: 'estudo', titulo: 'Modelos OSI e TCP/IP',
-        descricao: 'Faça o curso gratuito de fundamentos de redes da Cisco Networking Academy e desenhe as camadas com um exemplo de cada.',
+      { id: 'F02-M1', tipo: 'estudo', titulo: 'LAN, WAN e os modelos OSI e TCP/IP',
+        descricao: 'Comece pela diferença entre LAN (sua rede local) e WAN/internet. Depois faça o curso gratuito de fundamentos de redes da Cisco Networking Academy e desenhe as camadas do OSI e do TCP/IP com um exemplo de cada.',
         links: [['Cisco Networking Academy', 'https://www.netacad.com/'], ['Professor Messer (vídeos gratuitos)', 'https://www.professormesser.com/']] },
       { id: 'F02-M2', tipo: 'estudo', titulo: 'Endereçamento IP e sub-redes',
         descricao: 'Entenda máscara, CIDR (/24, /16) e as faixas privadas da RFC 1918. Calcule à mão quantos hosts cabem em um /26.',
@@ -335,7 +335,10 @@ const TRILHA = {
         links: [['TryHackMe', 'https://tryhackme.com/']] },
       { id: 'F08-M5', tipo: 'estudo', titulo: 'Engenharia social e phishing',
         descricao: 'Faça o quiz de phishing do Google e anote os sinais que você deixou passar. Engenharia social é o vetor mais comum de acesso inicial.',
-        links: [['Phishing Quiz (Google)', 'https://phishingquiz.withgoogle.com/']] }
+        links: [['Phishing Quiz (Google)', 'https://phishingquiz.withgoogle.com/']] },
+      { id: 'F08-M6', tipo: 'pratica', titulo: 'Agora sim: monte o Kali numa rede isolada',
+        descricao: 'Baixe a imagem oficial do Kali (confira o hash SHA256) e coloque-a numa rede host-only, junto com a VM alvo. O Kali só alcança o alvo e a internet para se atualizar, nunca a rede de casa ou da faculdade.',
+        links: [['Kali Linux', 'https://www.kali.org/get-kali/'], ['VirtualBox - modos de rede', 'https://www.virtualbox.org/manual/ch06.html']] }
     ],
     checkpoint: [
       { id: 'F08-Q1', p: 'Qual alvo você pode escanear com o Nmap sem pedir permissão a ninguém?',
