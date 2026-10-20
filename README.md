@@ -11,7 +11,7 @@ O site tem quatro partes:
 | **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, podcasts e canais, certificações e combinados. As coletâneas de ferramentas viraram páginas próprias, reunidas na seção **Recursos**. |
 | **Recursos** (`ferramentas.html`, `osint.html`, `ia.html`, `ransomware.html`) | Coletâneas de consulta: ferramentas de análise (SOC/threat intel), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). Linkadas na seção **Recursos** do guia. |
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
-| **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 63 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
+| **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 65 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 
 > Atividade formativa, **sem nota**.
 

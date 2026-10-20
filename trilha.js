@@ -154,7 +154,10 @@ const TRILHA = {
         links: [] },
       { id: 'F03-M5', tipo: 'pratica', titulo: 'Seu primeiro script bash',
         descricao: 'Escreva um script que liste os usuários do /etc/passwd que têm shell de login. Um analista faz esse tipo de checagem toda semana.',
-        links: [] }
+        links: [] },
+      { id: 'F03-M6', tipo: 'estudo', titulo: 'PowerShell: o terminal do Windows',
+        descricao: 'Metade do mundo corporativo é Windows, e o PowerShell aparece todo dia em SOC e resposta a incidentes. Aprenda o básico (Get-Process, Get-Service, Get-WinEvent) e entenda por que atacantes também abusam dele.',
+        links: [['Microsoft Learn: PowerShell', 'https://learn.microsoft.com/pt-br/powershell/scripting/overview']] }
     ],
     checkpoint: [
       { id: 'F03-Q1', p: 'O que significa chmod 640 em um arquivo?',
@@ -224,7 +227,10 @@ const TRILHA = {
         links: [['CryptoHack', 'https://cryptohack.org/']] },
       { id: 'F05-M5', tipo: 'estudo', titulo: 'Senhas e MFA',
         descricao: 'Verifique se o SEU e-mail aparece em vazamentos e ative MFA nas suas contas principais. Prefira app autenticador a SMS.',
-        links: [['Have I Been Pwned', 'https://haveibeenpwned.com/']] }
+        links: [['Have I Been Pwned', 'https://haveibeenpwned.com/']] },
+      { id: 'F05-M6', tipo: 'estudo', titulo: 'Identidade e acesso: SSO e Zero Trust',
+        descricao: 'SSO é um login só para vários serviços (SAML/OIDC). Zero Trust é o modelo "nunca confie, sempre verifique": não existe rede interna confiável por padrão, todo acesso é checado. Juntos, são a base do controle de acesso moderno.',
+        links: [['Cloudflare Learning: o que é SSO', 'https://www.cloudflare.com/learning/access-management/what-is-sso/'], ['NIST SP 800-207: Zero Trust', 'https://csrc.nist.gov/pubs/sp/800/207/final']] }
     ],
     checkpoint: [
       { id: 'F05-Q1', p: 'Uma senha "protegida" com Base64 está segura?',
