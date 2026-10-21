@@ -86,6 +86,7 @@ const NAV = `  <nav aria-label="Seções">
     <a href="../artigos.html">Artigos</a>
     <a href="../roadmap.html">Roadmaps</a>
     <a href="../teia.html" aria-current="page">Teia</a>
+    <a href="../plataformas.html">Plataformas</a>
     <a href="../sugestoes.html">Sugestões</a>
   </nav>`;
 
@@ -103,7 +104,7 @@ function notePage(note, backlinks) {
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="${esc(note.title)} — nota do Cyber Expert Guide.">
 <title>${esc(note.title)} · Teia</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23ff7a1a'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../styles.css">
 </head>
 <body>

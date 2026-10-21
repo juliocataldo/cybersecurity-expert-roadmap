@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Plataformas para aprender e praticar cibersegurança: TryHackMe, Hack The Box, LetsDefend, PortSwigger e mais, com foco, preço e para quem serve.">
+<title>Plataformas · Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23ff7a1a'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="canivete.html">Canivete suíço</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="trilhas.html">Trilhas</a>
+    <a href="artigos.html">Artigos</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="teia.html">Teia</a>
+    <a href="plataformas.html" aria-current="page">Plataformas</a>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <section class="sec-g">
+    <p class="eyebrow">Onde praticar</p>
+    <h1>Plataformas</h1>
+    <p class="sec-intro">Os melhores lugares para aprender e praticar, com foco, preço e para quem cada um serve. Comece pelos gratuitos; só pague quando o curso tiver laboratório prático e for citado nas vagas que te interessam. Preços mudam — confira no site oficial.</p>
+    <div class="tf" data-tf data-noun="plataformas">
+      <div class="tools-ctl" hidden>
+        <input type="search" placeholder="Buscar (ex.: SOC, web, grátis)" aria-label="Buscar plataforma" autocomplete="off">
+        <div class="chips-f" role="group" aria-label="Filtrar por foco">
+          <button type="button" class="chip-f" data-f="" aria-pressed="true">Todas</button>
+          <button type="button" class="chip-f" data-f="fund" aria-pressed="false">Fundamentos</button>
+          <button type="button" class="chip-f" data-f="web" aria-pressed="false">Web e AppSec</button>
+          <button type="button" class="chip-f" data-f="ofe" aria-pressed="false">Ofensivo</button>
+          <button type="button" class="chip-f" data-f="blue" aria-pressed="false">Blue Team e SOC</button>
+          <button type="button" class="chip-f" data-f="dfir" aria-pressed="false">DFIR e forense</button>
+          <button type="button" class="chip-f" data-f="grc" aria-pressed="false">GRC</button>
+          <button type="button" class="chip-f" data-f="ctf" aria-pressed="false">CTF</button>
+        </div>
+        <p class="mut small tf-count" role="status"></p>
+      </div>
+      <div class="cards tools">
+        <a class="card tool" data-cat="fund" href="https://tryhackme.com/" target="_blank" rel="noopener noreferrer"><span class="k">Guiado · freemium</span><h3>TryHackMe</h3><p>Trilhas do básico ao intermediário, no navegador. <b>Melhor para:</b> começar do zero.</p></a>
+        <a class="card tool" data-cat="ofe" href="https://www.hackthebox.com/" target="_blank" rel="noopener noreferrer"><span class="k">Ofensivo · freemium</span><h3>Hack The Box</h3><p>Máquinas para invadir e a HTB Academy. <b>Melhor para:</b> evoluir no ofensivo.</p></a>
+        <a class="card tool" data-cat="ofe" href="https://academy.hackthebox.com/" target="_blank" rel="noopener noreferrer"><span class="k">Ofensivo · freemium</span><h3>HTB Academy</h3><p>Módulos de pentest estruturados, do básico ao avançado. <b>Melhor para:</b> estudar com teoria.</p></a>
+        <a class="card tool" data-cat="blue" href="https://letsdefend.io/" target="_blank" rel="noopener noreferrer"><span class="k">Blue Team · freemium</span><h3>LetsDefend</h3><p>Simula a fila de alertas de um SOC real. <b>Melhor para:</b> virar analista de SOC.</p></a>
+        <a class="card tool" data-cat="dfir" href="https://blueteamlabs.online/" target="_blank" rel="noopener noreferrer"><span class="k">DFIR · freemium</span><h3>Blue Team Labs Online</h3><p>Desafios de forense e resposta a incidentes. <b>Melhor para:</b> DFIR hands-on.</p></a>
+        <a class="card tool" data-cat="dfir" href="https://cyberdefenders.org/" target="_blank" rel="noopener noreferrer"><span class="k">DFIR · freemium</span><h3>CyberDefenders</h3><p>Investigações com logs, PCAP e forense. <b>Melhor para:</b> praticar análise.</p></a>
+        <a class="card tool" data-cat="web" href="https://portswigger.net/web-security" target="_blank" rel="noopener noreferrer"><span class="k">Web · grátis</span><h3>PortSwigger Academy</h3><p>O melhor material grátis de segurança web, com labs. <b>Melhor para:</b> AppSec.</p></a>
+        <a class="card tool" data-cat="web" href="https://owasp.org/www-project-juice-shop/" target="_blank" rel="noopener noreferrer"><span class="k">Web · grátis/local</span><h3>OWASP Juice Shop</h3><p>Loja vulnerável de propósito, roda no seu Docker. <b>Melhor para:</b> treinar OWASP.</p></a>
+        <a class="card tool" data-cat="fund" href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener noreferrer"><span class="k">Fundamentos · grátis</span><h3>OverTheWire</h3><p>Wargames de terminal (Bandit). <b>Melhor para:</b> aprender Linux na prática.</p></a>
+        <a class="card tool" data-cat="ctf" href="https://picoctf.org/" target="_blank" rel="noopener noreferrer"><span class="k">CTF · grátis</span><h3>picoCTF</h3><p>Desafios de CTF feitos para estudantes. <b>Melhor para:</b> primeiros CTFs.</p></a>
+        <a class="card tool" data-cat="ofe" href="https://academy.tcm-sec.com/" target="_blank" rel="noopener noreferrer"><span class="k">Ofensivo · pago</span><h3>TCM Security</h3><p>Cursos muito práticos de pentest (PNPT). <b>Melhor para:</b> ir para o mercado.</p></a>
+        <a class="card tool" data-cat="ofe" href="https://ine.com/" target="_blank" rel="noopener noreferrer"><span class="k">Ofensivo · freemium</span><h3>INE</h3><p>Trilhas técnicas e a eJPT, porta de entrada do pentest. <b>Melhor para:</b> certificar.</p></a>
+        <a class="card tool" data-cat="grc" href="https://academy.simplycyber.io/" target="_blank" rel="noopener noreferrer"><span class="k">GRC · freemium</span><h3>Simply Cyber Academy</h3><p>Cursos de GRC e um canal grátis no YouTube. <b>Melhor para:</b> governança e risco.</p></a>
+        <a class="card tool" data-cat="blue" href="https://www.antisyphontraining.com/" target="_blank" rel="noopener noreferrer"><span class="k">Blue/Red · pague o que puder</span><h3>Antisyphon</h3><p>Aulas ao vivo com profissionais, a partir de zero. <b>Melhor para:</b> aprofundar barato.</p></a>
+        <a class="card tool" data-cat="blue" href="https://grow.google/certificates/cybersecurity/" target="_blank" rel="noopener noreferrer"><span class="k">Defensivo · assinatura</span><h3>Google Cybersecurity</h3><p>Programa guiado com SIEM, Linux, SQL e Python. <b>Melhor para:</b> um certificado de curso.</p></a>
+      </div>
+      <p class="mut small tf-empty" hidden>Nada encontrado. Tente outra palavra ou o foco "Todas".</p>
+    </div>
+
+    <h2 class="rm-h2">Comparativo rápido</h2>
+    <div class="plat-table-wrap">
+      <table class="plat">
+        <thead><tr><th>Plataforma</th><th>Foco</th><th>Preço</th><th>Melhor para</th></tr></thead>
+        <tbody>
+          <tr><td>TryHackMe</td><td>Guiado / fundamentos</td><td><span class="price free">Grátis + ~US$14/mês</span></td><td>Começar do zero</td></tr>
+          <tr><td>Hack The Box</td><td>Ofensivo</td><td><span class="price free">Grátis + ~US$14/mês</span></td><td>Evoluir no ofensivo</td></tr>
+          <tr><td>LetsDefend</td><td>Blue Team / SOC</td><td><span class="price free">Grátis + ~US$20/mês</span></td><td>Virar analista de SOC</td></tr>
+          <tr><td>Blue Team Labs Online</td><td>DFIR</td><td><span class="price free">Grátis + Pro</span></td><td>Forense e resposta</td></tr>
+          <tr><td>CyberDefenders</td><td>DFIR</td><td><span class="price free">Grátis</span></td><td>Praticar investigação</td></tr>
+          <tr><td>PortSwigger Academy</td><td>Web / AppSec</td><td><span class="price free">Grátis</span></td><td>Segurança web</td></tr>
+          <tr><td>OWASP Juice Shop</td><td>Web / AppSec</td><td><span class="price free">Grátis (local)</span></td><td>Treinar o OWASP Top 10</td></tr>
+          <tr><td>OverTheWire</td><td>Fundamentos / Linux</td><td><span class="price free">Grátis</span></td><td>Terminal na prática</td></tr>
+          <tr><td>picoCTF</td><td>CTF</td><td><span class="price free">Grátis</span></td><td>Primeiros CTFs</td></tr>
+          <tr><td>TCM Security</td><td>Ofensivo</td><td><span class="price paid">Pago (acessível)</span></td><td>Ir para o mercado (PNPT)</td></tr>
+          <tr><td>INE</td><td>Ofensivo</td><td><span class="price free">Freemium</span></td><td>Certificar (eJPT)</td></tr>
+          <tr><td>Simply Cyber Academy</td><td>GRC</td><td><span class="price free">Freemium</span></td><td>Governança e risco</td></tr>
+          <tr><td>Antisyphon</td><td>Blue / Red</td><td><span class="price free">Pague o que puder</span></td><td>Aprofundar barato</td></tr>
+          <tr><td>Google Cybersecurity</td><td>Defensivo</td><td><span class="price paid">Assinatura (Coursera)</span></td><td>Certificado de curso</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Faltou alguma? Sugira em <a href="sugestoes.html">Sugestões</a>. Veja também as <a href="trilhas.html">trilhas por função</a> (cada uma indica onde aprender) e o <a href="canivete.html">Canivete suíço</a> (ferramentas).</p>
+  </section>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+<script src="guia.js"></script>
+</body>
+</html>
