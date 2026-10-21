@@ -2,7 +2,7 @@
 :root{
   --bg:#0a0a0a;--s1:#121212;--s2:#1a1a1a;--line:#2b2b2b;--line2:#424242;
   --tx:#f2f2f2;--tx2:#d0d0d0;--mut:#a6a6a6;
-  --acc:#ff7a1a;--acc2:#d95f00;--accbg:#ff7a1a14;
+  --acc:#cf6a24;--acc2:#a85518;--accbg:#cf6a2416;
   --r:10px;
   --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,monospace
@@ -11,13 +11,13 @@
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:var(--acc);text-underline-offset:3px}
-a:hover{color:#ffa05c}
+a:hover{color:#e2904c}
 .mut{color:var(--mut)}.small{font-size:13px}
 .mono{font-family:var(--mono)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 button,.btn{display:inline-block;background:var(--acc);color:#0a0a0a;border:1px solid var(--acc);border-radius:8px;padding:9px 16px;font:600 14px/1.2 var(--sans);cursor:pointer;text-decoration:none}
-button:hover,.btn:hover{background:#ff9440;color:#0a0a0a}
+button:hover,.btn:hover{background:#e0813a;color:#0a0a0a}
 button.sec,.btn.sec{background:transparent;color:var(--tx);border-color:var(--line2)}
 button.sec:hover,.btn.sec:hover{border-color:var(--acc);color:var(--tx)}
 button:disabled{opacity:.4;cursor:not-allowed}
@@ -189,7 +189,7 @@ a.card:hover{border-color:var(--acc);color:var(--tx)}
 .game h3{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin:26px 0 10px}
 .lockmsg{border:1px solid var(--line2);border-left:2px solid var(--acc);border-radius:8px;padding:10px 14px;margin:12px 0;color:var(--tx2);font-size:14px}
 .mis{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;border:1px solid var(--line);background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.mis.chefao{border-color:#ff7a1a55}
+.mis.chefao{border-color:#cf6a2455}
 .mis.feita .mt{color:var(--mut);text-decoration:line-through;text-decoration-color:#8f8f8f88}
 .mis input{width:18px;height:18px;margin-top:4px;accent-color:var(--acc);cursor:pointer}
 .mis input:disabled{cursor:not-allowed}
@@ -458,7 +458,7 @@ dialog h2{padding-right:36px}
 .teia-chip{font-size:13px;padding:6px 12px;border:1px solid var(--line2);border-radius:999px;color:var(--tx2);text-decoration:none}
 .teia-chip:hover{border-color:var(--acc);color:var(--tx)}
 /* wikilinks e metadados nas páginas de nota */
-.wl{color:var(--acc);text-decoration:none;border-bottom:1px solid #ff7a1a55}
+.wl{color:var(--acc);text-decoration:none;border-bottom:1px solid #cf6a2455}
 .wl:hover{border-bottom-color:var(--acc)}
 .wl-missing{color:var(--mut);border-bottom:1px dashed var(--line2)}
 .nota-tags{margin:-4px 0 18px}
@@ -474,7 +474,7 @@ dialog h2{padding-right:36px}
 /* box destacado da trilha gamificada (em trilhas.html) */
 a.path{display:block;text-decoration:none;color:inherit}
 .path-feat{border-color:var(--acc);background:linear-gradient(var(--accbg),var(--accbg)),var(--s1)}
-a.path.path-feat:hover{border-color:#ffa05c}
+a.path.path-feat:hover{border-color:#e2904c}
 .path-team.feat{color:var(--acc);border-color:var(--acc)}
 .feat-cta{color:var(--acc)}
 
@@ -492,12 +492,10 @@ a.path.path-feat:hover{border-color:#ffa05c}
 .hero-tech>*{position:relative;z-index:1}
 .hero-tech::before{content:"";position:absolute;inset:-60px -40px -10px;z-index:0;pointer-events:none;
   background:
-    radial-gradient(560px 300px at 86% 4%, #ff7a1a0d, transparent 70%),
+    radial-gradient(560px 300px at 86% 4%, #cf6a240d, transparent 70%),
     linear-gradient(#ffffff05 1px, transparent 1px) 0 0/100% 38px,
     linear-gradient(90deg,#ffffff05 1px, transparent 1px) 0 0/38px 100%;
   -webkit-mask:linear-gradient(#000 50%, transparent);mask:linear-gradient(#000 50%, transparent)}
-/* aba ativa com um fio de destaque, discreto */
-.site nav a[aria-current=page]{box-shadow:inset 0 -2px 0 var(--acc)}
 
 /* ===== Aviso "em construção" (Teia, Artigos) ===== */
 .wip{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2);background:var(--s1);border:1px solid var(--line2);border-radius:999px;padding:7px 15px;margin:0 0 20px}
