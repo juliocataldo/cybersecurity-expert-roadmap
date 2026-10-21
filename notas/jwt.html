@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="JWT — nota do Cyber Expert Guide.">
+<title>JWT · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../index.html">Guia</a>
+    <a href="../canivete.html">Canivete suíço</a>
+    <a href="../checklist.html">Checklist</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html">Artigos</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../teia.html" aria-current="page">Teia</a>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>JWT</h1>
+    <p class="nota-tags"><span class="nota-tag">#web</span> <span class="nota-tag">#identidade</span></p>
+    <p><b>JWT (JSON Web Token)</b> é um token assinado que carrega informações da sessão. Usado em APIs e logins modernos, ligado a <a href="autenticacao.html" class="wl">Autenticação</a>.</p>
+<h3>Boas práticas</h3>
+<ul><li>Fixe o algoritmo de assinatura no servidor (evite <code>alg: none</code> e confusão de algoritmo).</li><li>Valide <b>expiração</b>, <b>issuer</b> e <b>audience</b>.</li><li>Não guarde dado sensível no payload — ele é apenas codificado, não criptografado.</li></ul>
+<h3>Pegadinha</h3>
+<p>JWT não é &quot;mais seguro&quot; por padrão; é só um formato. A segurança vem de como você assina, valida e expira. Guardar o token com cuidado também conta.</p>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="autenticacao.html">Autenticação</a></li></ul></div>
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+</body>
+</html>

@@ -470,3 +470,10 @@ dialog h2{padding-right:36px}
 .prose pre{background:var(--s1);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;margin:0 0 16px}
 .prose pre code{background:none;border:0;padding:0;font:13px var(--mono);color:var(--tx)}
 .prose hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+
+/* box destacado da trilha gamificada (em trilhas.html) */
+a.path{display:block;text-decoration:none;color:inherit}
+.path-feat{border-color:var(--acc);background:linear-gradient(var(--accbg),var(--accbg)),var(--s1)}
+a.path.path-feat:hover{border-color:#ffa05c}
+.path-team.feat{color:var(--acc);border-color:var(--acc)}
+.feat-cta{color:var(--acc)}
