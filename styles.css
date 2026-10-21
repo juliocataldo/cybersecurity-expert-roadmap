@@ -477,3 +477,7 @@ a.path{display:block;text-decoration:none;color:inherit}
 a.path.path-feat:hover{border-color:#ffa05c}
 .path-team.feat{color:var(--acc);border-color:var(--acc)}
 .feat-cta{color:var(--acc)}
+
+/* dicas por trilha */
+.path-tips{margin:6px 0 0;padding-left:18px}
+.path-tips li{color:var(--tx2);font-size:13px;line-height:1.5;margin:5px 0}
