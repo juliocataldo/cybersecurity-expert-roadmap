@@ -9,9 +9,10 @@ O site tem quatro partes:
 | Página | Para quê |
 |---|---|
 | **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, podcasts e canais, certificações e combinados. Canivete suíço e Checklist aparecem como entradas curtas que levam às páginas próprias. |
-| **Canivete suíço** (`canivete.html` → `utilidades.html`, `osint.html`, `ia.html`, `ransomware.html`) | Página que reúne as coletâneas de consulta: **Ferramentas online** (99 utilidades com filtro — análise de IOCs, threat intel, malware, OSINT, DNS, redes, SSL e dev), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). |
+| **Canivete suíço** (`canivete.html` → `utilidades.html`, `osint.html`, `ia.html`, `ransomware.html`) | Página que reúne as coletâneas de consulta: **Ferramentas online** (113 utilidades com filtro em 11 categorias — análise de IOCs, threat intel, malware, OSINT, DNS, redes, SSL, **senhas e credenciais**, **ofensivo/OffSec**, referência e dev), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). |
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
 | **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 65 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
+| **Artigos** (`artigos.html` + `artigo-*.html`) | Estudos de caso de segurança escritos em português, do zero. Primeiro texto: *Como uma câmera IP barata vira porta de entrada* (IoT), inspirado no estudo de Zoltan Balazs, com crédito à fonte. |
 
 > Atividade formativa, **sem nota**.
 

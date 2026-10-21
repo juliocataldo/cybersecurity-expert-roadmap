@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Estudo de caso: como uma câmera IP barata vira porta de entrada. Vulnerabilidades de IoT (backdoor, command injection, texto puro) e as lições de segurança por design.">
+<title>Câmera IP: porta de entrada · Artigos</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>ROADMAP</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="canivete.html">Canivete suíço</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="artigos.html" aria-current="page">Artigos</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="artigos.html">&larr; Artigos</a></p>
+  <article class="sec-g prose">
+    <p class="eyebrow">Artigo · estudo de caso</p>
+    <h1>Como uma câmera IP barata vira porta de entrada</h1>
+    <p class="art-meta">Leitura de ~6 min · tema: segurança em IoT, por design. Inspirado no estudo de <a href="https://jumpespjump.blogspot.com/2015/09/how-i-hacked-my-ip-camera-and-found.html" target="_blank" rel="noopener noreferrer">Zoltan Balazs (2015)</a>; texto escrito do zero, com foco nas lições de defesa.</p>
+
+    <p>Uma câmera IP de poucos reais parece inofensiva. Mas, em 2015, o pesquisador Zoltan Balazs comprou uma dessas câmeras, abriu a tampa (de software) e encontrou quase todos os erros de segurança que um dispositivo pode cometer. O modelo provável era uma Eminent EM6220, mas o ponto importante é outro: o firmware usava um SDK (baseado no servidor web GoAhead) compartilhado por <b>dezenas de fabricantes</b>. Ou seja, a mesma falha se repetia em muitos produtos com marcas diferentes. Dois anos depois, esse conjunto de problemas virou o <b>CVE-2017-5674</b> e combustível para botnets de câmeras como a Persirai.</p>
+    <p>Não é um manual de ataque. É o contrário: um mapa dos erros para você <b>não</b> repetir quando for construir, comprar ou defender um dispositivo conectado.</p>
+
+    <h2>O que estava errado</h2>
+    <p>A câmera acumulava falhas em todas as camadas — exatamente o tipo de coisa que um threat model simples ("o que pode dar errado?") teria pego:</p>
+    <ul>
+      <li><b>Senha fraca de fábrica.</b> O acesso web era protegido por um PIN de 4 dígitos numéricos: dez mil combinações, trivial de adivinhar.</li>
+      <li><b>Credenciais em texto puro.</b> O aplicativo mandava usuário e senha em <b>cada</b> requisição HTTP (porta 81), sem TLS. Quem estivesse na mesma rede lia tudo.</li>
+      <li><b>Segredos mal guardados.</b> O app de desktop salvava a senha em texto puro num arquivo local.</li>
+      <li><b>Serviço escondido.</b> Um <code>nmap</code> revelou um telnet (BusyBox) na porta 23 que o manual nem mencionava.</li>
+      <li><b>Conta backdoor.</b> Havia um usuário <code>root</code> com uma senha padrão fraca, não documentada e impossível de trocar de forma permanente pela interface. Reiniciar a câmera restaurava a senha de fábrica.</li>
+      <li><b>Command injection.</b> A função de "enviar foto por FTP" copiava o campo de senha, sem tratamento, para dentro de um script de shell. Caracteres especiais no campo viravam comandos executados pelo sistema.</li>
+      <li><b>Nuvem sem criptografia.</b> Para funcionar sem configurar o roteador, a câmera falava com servidores externos por UDP, em texto puro, identificada por um ID — acessível de fora.</li>
+      <li><b>Tudo como root.</b> Os serviços rodavam com privilégio máximo, então qualquer falha virava controle total.</li>
+      <li><b>Exposição automática.</b> Via UPnP, a porta web podia ser aberta para a internet sem o dono perceber.</li>
+    </ul>
+
+    <h2>Como os erros se encadeiam</h2>
+    <p>Nenhuma dessas falhas precisa de mágica. Em alto nível, a história é sempre a mesma: observar o tráfego mostra as credenciais e as portas; uma varredura revela o serviço que não deveria existir; um campo que aceita qualquer texto e cai num shell dá execução de comandos; e, porque tudo roda como root, esse comando lê as senhas de Wi-Fi, e-mail e FTP guardadas no aparelho. O <code>/etc/passwd</code> ainda por cima guardava um hash de uma senha comum, dessas que qualquer lista pública quebra em segundos.</p>
+    <p>O resultado prático: um aparelho dentro da sua casa que um estranho controla, enxerga a sua rede e serve de trampolim para o resto dela.</p>
+
+    <h2>Por que isso ainda importa</h2>
+    <p>Esse caso é de 2015, mas o roteiro não envelheceu. Botnets como Mirai e Persirai cresceram justamente varrendo a internet atrás de telnet aberto e <b>senhas padrão</b> — pares como <code>root:xc3511</code> e <code>root:vizxv</code> que vêm de fábrica em milhares de dispositivos. Câmera, babá eletrônica, DVR, roteador: o que não é atualizado e usa credencial de fábrica continua sendo recrutado para ataques até hoje.</p>
+
+    <h2>As lições (que valem para quem cria e para quem usa)</h2>
+    <h3>Se você constrói o produto</h3>
+    <ul>
+      <li><b>Nada de credencial hardcoded ou backdoor.</b> Cada aparelho nasce com uma senha única, gerada na primeira configuração, e o dono precisa conseguir trocá-la de verdade.</li>
+      <li><b>Nunca monte comando de shell com entrada do usuário.</b> Use APIs que não passam por shell, valide no servidor e trabalhe com allowlist. Todo input é hostil.</li>
+      <li><b>Criptografe tudo</b> com TLS e não mande senha em URL, header ou texto puro. Proteja os segredos em repouso num cofre, não num arquivo aberto.</li>
+      <li><b>Menor privilégio:</b> serviço nenhum deveria rodar como root. Desligue o que não é usado (telnet, UPnP).</li>
+      <li><b>Tenha um canal de atualização</b> confiável e assine o firmware. E faça <b>threat modeling</b> antes de lançar: pergunte o que um input malicioso ou um acesso remoto poderiam causar.</li>
+    </ul>
+    <h3>Se você só usa o aparelho</h3>
+    <ul>
+      <li>Troque a senha de fábrica no primeiro uso e, se der, desligue acesso remoto e UPnP.</li>
+      <li>Coloque câmeras e dispositivos IoT numa <b>rede separada</b> (ou na rede de convidados), longe do computador e do celular.</li>
+      <li>Mantenha o firmware atualizado e desconfie de aparelhos que nunca recebem atualização.</li>
+    </ul>
+
+    <h2>Para ir além</h2>
+    <p>Os mesmos princípios aparecem em padrões que valem como baseline: <a href="https://owasp.org/www-project-internet-of-things/" target="_blank" rel="noopener noreferrer">OWASP IoT Top 10</a>, <a href="https://owasp.org/www-project-application-security-verification-standard/" target="_blank" rel="noopener noreferrer">OWASP ASVS</a> e o <a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST Cybersecurity Framework</a>. E, na trilha, o tema conecta com a <a href="trilha.html#F05">Fase 05 (princípios e criptografia)</a> e a ideia de <b>defense in depth</b>.</p>
+
+    <p class="art-meta art-foot">Crédito: a pesquisa original é de <a href="https://jumpespjump.blogspot.com/2015/09/how-i-hacked-my-ip-camera-and-found.html" target="_blank" rel="noopener noreferrer">Zoltan Balazs — "How I hacked my IP camera, and found this backdoor account"</a>. Este texto é um resumo educacional escrito do zero, com foco em defesa; não reproduz o passo a passo de exploração.</p>
+  </article>
+</main>
+</body>
+</html>
