@@ -487,25 +487,17 @@ a.path.path-feat:hover{border-color:#ffa05c}
 .site-foot p{color:var(--mut);font-size:13px;line-height:1.75;max-width:78ch;margin:0}
 .foot-quote{color:var(--tx2);font-style:italic}
 
-/* ===== Polimento "cyber" no jogo de cores (preto/laranja com brilho) ===== */
+/* ===== Toque "cyber" leve (preto/laranja, sem brilho exagerado) ===== */
 .hero-tech{position:relative}
 .hero-tech>*{position:relative;z-index:1}
-.hero-tech::before{content:"";position:absolute;inset:-70px -40px -10px;z-index:0;pointer-events:none;
+.hero-tech::before{content:"";position:absolute;inset:-60px -40px -10px;z-index:0;pointer-events:none;
   background:
-    radial-gradient(620px 320px at 82% 8%, #ff7a1a26, transparent 70%),
-    radial-gradient(520px 280px at -5% 95%, #ff7a1a12, transparent 70%),
-    linear-gradient(#ffffff06 1px, transparent 1px) 0 0/100% 34px,
-    linear-gradient(90deg,#ffffff06 1px, transparent 1px) 0 0/34px 100%;
-  -webkit-mask:linear-gradient(#000 60%, transparent);mask:linear-gradient(#000 60%, transparent)}
-.hero-tech h1{text-shadow:0 0 28px #ff7a1a33}
-.wordmark span{text-shadow:0 0 10px #ff7a1a66}
-.stat b{text-shadow:0 0 18px #ff7a1a2e}
-/* botões primários com leve gradiente e brilho */
-.btn:not(.sec),button:not(.sec){background:linear-gradient(180deg,#ff8a2e,#ff7a1a);box-shadow:0 2px 16px #ff7a1a2e}
-.btn:not(.sec):hover,button:not(.sec):hover{background:linear-gradient(180deg,#ff9440,#ff8322);box-shadow:0 4px 24px #ff7a1a4d}
-/* aba ativa com fio de destaque */
+    radial-gradient(560px 300px at 86% 4%, #ff7a1a0d, transparent 70%),
+    linear-gradient(#ffffff05 1px, transparent 1px) 0 0/100% 38px,
+    linear-gradient(90deg,#ffffff05 1px, transparent 1px) 0 0/38px 100%;
+  -webkit-mask:linear-gradient(#000 50%, transparent);mask:linear-gradient(#000 50%, transparent)}
+/* aba ativa com um fio de destaque, discreto */
 .site nav a[aria-current=page]{box-shadow:inset 0 -2px 0 var(--acc)}
-@media(prefers-reduced-motion:reduce){.hero-tech::before{background:radial-gradient(620px 320px at 82% 8%, #ff7a1a20, transparent 70%)}}
 
 /* ===== Aviso "em construção" (Teia, Artigos) ===== */
 .wip{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2);background:var(--s1);border:1px solid var(--line2);border-radius:999px;padding:7px 15px;margin:0 0 20px}
