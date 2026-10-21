@@ -371,3 +371,19 @@ dialog h2{padding-right:36px}
 .prose li b,.prose p b{color:var(--tx)}
 .art-meta{font-size:14px;color:var(--mut);margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid var(--line)}
 .art-foot{margin-top:28px;padding-top:16px;padding-bottom:0;border-bottom:0;border-top:1px solid var(--line)}
+
+/* ===== Roadmap em fluxo (roadmap.html) ===== */
+.rm-hint{margin:6px 0 0}
+.rm-scroll{overflow-x:auto;overflow-y:hidden;margin-top:16px;padding-bottom:10px;border:1px solid var(--line);border-radius:var(--r);background:#0d0d0d}
+.rm-svg{width:1040px;height:auto;display:block;margin:0 auto}
+.rm-main{fill:var(--acc)}
+.rm-main-tx{fill:#0a0a0a;font:700 15px var(--sans)}
+.rm-sub{fill:var(--s2);stroke:var(--line2);stroke-width:1}
+.rm-sub-tx{fill:var(--tx2);font:13px var(--sans)}
+.rm-edge{stroke:var(--line2);stroke-width:1.5;fill:none}
+.rm-path{stroke:var(--acc);stroke-width:2.5;fill:none;marker-end:url(#ah)}
+.rm-ah{fill:var(--acc)}
+.rm-chip{fill:var(--s2);stroke:var(--acc);stroke-width:1.5}
+.rm-chip-tx{fill:var(--tx);font:600 13px var(--sans)}
+.rm-goal{fill:#2b1606;stroke:var(--acc);stroke-width:1.5}
+.rm-goal-tx{fill:var(--acc);font:700 15px var(--sans)}

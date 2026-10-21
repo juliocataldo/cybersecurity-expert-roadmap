@@ -1,4 +1,4 @@
-# Cybersecurity Roadmap
+# Cyber Expert Guide
 
 Guia de estudos e trilha gamificada para quem está começando em Cyber Security.
 
@@ -13,6 +13,7 @@ O site tem quatro partes:
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
 | **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 65 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 | **Artigos** (`artigos.html` + `artigo-*.html`) | Estudos de caso de segurança escritos em português, do zero. Primeiro texto: *Como uma câmera IP barata vira porta de entrada* (IoT), inspirado no estudo de Zoltan Balazs, com crédito à fonte. |
+| **Roadmap** (`roadmap.html`) | Roadmap de Ethical Hacking em **fluxo visual** (caixas e setas, estilo roadmap.sh): 12 estágios do fundamento ao pentester, cada um com seus temas. SVG inline gerado por `gen_roadmap.py`; conteúdo próprio. |
 
 > Atividade formativa, **sem nota**.
 
