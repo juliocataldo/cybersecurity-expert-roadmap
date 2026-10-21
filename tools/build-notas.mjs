@@ -7,7 +7,6 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, rmSync
 import { join, basename } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
-const VAULT = existsSync(join(ROOT, 'vault')) ? join(ROOT, 'vault') : join(ROOT, 'tools', 'sample-vault');
 const OUTDIR = join(ROOT, 'notas');
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -128,6 +127,10 @@ ${NAV}
 }
 
 /* ================= build ================= */
+// Escolhe o vault real só se ele existir E tiver ao menos um .md.
+// Senão cai para as notas de exemplo — assim um vault vazio NUNCA apaga as notas.
+const VDIR = join(ROOT, 'vault');
+const VAULT = (existsSync(VDIR) && walk(VDIR).length) ? VDIR : join(ROOT, 'tools', 'sample-vault');
 const files = walk(VAULT);
 const notes = [];
 for (const f of files) {

@@ -44,6 +44,10 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # segurança: nunca commitar uma Teia vazia (ex.: vault sem notas)
+          if ! ls notas/*.html >/dev/null 2>&1; then
+            echo "Pasta notas/ vazia — nada a publicar, abortando."; exit 0
+          fi
           git add teia-data.js notas/
           if git diff --staged --quiet; then
             echo "Sem mudanças na Teia."
