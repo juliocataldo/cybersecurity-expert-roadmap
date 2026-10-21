@@ -31,7 +31,12 @@ input[type=text]{background:var(--bg);color:var(--tx);border:1px solid var(--lin
 .site nav a{color:var(--mut);text-decoration:none;font-size:14px;padding:6px 12px;border-radius:6px}
 .site nav a:hover{color:var(--tx)}
 .site nav a[aria-current=page]{color:var(--tx);background:var(--s2)}
-@media(max-width:640px){.site{padding:12px 16px;gap:10px}}
+@media(max-width:640px){
+  .site{padding:10px 16px;gap:8px 10px;flex-wrap:wrap}
+  .wordmark{margin-right:auto;font-size:14px}
+  .site nav{width:100%;flex-wrap:wrap;gap:2px 4px;order:2}
+  .site nav a,.nav-group>summary{font-size:13px;padding:5px 9px}
+}
 
 /* ===== Guia (página principal) ===== */
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
@@ -483,9 +488,12 @@ a.path.path-feat:hover{border-color:#e2904c}
 .path-tips li{color:var(--tx2);font-size:13px;line-height:1.5;margin:5px 0}
 
 /* ===== Rodapé do site ===== */
-.site-foot{border-top:1px solid var(--line);margin-top:56px;padding:30px 0 44px}
-.site-foot p{color:var(--mut);font-size:13px;line-height:1.75;max-width:78ch;margin:0}
+.site-foot{margin-top:56px;padding:0 0 44px}
+.site-foot .wrap{box-sizing:border-box}
+.site-foot p{color:var(--mut);font-size:13px;line-height:1.75;margin:0;
+  background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 24px}
 .foot-quote{color:var(--tx2);font-style:italic}
+@media(max-width:640px){.site-foot p{font-size:12.5px;padding:16px 18px}}
 
 /* ===== Toque "cyber" leve (preto/laranja, sem brilho exagerado) ===== */
 .hero-tech{position:relative}
