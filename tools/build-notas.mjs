@@ -79,7 +79,8 @@ function mdToHtml(md, noteTitle, resolve) {
 }
 
 const NAV = `  <nav aria-label="Seções">
-    <a href="../">Guia</a>
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
     <a href="../roadmap.html">Roadmaps</a>
     <a href="../trilhas.html">Trilhas</a>
     <a href="../artigos.html">Artigos</a>

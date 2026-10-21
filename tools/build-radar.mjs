@@ -51,17 +51,26 @@ function kevCard(c) {
 
 /* ---- coleta ---- */
 let victims = list(await api('/api/v1/victims?country=BR&page_size=30')).slice(0, 24).map(victimCard);
-let cves = list(await api('/api/v1/cve?in_kev=true&page_size=50'));
-if (!cves.length) cves = list(await api('/api/v1/kev?page_size=50')); // fallback
-let cveBig = cves.filter(c => BIG.some(b => vendorHay(c).includes(b)));
-if (cveBig.length < 5) cveBig = cves; // sem vendor reconhecido? mostra o topo por risco
-const kev = cveBig.slice(0, 18).map(kevCard);
+let kevList = list(await api('/api/v1/cve?in_kev=true&page_size=24'));
+if (!kevList.length) kevList = list(await api('/api/v1/kev?page_size=24')); // fallback
+const kevIds = kevList.map(c => pick(c, ['cve_id', 'cve', 'id', 'cveID'])).filter(Boolean);
+// enriquece com /cve/{id} (traz affected[].vendor/product), sequencial p/ respeitar rate limit
+const details = [];
+for (const id of kevIds.slice(0, 16)) {
+  const d = await api('/api/v1/cve/' + encodeURIComponent(id));
+  if (d) details.push(d.cve || d.data || d.item || d);
+}
+let src = details.length ? details : kevList;
+let cveBig = src.filter(c => BIG.some(b => vendorHay(c).includes(b)));
+if (cveBig.length < 5) cveBig = src; // sem vendor reconhecido? mostra o topo por risco
+const kev = cveBig.slice(0, 14).map(kevCard);
 
 const temDados = KEY && (victims.length || kev.length);
 const hoje = new Date().toISOString().slice(0, 10);
 
 const NAV = `  <nav aria-label="Seções">
-    <a href="./">Guia</a>
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
     <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
     <a href="artigos.html">Artigos</a>
@@ -112,7 +121,7 @@ ${NAV}
   <section class="sec-g">
     <p class="eyebrow">Threat intel</p>
     <h1>Radar de ameaças</h1>
-    <p class="sec-intro">O que está acontecendo agora, com foco em <b>Brasil</b> e <b>grandes fornecedores</b>. Atualizado automaticamente${temDados ? ` (último: ${hoje})` : ''}; fonte: <a href="https://vexday.io/" target="_blank" rel="noopener noreferrer">Vexday</a>.</p>
+    <p class="sec-intro">O que está acontecendo agora, com foco em <b>Brasil</b> e <b>grandes fornecedores</b>.${temDados ? ` Atualizado automaticamente &middot; última atualização: ${hoje}.` : ' Atualizado automaticamente.'}</p>
 ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : placeholder}
   </section>
 </main>
