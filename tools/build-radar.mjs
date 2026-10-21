@@ -34,27 +34,28 @@ function victimCard(v) {
   const meta = [group && ('Grupo: ' + group), sector, date].filter(Boolean).join(' · ');
   return `      <div class="card"><span class="k">Ransomware · Brasil</span><h3>${name}</h3><p>${meta || '&nbsp;'}</p></div>`;
 }
+const affList = c => { const a = c.affected || c.affected_products || c.vendors || []; return Array.isArray(a) ? a : []; };
+const vendorHay = c => affList(c).map(a => (pick(a, ['vendor', 'vendor_name']) + ' ' + pick(a, ['product', 'product_name']))).join(' ').toLowerCase()
+  || (pick(c, ['vendor', 'product']) + '').toLowerCase();
 function kevCard(c) {
   const id = esc(pick(c, ['cve_id', 'cve', 'id', 'cveID']) || 'CVE');
-  const vendor = esc(pick(c, ['vendor', 'vendorProject', 'vendor_name']));
-  const product = esc(pick(c, ['product', 'product_name']));
+  const a0 = affList(c)[0] || {};
+  const vendor = esc(pick(a0, ['vendor', 'vendor_name']) || pick(c, ['vendor', 'vendorProject']));
+  const product = esc(pick(a0, ['product', 'product_name']) || pick(c, ['product']));
   const sev = esc(pick(c, ['cvss_severity', 'severity', 'cvssSeverity'])).toUpperCase();
-  const name = esc(pick(c, ['name', 'vulnerabilityName', 'title', 'summary', 'description']));
-  const date = esc(asDate(pick(c, ['date_added', 'dateAdded', 'added', 'published', 'date'])));
+  const score = esc(pick(c, ['cvss_score', 'cvss', 'score']));
   const sevCls = /CRIT/.test(sev) ? 'crit' : /HIGH|ALT/.test(sev) ? 'high' : '';
   const vp = [vendor, product].filter(Boolean).join(' ');
-  return `      <a class="card" href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(id)}" target="_blank" rel="noopener noreferrer"><span class="k">KEV${vp ? ' · ' + esc(vp) : ''}</span><h3>${id}${sev ? ` <span class="pill sev-${sevCls}">${sev}</span>` : ''}</h3><p>${name || 'Vulnerabilidade sob exploração ativa.'}${date ? ` <span class="mut">· ${date}</span>` : ''}</p></a>`;
+  return `      <a class="card" href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(id)}" target="_blank" rel="noopener noreferrer"><span class="k">KEV${vp ? ' · ' + esc(vp) : ''}</span><h3>${id}${sev ? ` <span class="pill sev-${sevCls}">${sev}</span>` : ''}</h3><p>Em exploração ativa.${score ? ` CVSS ${score}.` : ''}</p></a>`;
 }
 
 /* ---- coleta ---- */
 let victims = list(await api('/api/v1/victims?country=BR&page_size=30')).slice(0, 24).map(victimCard);
-let kevAll = list(await api('/api/v1/kev?page_size=100'));
-let kevBig = kevAll.filter(c => {
-  const hay = (pick(c, ['vendor', 'vendorProject', 'vendor_name']) + ' ' + pick(c, ['product', 'product_name']) + ' ' + pick(c, ['name', 'vulnerabilityName', 'title'])).toLowerCase();
-  return BIG.some(b => hay.includes(b));
-});
-if (kevBig.length < 5) kevBig = kevAll; // sem campo de vendor? usa o topo por risco
-const kev = kevBig.slice(0, 18).map(kevCard);
+let cves = list(await api('/api/v1/cve?in_kev=true&page_size=50'));
+if (!cves.length) cves = list(await api('/api/v1/kev?page_size=50')); // fallback
+let cveBig = cves.filter(c => BIG.some(b => vendorHay(c).includes(b)));
+if (cveBig.length < 5) cveBig = cves; // sem vendor reconhecido? mostra o topo por risco
+const kev = cveBig.slice(0, 18).map(kevCard);
 
 const temDados = KEY && (victims.length || kev.length);
 const hoje = new Date().toISOString().slice(0, 10);
