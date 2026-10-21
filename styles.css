@@ -517,3 +517,17 @@ table.plat td:first-child{font-weight:600;color:var(--tx);white-space:nowrap}
 /* severidade no Radar */
 .pill.sev-crit{color:#ff6b6b;border-color:#5a2b2b}
 .pill.sev-high{color:#e2904c;border-color:#6b4a2a}
+
+/* ===== Menu agrupado: dropdown "Recursos" (sem JS, via <details>) ===== */
+.site nav .nav-group{position:relative;margin:0}
+.nav-group>summary{list-style:none;cursor:pointer;color:var(--mut);font-size:14px;padding:6px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
+.nav-group>summary::-webkit-details-marker{display:none}
+.nav-group>summary::after{content:"";width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.75}
+.nav-group>summary:hover{color:var(--tx)}
+.nav-group>summary.cur{color:var(--tx)}
+.nav-group[open]>summary{color:var(--tx);background:var(--s2)}
+.nav-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:186px;background:var(--s1);border:1px solid var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:2px;z-index:20;box-shadow:0 12px 34px #0009}
+.nav-menu a{color:var(--tx2);text-decoration:none;font-size:14px;padding:8px 12px;border-radius:6px;white-space:nowrap}
+.nav-menu a:hover{background:var(--s2);color:var(--tx)}
+.nav-menu a[aria-current=page]{color:var(--tx);background:var(--s2)}
+@media(max-width:640px){.nav-menu{right:auto;left:0}}

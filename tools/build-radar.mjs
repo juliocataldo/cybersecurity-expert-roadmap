@@ -61,14 +61,19 @@ const hoje = new Date().toISOString().slice(0, 10);
 
 const NAV = `  <nav aria-label="Seções">
     <a href="./">Guia</a>
-    <a href="canivete.html">Canivete suíço</a>
-    <a href="checklist.html">Checklist</a>
+    <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
     <a href="artigos.html">Artigos</a>
-    <a href="roadmap.html">Roadmaps</a>
-    <a href="teia.html">Teia</a>
-    <a href="plataformas.html">Plataformas</a>
-    <a href="radar.html" aria-current="page">Radar</a>
+    <details class="nav-group">
+      <summary class="cur">Recursos</summary>
+      <div class="nav-menu">
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="checklist.html">Checklist</a>
+        <a href="teia.html">Teia</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="radar.html" aria-current="page">Radar</a>
+      </div>
+    </details>
     <a href="sugestoes.html">Sugestões</a>
   </nav>`;
 
@@ -110,7 +115,7 @@ ${NAV}
 ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : placeholder}
   </section>
 </main>
-<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span> · <span class="foot-src">Threat intel por <a href="https://vexday.io/" target="_blank" rel="noopener noreferrer">Vexday</a>.</span></p></div></footer>
 </body>
 </html>
 `;
