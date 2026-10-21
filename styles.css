@@ -513,3 +513,7 @@ table.plat td:first-child{font-weight:600;color:var(--tx);white-space:nowrap}
 .price{font:600 11px/1.5 var(--mono);color:var(--mut)}
 .price.free{color:#49c6a0}
 .price.paid{color:#e7b9a6}
+
+/* severidade no Radar */
+.pill.sev-crit{color:#ff6b6b;border-color:#5a2b2b}
+.pill.sev-high{color:#e2904c;border-color:#6b4a2a}
