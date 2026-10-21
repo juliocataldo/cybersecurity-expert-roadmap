@@ -1,0 +1,53 @@
+name: Build Teia (notas do Obsidian)
+
+# Regenera a Teia a partir do repo de notas. Dispara:
+#  - quando o repo de notas avisa (repository_dispatch), veja o passo de setup no README;
+#  - manualmente (workflow_dispatch);
+#  - a cada 6h (fallback);
+#  - quando o gerador muda.
+on:
+  repository_dispatch:
+    types: [notas-update]
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 */6 * * *'
+  push:
+    paths: ['tools/build-notas.mjs']
+
+permissions:
+  contents: write
+
+env:
+  # troque para o seu repo de notas (público). Se for privado, veja NOTAS_TOKEN no README.
+  NOTAS_REPO: juliocataldo/notas-cyber
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do site
+        uses: actions/checkout@v4
+      - name: Checkout das notas (vault)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.NOTAS_REPO }}
+          path: vault
+          # Para repo de notas PRIVADO, descomente e crie o secret NOTAS_TOKEN (PAT com acesso de leitura):
+          # token: ${{ secrets.NOTAS_TOKEN }}
+        continue-on-error: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Gerar Teia
+        run: node tools/build-notas.mjs
+      - name: Commit se houver mudanças
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add teia-data.js notas/
+          if git diff --staged --quiet; then
+            echo "Sem mudanças na Teia."
+          else
+            git commit -m "Atualiza Teia (notas do Obsidian)"
+            git push
+          fi

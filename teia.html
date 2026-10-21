@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Teia de conhecimento: minhas notas de segurança (Obsidian) e como os temas se conectam, em um grafo interativo.">
+<title>Teia · Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="canivete.html">Canivete suíço</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="artigos.html">Artigos</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="teia.html" aria-current="page">Teia</a>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <section class="sec-g">
+    <p class="eyebrow">Segundo cérebro</p>
+    <h1>Teia de conhecimento</h1>
+    <p class="sec-intro">Minhas anotações de segurança e como os temas se conectam — igual ao grafo do Obsidian. Cada ponto é uma nota; as linhas são as menções entre elas. Clique num ponto para abrir a nota; arraste para reorganizar.</p>
+    <div class="teia-wrap">
+      <canvas id="teia" class="teia-canvas" aria-label="Grafo de notas conectadas"></canvas>
+      <p class="teia-empty" id="teiaEmpty" hidden>Ainda não há notas publicadas.</p>
+    </div>
+    <noscript><p class="mut small">O grafo precisa de JavaScript. A lista de notas está logo abaixo.</p></noscript>
+    <p class="path-k">Todas as notas</p>
+    <div class="teia-list" id="teiaList"></div>
+    <p class="mut small">As notas vêm do meu vault do Obsidian (só as marcadas como públicas). Quer sugerir um tema? Use a página de <a href="sugestoes.html">Sugestões</a>.</p>
+  </section>
+</main>
+<script src="teia-data.js"></script>
+<script src="teia.js"></script>
+</body>
+</html>

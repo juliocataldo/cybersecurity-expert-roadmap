@@ -14,6 +14,7 @@ O site tem quatro partes:
 | **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 65 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 | **Artigos** (`artigos.html` + `artigo-*.html`) | Estudos de caso de segurança escritos em português, do zero. Primeiro texto: *Como uma câmera IP barata vira porta de entrada* (IoT), inspirado no estudo de Zoltan Balazs, com crédito à fonte. |
 | **Roadmaps** (`roadmap.html`) | Hub de mapas: o **fluxo de Ethical Hacking** (caixas e setas, estilo roadmap.sh, 12 estágios) e **trilhas por função** (SOC, Pentester, GRC, Cloud, DFIR) com tempo, certs, onde aprender e vídeos do YouTube. SVG inline (cores embutidas, à prova de cache) gerado por `gen_roadmap.py`; conteúdo próprio. |
+| **Teia** (`teia.html` + `teia.js` + `notas/`) | **Segundo cérebro**: grafo interativo das minhas notas (Obsidian) e páginas por nota com backlinks. Gerado por `tools/build-notas.mjs` a partir de um vault de markdown (`publish: true`). Veja "Teia" em *Para o professor*. |
 | **Sugestões** (`sugestoes.html` + `sugestoes.js`) | Community board: formulário que gera uma **issue pré-preenchida no GitHub** (o site é estático, sem servidor), onde a comunidade comenta e vota. |
 
 > Atividade formativa, **sem nota**.
@@ -86,6 +87,40 @@ Todo o conteúdo da trilha está em **`trilha.js`**. Dá para mudar textos, link
 O arquivo exportado pelo aluno usa o mesmo formato (`schema: 1`, `lab: "roadmap"`) dos labs. No painel da turma, ele mostra quais fases foram concluídas e **quais questões a turma mais errou**.
 
 O progresso é autodeclarado (o aluno marca as missões), então serve para diagnóstico, não para nota.
+
+### Teia (notas do Obsidian → site)
+A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às páginas em `notas/`. Tudo é gerado por `tools/build-notas.mjs` (Node, zero dependências) a partir de um vault de markdown.
+
+**Rodar local:** `node tools/build-notas.mjs` — lê de `./vault/` (ignorado no git) ou, se não existir, de `tools/sample-vault/` (notas de exemplo). Gera `teia-data.js` e `notas/*.html`. Só entram notas com `publish: true` no frontmatter. Suporta `# títulos`, listas, `**negrito**`/`*itálico*`/`` `código` ``, blocos ```` ``` ````, citações, links e **`[[wikilinks]]`** (e `[[Nota|texto]]`); as tags vêm do frontmatter.
+
+**Publicar do Obsidian (sem terminal):**
+1. Crie um repositório **`notas-cyber`** no GitHub (público; se privado, veja abaixo).
+2. No Obsidian: **Community plugins → Obsidian Git**; aponte o remote para esse repo e ligue o backup automático (ou use "Backup now"). Publicar = salvar.
+3. Marque as notas públicas com frontmatter:
+   ```
+   ---
+   title: Minha nota
+   publish: true
+   tags: [web, defensivo]
+   ---
+   ```
+4. O Action `/.github/workflows/notas.yml` puxa o `notas-cyber` para `vault/`, roda o gerador e commita `teia-data.js` + `notas/`. Ele dispara manualmente, a cada 6h e quando o repo de notas avisar.
+5. **(opcional) Atualização instantânea:** no `notas-cyber`, adicione um workflow que chama o `repository_dispatch` do site ao dar push (precisa de um PAT no secret `SITE_DISPATCH_TOKEN`):
+   ```yaml
+   on: { push: { branches: [main] } }
+   jobs:
+     ping:
+       runs-on: ubuntu-latest
+       steps:
+         - run: |
+             curl -X POST -H "Authorization: token ${{ secrets.SITE_DISPATCH_TOKEN }}" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/juliocataldo/cybersecurity-expert-roadmap/dispatches \
+               -d '{"event_type":"notas-update"}'
+   ```
+6. **Repo de notas privado:** no `notas.yml`, descomente a linha `token: ${{ secrets.NOTAS_TOKEN }}` e crie o secret `NOTAS_TOKEN` (PAT com leitura do repo de notas).
+
+> Só as notas `publish: true` saem. O resto do vault (privado) nunca é publicado — o `vault/` fica no `.gitignore`.
 
 ### Publicação
 GitHub Pages servindo a branch `main`, pasta raiz. O arquivo `.nojekyll` desliga o processamento do Jekyll.
