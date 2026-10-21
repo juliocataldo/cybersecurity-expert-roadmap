@@ -218,7 +218,9 @@ function toast(msg, kind) {
 
 /* ===== diálogos ===== */
 function dialog(...kids) {
-  const d = $('#dlg'); d.replaceChildren(...kids, h('div', { class: 'row' }, h('button', { class: 'sec', onclick: () => d.close() }, 'Fechar'))); d.showModal();
+  const d = $('#dlg');
+  const x = h('button', { class: 'dlg-x', 'aria-label': 'Fechar', title: 'Fechar', onclick: () => d.close() }, '×');
+  d.replaceChildren(x, ...kids, h('div', { class: 'row' }, h('button', { class: 'sec', onclick: () => d.close() }, 'Fechar'))); d.showModal();
 }
 function openBadges() {
   const got = new Set(earnedBadges());
@@ -234,7 +236,7 @@ function openSave() {
     oninput: e => { S.who = e.target.value.slice(0, 60); save(); } });
   dialog(h('h2', null, 'Seu progresso'),
     h('p', null, 'O progresso fica salvo ', h('b', null, 'só neste navegador'), '. Se trocar de computador, limpar os dados do navegador ou usar janela anônima, ele não vai junto. Exporte de vez em quando.'),
-    h('label', null, 'Nome ou RM (opcional)'), who,
+    h('label', null, 'Nome (opcional)'), who,
     h('div', { class: 'row' },
       h('button', { onclick: exportJson }, 'Exportar .json'),
       h('button', { class: 'sec', onclick: () => $('#fileIn').click() }, 'Importar .json'),
@@ -252,9 +254,7 @@ function openAbout() {
     h('p', null, 'A sequência conta os dias seguidos em que você concluiu ao menos uma missão ou respondeu uma questão.'),
     h('div', { class: 'warn' }, h('b', null, 'Ética: '), 'pratique só no que é seu ou em plataformas feitas para isso (labs, CTFs, VMs). Testar sistemas de terceiros sem autorização é crime (Lei 12.737/2012).'),
     h('h3', null, 'Privacidade'),
-    h('p', null, 'Este site não tem servidor, cookies nem rastreamento. Tudo fica no seu navegador; o nome/RM é opcional e só vai no arquivo que você mesmo exportar.'),
-    h('h3', null, 'Créditos'),
-    h('p', null, 'Conteúdo original, em português, escrito para a turma. A estrutura foi inspirada em: ', ...T.creditos.flatMap(([n, u], k) => [k ? ' e ' : '', ext(u, n)]), '.'));
+    h('p', null, 'Este site não tem servidor, cookies nem rastreamento. Tudo fica no seu navegador; o nome é opcional e só vai no arquivo que você mesmo exportar.'));
 }
 
 /* ===== exportar / importar ===== */

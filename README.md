@@ -8,8 +8,8 @@ O site tem quatro partes:
 
 | Página | Para quê |
 |---|---|
-| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, podcasts e canais, certificações e combinados. As coletâneas de ferramentas viraram páginas próprias, reunidas na seção **Recursos**. |
-| **Recursos** (`ferramentas.html`, `osint.html`, `ia.html`, `ransomware.html`) | Coletâneas de consulta: ferramentas de análise (SOC/threat intel), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). Linkadas na seção **Recursos** do guia. |
+| **Guia** (`index.html`, página principal) | Para **ler**: entender a área, por onde começar (fundamentos → OWASP Top 10 → PortSwigger → TryHackMe → roadmap.sh), onde praticar, como montar um laboratório isolado, cursos, podcasts e canais, certificações e combinados. Canivete suíço e Checklist aparecem como entradas curtas que levam às páginas próprias. |
+| **Canivete suíço** (`canivete.html` → `ferramentas.html`, `osint.html`, `ia.html`, `ransomware.html`) | Página que reúne as coletâneas de consulta: ferramentas de análise (SOC/threat intel), OSINT, IA e segurança, e simuladores de ransomware (Blue Team, avançado). |
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
 | **Trilha** (`trilha.html`) | Para **ir fazendo**: 12 fases, 65 missões, 36 questões de checkpoint, XP, níveis, dias seguidos e conquistas. Progresso salvo só no navegador. |
 
@@ -53,7 +53,7 @@ Pratique **só** no que é seu ou em plataformas feitas para isso: VMs, labs, CT
 Invadir dispositivo alheio sem autorização é crime no Brasil (Lei 12.737/2012, art. 154-A do Código Penal).
 
 ## Privacidade
-O site é estático: não tem servidor, login, cookies nem rastreamento. O progresso fica no `localStorage` do navegador. O nome/RM é opcional e só vai no arquivo que o próprio aluno exportar.
+O site é estático: não tem servidor, login, cookies nem rastreamento. O progresso fica no `localStorage` do navegador. O nome é opcional e só vai no arquivo que a própria pessoa exportar.
 
 ---
 
@@ -96,7 +96,7 @@ GitHub Pages servindo a branch `main`, pasta raiz. O arquivo `.nojekyll` desliga
 - [ ] Certificado de conclusão da trilha
 
 ## Créditos
-Conteúdo original, em português, escrito para a turma de Cyber Security da FIAP. A estrutura de fases foi inspirada em:
+Conteúdo original, em português. A estrutura de fases foi inspirada em:
 - [Cybersecurity Mastery Roadmap](https://github.com/Hamed233/Cybersecurity-Mastery-Roadmap), de Hamed233
 - [CyberSecurity RoadMap](https://jansen-moreira.notion.site/CyberSecurity-RoadMap-1123f61008cd806e9ae8d6c57bc5d2d9), de Jansen Moreira
 
