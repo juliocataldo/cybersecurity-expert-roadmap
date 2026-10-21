@@ -46,6 +46,7 @@
         <button type="button" class="chip-f" data-f="mail" aria-pressed="false">E-mail</button>
         <button type="button" class="chip-f" data-f="net" aria-pressed="false">Redes e web</button>
         <button type="button" class="chip-f" data-f="ssl" aria-pressed="false">SSL/TLS</button>
+        <button type="button" class="chip-f" data-f="ref" aria-pressed="false">Referência</button>
         <button type="button" class="chip-f" data-f="dev" aria-pressed="false">Dev e utilidades</button>
         </div>
         <p class="mut small tf-count" role="status"></p>
@@ -64,6 +65,12 @@
       <a class="card tool" data-cat="cti" href="https://cybergordon.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>CyberGordon</h3><p>Consulta um indicador em vários serviços de reputação.</p></a>
       <a class="card tool" data-cat="cti" href="https://metadefender.opswat.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>MetaDefender Cloud</h3><p>Varredura de arquivos, hashes e URLs em vários engines.</p></a>
       <a class="card tool" data-cat="cti" href="https://ipcheck.proofpoint.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>Proofpoint Dynamic Reputation</h3><p>Reputação de IP para envio de e-mail.</p></a>
+      <a class="card tool" data-cat="cti" href="https://viz.greynoise.io/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>GreyNoise</h3><p>Diz se o IP é scanner em massa (ruído) ou atividade direcionada.</p></a>
+      <a class="card tool" data-cat="cti" href="https://ipinfo.io/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>IPinfo</h3><p>Geolocalização, ASN e tipo de rede (hosting, VPN, residencial).</p></a>
+      <a class="card tool" data-cat="cti" href="https://www.shodan.io/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>Shodan</h3><p>Serviços e portas expostos na internet. Requer conta.</p></a>
+      <a class="card tool" data-cat="cti" href="https://search.censys.io/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>Censys</h3><p>Hosts, serviços e certificados expostos. Requer conta.</p></a>
+      <a class="card tool" data-cat="cti" href="https://threatfox.abuse.ch/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>ThreatFox</h3><p>IOCs de C2 e malware compartilhados pela comunidade.</p></a>
+      <a class="card tool" data-cat="cti" href="https://exchange.xforce.ibmcloud.com/" target="_blank" rel="noopener noreferrer"><span class="k">Threat intel</span><h3>IBM X-Force Exchange</h3><p>Reputação de IP, URL e hash, com relatórios de ameaças. Requer conta.</p></a>
       <a class="card tool" data-cat="mal" href="https://any.run/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>ANY.RUN</h3><p>Sandbox interativa; análises gratuitas são públicas.</p></a>
       <a class="card tool" data-cat="mal" href="https://www.virustotal.com/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>VirusTotal</h3><p>Hash, URL, domínio e IP em dezenas de engines.</p></a>
       <a class="card tool" data-cat="mal" href="https://www.hybrid-analysis.com/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>Hybrid Analysis</h3><p>Relatórios de sandbox (Falcon).</p></a>
@@ -79,6 +86,7 @@
       <a class="card tool" data-cat="mal" href="https://blog.didierstevens.com/programs/oledump-py/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>oledump.py</h3><p>Analisa macros em documentos Office.</p></a>
       <a class="card tool" data-cat="mal" href="https://www.nextron-systems.com/thor-lite/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>THOR Lite</h3><p>Scanner de IOCs e artefatos suspeitos.</p></a>
       <a class="card tool" data-cat="mal" href="https://www.autopsy.com/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>Autopsy</h3><p>Plataforma de forense digital.</p></a>
+      <a class="card tool" data-cat="mal" href="https://bazaar.abuse.ch/" target="_blank" rel="noopener noreferrer"><span class="k">Malware e sandbox</span><h3>MalwareBazaar</h3><p>Amostras de malware por hash, com família e tags.</p></a>
       <a class="card tool" data-cat="osint" href="https://osintframework.com/" target="_blank" rel="noopener noreferrer"><span class="k">OSINT</span><h3>OSINT Framework</h3><p>Mapa clicável de ferramentas por tipo de dado.</p></a>
       <a class="card tool" data-cat="osint" href="https://www.deviceinfo.me/" target="_blank" rel="noopener noreferrer"><span class="k">OSINT</span><h3>Device Info</h3><p>Mostra o que o SEU navegador e dispositivo expõem.</p></a>
       <a class="card tool" data-cat="osint" href="https://www.followthatpage.com/" target="_blank" rel="noopener noreferrer"><span class="k">OSINT</span><h3>Follow That Page</h3><p>Avisa quando uma página muda.</p></a>
@@ -99,8 +107,15 @@
       <a class="card tool" data-cat="url" href="https://www.dnswatch.info/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>DNSWatch</h3><p>DNS lookup e reverse DNS.</p></a>
       <a class="card tool" data-cat="url" href="https://user-agents.net/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>user-agents.net</h3><p>Base de referência de user agents.</p></a>
       <a class="card tool" data-cat="url" href="https://logeix.com/tools/robots-txt" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>robots.txt Tester</h3><p>Valida o robots.txt de um site.</p></a>
+      <a class="card tool" data-cat="url" href="https://lookup.icann.org/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>ICANN Lookup</h3><p>WHOIS/RDAP oficial: criação, registrar e status do domínio.</p></a>
+      <a class="card tool" data-cat="url" href="https://dnsdumpster.com/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>DNSDumpster</h3><p>Mapa de registros DNS e subdomínios.</p></a>
+      <a class="card tool" data-cat="url" href="https://securitytrails.com/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>SecurityTrails</h3><p>Histórico de DNS: para onde o domínio já apontou. Requer conta.</p></a>
+      <a class="card tool" data-cat="url" href="https://transparencyreport.google.com/safe-browsing/search" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>Google Safe Browsing</h3><p>Verifica se o site está marcado como inseguro.</p></a>
+      <a class="card tool" data-cat="url" href="https://www.urlvoid.com/" target="_blank" rel="noopener noreferrer"><span class="k">URL, DNS e domínio</span><h3>URLVoid</h3><p>Reputação de um site em várias listas de bloqueio.</p></a>
       <a class="card tool" data-cat="mail" href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>MXToolbox Email Headers</h3><p>Lê e explica o cabeçalho de um e-mail.</p></a>
       <a class="card tool" data-cat="mail" href="https://captainverify.com/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>CaptainVerify Mail Tester</h3><p>Verifica se um endereço de e-mail existe.</p></a>
+      <a class="card tool" data-cat="mail" href="https://haveibeenpwned.com/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>Have I Been Pwned</h3><p>Mostra se o SEU e-mail apareceu em vazamentos.</p></a>
+      <a class="card tool" data-cat="mail" href="https://toolbox.googleapps.com/apps/messageheader/" target="_blank" rel="noopener noreferrer"><span class="k">E-mail</span><h3>Google Messageheader</h3><p>Lê o cabeçalho bruto e mostra o caminho do e-mail.</p></a>
       <a class="card tool" data-cat="net" href="https://www.calculator.net/ip-subnet-calculator.html" target="_blank" rel="noopener noreferrer"><span class="k">Redes e web</span><h3>IP Subnet Calculator</h3><p>Calcula sub-redes e faixas de IP.</p></a>
       <a class="card tool" data-cat="net" href="https://ping.eu/" target="_blank" rel="noopener noreferrer"><span class="k">Redes e web</span><h3>ping.eu</h3><p>Ping, traceroute, DNS, porta e WHOIS online.</p></a>
       <a class="card tool" data-cat="net" href="https://bgp.he.net/" target="_blank" rel="noopener noreferrer"><span class="k">Redes e web</span><h3>bgp.he.net</h3><p>Informações de BGP, ASN e prefixos.</p></a>
@@ -119,6 +134,9 @@
       <a class="card tool" data-cat="ssl" href="https://zerossl.com/" target="_blank" rel="noopener noreferrer"><span class="k">SSL/TLS</span><h3>ZeroSSL</h3><p>Certificados SSL/TLS gratuitos.</p></a>
       <a class="card tool" data-cat="ssl" href="https://www.sslshopper.com/csr-decoder.html" target="_blank" rel="noopener noreferrer"><span class="k">SSL/TLS</span><h3>CSR Decoder</h3><p>Decodifica e valida um CSR.</p></a>
       <a class="card tool" data-cat="ssl" href="https://bcrypt-generator.com/" target="_blank" rel="noopener noreferrer"><span class="k">SSL/TLS</span><h3>Bcrypt Generator</h3><p>Gera e testa hashes bcrypt.</p></a>
+      <a class="card tool" data-cat="ref" href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer"><span class="k">Referência</span><h3>MITRE ATT&amp;CK</h3><p>Táticas e técnicas usadas por atacantes.</p></a>
+      <a class="card tool" data-cat="ref" href="https://lolbas-project.github.io/" target="_blank" rel="noopener noreferrer"><span class="k">Referência</span><h3>LOLBAS</h3><p>Binários legítimos do Windows abusados por atacantes.</p></a>
+      <a class="card tool" data-cat="ref" href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer"><span class="k">Referência</span><h3>GTFOBins</h3><p>O mesmo para binários do Linux.</p></a>
       <a class="card tool" data-cat="dev" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer"><span class="k">Dev e utilidades</span><h3>CyberChef</h3><p>Decodifica e transforma dados no navegador.</p></a>
       <a class="card tool" data-cat="dev" href="https://crontab.guru/" target="_blank" rel="noopener noreferrer"><span class="k">Dev e utilidades</span><h3>crontab.guru</h3><p>Monta e lê expressões de cron.</p></a>
       <a class="card tool" data-cat="dev" href="https://explainshell.com/" target="_blank" rel="noopener noreferrer"><span class="k">Dev e utilidades</span><h3>explainshell</h3><p>Explica cada parte de um comando shell.</p></a>
