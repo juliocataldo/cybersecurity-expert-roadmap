@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Sugira recursos, trilhas, artigos ou melhorias para o Cyber Expert Guide. As sugestões viram issues públicas no GitHub, onde qualquer um pode comentar e votar.">
+<title>Sugestões · Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Guia</a>
+    <a href="canivete.html">Canivete suíço</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="trilha.html">Trilha</a>
+    <a href="artigos.html">Artigos</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="sugestoes.html" aria-current="page">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <section class="sec-g">
+    <p class="eyebrow">Community board</p>
+    <h1>Ajude a construir</h1>
+    <p class="sec-intro">Faltou uma ferramenta? Quer uma trilha nova, um artigo sobre um tema, ou achou um link quebrado? Manda aqui. Cada sugestão vira uma <b>issue pública no GitHub</b>, onde qualquer pessoa pode comentar e <b>votar (reação de joinha)</b> — e eu uso isso para priorizar o que entra primeiro.</p>
+    <div class="sug-grid">
+      <form id="sugForm" class="sug-form" novalidate>
+        <label for="sugCat">Categoria</label>
+        <select id="sugCat">
+          <option value="Recurso / ferramenta">Recurso / ferramenta</option>
+          <option value="Nova trilha / roadmap">Nova trilha / roadmap</option>
+          <option value="Artigo / tema">Artigo / tema</option>
+          <option value="Correção / link quebrado">Correção / link quebrado</option>
+          <option value="Melhoria de UI">Melhoria de UI</option>
+          <option value="Outro">Outro</option>
+        </select>
+
+        <label for="sugTitle">Título <span class="sug-count" id="sugTitleCount">0/80</span></label>
+        <input type="text" id="sugTitle" maxlength="80" autocomplete="off" placeholder="Em uma frase: o que você sugere?">
+
+        <label for="sugDesc">Descrição <span class="sug-count" id="sugDescCount">0/500</span></label>
+        <textarea id="sugDesc" maxlength="500" rows="6" placeholder="Por que isso ajuda? Links, contexto, exemplos. Não cole dados pessoais."></textarea>
+
+        <label for="sugName">Seu nome ou @ (opcional)</label>
+        <input type="text" id="sugName" maxlength="60" autocomplete="off" placeholder="Opcional — só para crédito">
+
+        <p class="sug-err" id="sugErr" role="alert" hidden></p>
+        <div class="row">
+          <button type="button" id="sugSend">Abrir no GitHub →</button>
+          <a class="btn sec" href="https://github.com/juliocataldo/cybersecurity-expert-roadmap/issues" target="_blank" rel="noopener noreferrer">Ver e votar nas sugestões</a>
+        </div>
+        <p class="mut small">Ao continuar, o GitHub abre em outra aba com a issue já preenchida; é só revisar e publicar (precisa de uma conta gratuita). Nada é enviado deste site — ele não tem servidor.</p>
+      </form>
+
+      <aside class="sug-side">
+        <h3>Como funciona</h3>
+        <ol class="sug-steps">
+          <li>Escolha a categoria e descreva a ideia.</li>
+          <li>Clique em <b>Abrir no GitHub</b>: a issue vai pré-preenchida.</li>
+          <li>Publique a issue (ou ajuste antes).</li>
+          <li>A comunidade comenta e vota; as mais votadas entram primeiro.</li>
+        </ol>
+        <h3>O que já dá para sugerir</h3>
+        <ul class="sug-ideas">
+          <li>Ferramenta para o <a href="canivete.html">Canivete suíço</a></li>
+          <li>Tema para um <a href="artigos.html">Artigo</a></li>
+          <li>Trilha por função nova em <a href="roadmap.html">Roadmaps</a></li>
+          <li>Item para o <a href="checklist.html">Checklist</a></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</main>
+<script src="sugestoes.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Guia de estudos para começar em Cyber Security: por onde começar, laboratórios, podcasts, certificações e uma trilha gamificada.">
-<title>Cybersecurity Roadmap · Guia de estudos</title>
+<title>Cyber Expert Guide · Guia de estudos</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Cpath d='M9 22 L16 8 L23 22' stroke='%23ff7a1a' stroke-width='3' fill='none'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,19 +19,38 @@
     <a href="checklist.html">Checklist</a>
     <a href="trilha.html">Trilha</a>
     <a href="artigos.html">Artigos</a>
-    <a href="roadmap.html">Roadmap</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="sugestoes.html">Sugestões</a>
   </nav>
 </header>
 
 <main class="wrap">
-  <section class="hero">
-    <p class="eyebrow">Guia de estudos · Cyber Security</p>
-    <h1>Por onde começar em Cyber Security</h1>
-    <p class="lead">Um caminho para ler com calma: o que estudar primeiro, onde praticar, o que ouvir no caminho e como a carreira se divide. Quando quiser ir fazendo e marcando o progresso, a trilha gamificada está no fim.</p>
-    <div class="cta">
-      <a class="btn" href="#comece">Começar a ler</a>
-      <a class="btn sec" href="trilha.html">Abrir a trilha gamificada</a>
+  <section class="hero hero-tech">
+    <div class="hero-main">
+      <p class="eyebrow mono">// cyber-expert-guide</p>
+      <h1>Pare de adivinhar.<br>Monte seu caminho em segurança.</h1>
+      <p class="lead">Um guia de estudos que virou portfólio: roadmaps por função, uma trilha gamificada, um canivete com 113 ferramentas, um checklist de privacidade e artigos — tudo em português, escrito do zero e sem rastreamento.</p>
+      <div class="cta">
+        <a class="btn" href="roadmap.html">Ver os roadmaps</a>
+        <a class="btn sec" href="trilha.html">Abrir a trilha</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>6</b><span>roadmaps e trilhas</span></div>
+        <div class="stat"><b>113</b><span>ferramentas</span></div>
+        <div class="stat"><b>65</b><span>missões</span></div>
+        <div class="stat"><b>233</b><span>hábitos</span></div>
+      </div>
     </div>
+    <aside class="term" aria-hidden="true">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre class="term-body"><span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ ls ./guia
+<span class="term-o">area/  comece/  praticar/  laboratorio/</span>
+<span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ open roadmaps
+<span class="term-o">[ok] SOC · Pentest · GRC · Cloud · DFIR</span>
+<span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ start trilha
+<span class="term-o">XP 0 -&gt; Lenda da Cyber</span>
+<span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ <span class="cursor">&#9608;</span></pre>
+    </aside>
   </section>
 
   <nav class="toc" aria-label="Nesta página">
@@ -142,35 +161,6 @@
       </div>
     </div>
 
-    <div class="area-quiz" id="areaQuiz" hidden>
-      <h3>Teste rápido: qual área tem mais a ver com você?</h3>
-      <p class="mut small">3 perguntas, sem resposta certa. Não é uma escolha definitiva: é só um ponto de partida para explorar.</p>
-      <form id="aq">
-        <fieldset><legend>1. Num trabalho em grupo, você costuma ser quem...</legend>
-          <label><input type="radio" name="q1" value="ofe"> testa tudo para achar o que pode dar errado</label>
-          <label><input type="radio" name="q1" value="def"> investiga quando algo dá errado</label>
-          <label><input type="radio" name="q1" value="cti"> pesquisa a fundo e escreve o resumo para o grupo</label>
-          <label><input type="radio" name="q1" value="grc"> organiza o plano e conversa com todo mundo</label>
-          <label><input type="radio" name="q1" value="cld"> automatiza a parte chata com alguma ferramenta</label>
-        </fieldset>
-        <fieldset><legend>2. Qual destas tarefas parece mais divertida?</legend>
-          <label><input type="radio" name="q2" value="ofe"> Encontrar uma falha num site feito para treino</label>
-          <label><input type="radio" name="q2" value="def"> Descobrir o que aconteceu a partir de logs</label>
-          <label><input type="radio" name="q2" value="cti"> Descobrir quem está por trás de uma campanha de golpes</label>
-          <label><input type="radio" name="q2" value="grc"> Avaliar os riscos de uma empresa e priorizar</label>
-          <label><input type="radio" name="q2" value="cld"> Montar um servidor na nuvem do jeito certo</label>
-        </fieldset>
-        <fieldset><legend>3. Qual destas séries ou documentários você escolheria?</legend>
-          <label><input type="radio" name="q3" value="ofe"> Um grupo planejando um assalto perfeito</label>
-          <label><input type="radio" name="q3" value="def"> Uma investigação policial cheia de pistas</label>
-          <label><input type="radio" name="q3" value="cti"> Jornalistas desvendando um caso só com fontes abertas</label>
-          <label><input type="radio" name="q3" value="grc"> Os bastidores de uma grande empresa em crise</label>
-          <label><input type="radio" name="q3" value="cld"> Como funciona a infraestrutura de uma big tech</label>
-        </fieldset>
-        <div class="row"><button type="submit">Ver resultado</button><button type="reset" class="sec">Limpar</button></div>
-        <p class="aq-out" id="aqOut" role="status"></p>
-      </form>
-    </div>
   </section>
 
   <!-- 02 -->

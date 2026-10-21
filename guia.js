@@ -36,34 +36,6 @@
   area.classList.add('js');
   document.getElementById('areaHint').hidden = false;
   selectTab(tabs[0]);
-
-  /* ---- teste rápido ---- */
-  const quiz = document.getElementById('areaQuiz');
-  const form = document.getElementById('aq');
-  const out = document.getElementById('aqOut');
-  quiz.hidden = false;
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const vals = ['q1', 'q2', 'q3'].map(n => (form.querySelector(`input[name=${n}]:checked`) || {}).value);
-    if (vals.some(v => !v)) { out.textContent = 'Responda as 3 perguntas para ver o resultado.'; return; }
-    const cont = {}; vals.forEach(v => { cont[v] = (cont[v] || 0) + 1; });
-    const max = Math.max(...Object.values(cont));
-    const top = Object.keys(cont).filter(k => cont[k] === max);
-    const pick = top.length === 1 ? top[0] : null;
-    out.replaceChildren();
-    const b = document.createElement('b');
-    if (pick) {
-      b.textContent = NOMES[pick];
-      out.append('Seu perfil puxa para ', b, '. Abrimos essa área acima para você explorar. Lembre que todo mundo passa pelos Fundamentos primeiro.');
-      selectTab(tabs.find(t => t.dataset.area === pick));
-    } else {
-      const ns = top.map(k => NOMES[k]); b.textContent = ns.slice(0, -1).join(', ') + ' e ' + ns[ns.length - 1];
-      out.append('Deu empate entre ', b, '. Ótimo sinal: explore as áreas acima e veja qual desperta mais curiosidade.');
-      selectTab(tabs.find(t => t.dataset.area === top[0]));
-    }
-    area.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-  });
-  form.addEventListener('reset', () => { out.textContent = ''; });
 })();
 
 /* Blocos de ferramentas ([data-tf]): filtro por categoria + busca (sem acento, sem maiúscula).
