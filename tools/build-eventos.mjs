@@ -21,7 +21,7 @@ function regioes(local, nome) {
     }
   } else if (/EUA/.test(local)) r.add('us');
   else if (/Europa|Reino Unido/.test(local)) r.add('eu');
-  else if (/Singapura/.test(local)) r.add('as');
+  else if (/Singapura|Índia/.test(local)) r.add('as');
   else if (/Canadá|Arábia Saudita/.test(local)) r.add('out');
   if (!r.size) throw new Error(`Região não classificada: ${nome} (${local})`);
   return [...r];
