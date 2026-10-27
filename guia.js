@@ -42,28 +42,32 @@
    Sem JS, os controles ficam ocultos e todas as ferramentas aparecem. */
 document.querySelectorAll('[data-tf]').forEach(box => {
   const cards = [...box.querySelectorAll('.tool')];
-  const chips = [...box.querySelectorAll('.chip-f')];
   const q = box.querySelector('input[type=search]');
   const count = box.querySelector('.tf-count');
   const empty = box.querySelector('.tf-empty');
   const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const text = new Map(cards.map(c => [c, norm(c.textContent)]));
-  let cat = '';
+  /* Cada .chips-f \u00e9 um filtro independente (E l\u00f3gico entre grupos). L\u00ea data-<attr> do card,
+     com attr = data-attr do grupo ("cat" por padr\u00e3o), em tokens separados por espa\u00e7o. */
+  const groups = [...box.querySelectorAll('.chips-f')].map(g => ({ el: g, attr: g.dataset.attr || 'cat', val: '' }));
   function apply() {
     const term = norm(q.value.trim());
     let n = 0;
     cards.forEach(c => {
-      const show = (!cat || c.dataset.cat.split(' ').includes(cat)) && (!term || text.get(c).includes(term));
+      const show = groups.every(g => !g.val || (c.dataset[g.attr] || '').split(' ').includes(g.val)) && (!term || text.get(c).includes(term));
       c.hidden = !show; if (show) n++;
     });
     count.textContent = `${n} de ${cards.length} ${box.dataset.noun || 'ferramentas'}`;
     empty.hidden = n > 0;
   }
-  chips.forEach(b => b.addEventListener('click', () => {
-    cat = b.dataset.f;
-    chips.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
-    apply();
-  }));
+  groups.forEach(g => {
+    const chips = [...g.el.querySelectorAll('.chip-f')];
+    chips.forEach(b => b.addEventListener('click', () => {
+      g.val = b.dataset.f;
+      chips.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+      apply();
+    }));
+  });
   q.addEventListener('input', apply);
   box.querySelector('.tools-ctl').hidden = false;
   apply();
