@@ -91,6 +91,8 @@ const NAV = `  <nav aria-label="Seções">
         <a href="../checklist.html">Checklist</a>
         <a href="../teia.html" aria-current="page">Teia</a>
         <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
         <a href="../radar.html">Radar</a>
       </div>
     </details>

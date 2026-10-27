@@ -53,7 +53,7 @@ document.querySelectorAll('[data-tf]').forEach(box => {
     const term = norm(q.value.trim());
     let n = 0;
     cards.forEach(c => {
-      const show = (!cat || c.dataset.cat === cat) && (!term || text.get(c).includes(term));
+      const show = (!cat || c.dataset.cat.split(' ').includes(cat)) && (!term || text.get(c).includes(term));
       c.hidden = !show; if (show) n++;
     });
     count.textContent = `${n} de ${cards.length} ${box.dataset.noun || 'ferramentas'}`;
