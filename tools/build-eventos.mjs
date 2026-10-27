@@ -9,7 +9,7 @@ const nT = EVENTOS.filter(e => e[3] !== 'e').length;
 const nE = EVENTOS.filter(e => e[3] !== 't').length;
 
 // Região derivada do campo "local". Um evento pode cair em mais de uma (circuitos itinerantes).
-const REG = { sp: 'Brasil · SP', br: 'Brasil · Outros estados', us: 'EUA', eu: 'Europa', out: 'Outros países' };
+const REG = { sp: 'Brasil · SP', br: 'Brasil · Outros estados', us: 'EUA', eu: 'Europa', as: 'Ásia', out: 'Outros países' };
 const CIDADES_SP = /São Paulo|Guarujá|Campinas/;
 function regioes(local, nome) {
   const r = new Set();
@@ -20,7 +20,8 @@ function regioes(local, nome) {
       else r.add(CIDADES_SP.test(c) ? 'sp' : 'br');
     }
   } else if (/EUA/.test(local)) r.add('us');
-  else if (/Europa/.test(local)) r.add('eu');
+  else if (/Europa|Reino Unido/.test(local)) r.add('eu');
+  else if (/Singapura/.test(local)) r.add('as');
   else if (/Canadá|Arábia Saudita/.test(local)) r.add('out');
   if (!r.size) throw new Error(`Região não classificada: ${nome} (${local})`);
   return [...r];
@@ -46,7 +47,7 @@ const main = `<main class="wrap">
   <section class="sec-g">
     <p class="eyebrow">Onde se conectar</p>
     <h1>Eventos</h1>
-    <p class="sec-intro">Conferências, comunidades e encontros de cibersegurança. As <b>datas ficam em aberto de propósito</b>: calendários mudam, edições são remarcadas e algumas só abrem inscrição perto da hora. Use a lista para descobrir o que combina com você e confirme data, preço e programação no site oficial. Escolha o público: <b>técnico</b> (hands-on, pesquisa, comunidade) ou <b>executivo</b> (gestão, risco, governança, mercado). Dá para combinar com a região: Brasil (SP ou outros estados), EUA, Europa e demais países.</p>
+    <p class="sec-intro">Conferências, comunidades e encontros de cibersegurança. As <b>datas ficam em aberto de propósito</b>: calendários mudam, edições são remarcadas e algumas só abrem inscrição perto da hora. Use a lista para descobrir o que combina com você e confirme data, preço e programação no site oficial. Escolha o público: <b>técnico</b> (hands-on, pesquisa, comunidade) ou <b>executivo</b> (gestão, risco, governança, mercado). Dá para combinar com a região: Brasil (SP ou outros estados), EUA, Europa, Ásia e demais países.</p>
     <div class="tf" data-tf data-noun="eventos">
       <div class="tools-ctl" hidden>
         <input type="search" placeholder="Buscar (ex.: SOC, Recife, CISO, CTF)" aria-label="Buscar evento" autocomplete="off">
