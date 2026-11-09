@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
-export const versaoCss = () => createHash('sha1').update(readFileSync(new URL('../styles.css', import.meta.url))).digest('hex').slice(0, 8);
+export const versaoCss = () => createHash('sha1').update(readFileSync(new URL('../styles.css', import.meta.url), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8);
 export const RE_LINK = /href="((?:\.\.\/)?)styles\.css(?:\?v=[0-9a-f]+)?"/g;
 
 export function paginas() {

@@ -204,7 +204,7 @@ const NAV = `  <nav aria-label="Seções">
     </details>
     <a href="sugestoes.html">Sugestões</a>
   </nav>`;
-const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'))).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
+const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/)[9];
 const FOOT = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<footer'));
 

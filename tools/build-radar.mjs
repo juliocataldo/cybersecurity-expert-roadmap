@@ -69,7 +69,7 @@ const kev = cveBig.slice(0, 14).map(kevCard);
 const temDados = KEY && (victims.length || kev.length);
 const hoje = new Date().toISOString().slice(0, 10);
 
-const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'))).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
+const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
