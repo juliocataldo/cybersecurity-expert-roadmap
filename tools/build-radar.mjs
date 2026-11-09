@@ -78,6 +78,7 @@ const NAV = `  <nav aria-label="Seções">
       <summary class="cur">Recursos</summary>
       <div class="nav-menu">
         <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html">Soluções de Sec</a>
         <a href="checklist.html">Checklist</a>
         <a href="teia.html">Teia</a>
         <a href="plataformas.html">Plataformas</a>
@@ -102,6 +103,8 @@ const painelKev = kev.length
 const placeholder = `    <p class="wip"><span class="wip-dot"></span><b>Radar sendo configurado</b> — adicione o secret <code>CHAVE_VEXDAY</code> no repositório e rode o workflow "Radar".</p>
     <p class="sec-intro">Quando a chave estiver no lugar, esta página passa a mostrar, atualizada automaticamente: <b>ransomware no Brasil</b> e <b>vulnerabilidades em exploração ativa</b> de grandes fornecedores.</p>`;
 
+const LINK_BR = `    <p class="note">Quer os números agregados? Veja o <a href="radar-brasil.html">Radar Brasil</a>: alegações por mês, setor e grupo, e comunicações da ANPD por estado, sem identificar vítimas.</p>`;
+
 const PAGE = `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -124,6 +127,7 @@ ${NAV}
     <p class="eyebrow">Threat intel</p>
     <h1>Radar de ameaças</h1>
     <p class="sec-intro">O que está acontecendo agora, com foco em <b>Brasil</b> e <b>grandes fornecedores</b>.${temDados ? ` Atualizado automaticamente &middot; última atualização: ${hoje}.` : ' Atualizado automaticamente.'}</p>
+${LINK_BR}
 ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : placeholder}
   </section>
 </main>

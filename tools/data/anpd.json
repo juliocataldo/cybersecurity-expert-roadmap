@@ -1,0 +1,294 @@
+{
+ "atualizado": "2026-10-31",
+ "fonte": "ANPD — painéis públicos de comunicações de incidente de segurança (CIS)",
+ "total": 2177,
+ "ransomware": 535,
+ "anos": [
+  {
+   "ano": "2021",
+   "incidentes": 186,
+   "ransomware": 65
+  },
+  {
+   "ano": "2022",
+   "incidentes": 275,
+   "ransomware": 99
+  },
+  {
+   "ano": "2023",
+   "incidentes": 352,
+   "ransomware": 131
+  },
+  {
+   "ano": "2024",
+   "incidentes": 333,
+   "ransomware": 79
+  },
+  {
+   "ano": "2025",
+   "incidentes": 395,
+   "ransomware": 86
+  },
+  {
+   "ano": "2026",
+   "incidentes": 636,
+   "ransomware": 75
+  }
+ ],
+ "tipos": [
+  {
+   "nome": "Exploração de vulnerabilidade",
+   "n": 398
+  },
+  {
+   "nome": "Ransomware sem transferência de dados",
+   "n": 319
+  },
+  {
+   "nome": "Roubo de credenciais e engenharia social",
+   "n": 305
+  },
+  {
+   "nome": "Ransomware com transferência ou publicação de dados",
+   "n": 216
+  },
+  {
+   "nome": "Acesso não autorizado",
+   "n": 203
+  },
+  {
+   "nome": "Divulgação indevida de dados pessoais",
+   "n": 155
+  },
+  {
+   "nome": "Outro incidente cibernético",
+   "n": 150
+  },
+  {
+   "nome": "Publicação não intencional de dados pessoais",
+   "n": 100
+  },
+  {
+   "nome": "Outro incidente não cibernético",
+   "n": 94
+  },
+  {
+   "nome": "Envio de dados a destinatário incorreto",
+   "n": 80
+  },
+  {
+   "nome": "Perda ou roubo de documentos e dispositivos",
+   "n": 38
+  },
+  {
+   "nome": "Falha em software",
+   "n": 32
+  },
+  {
+   "nome": "Força bruta contra credencial",
+   "n": 24
+  },
+  {
+   "nome": "Denúncia ou petição de titular",
+   "n": 13
+  },
+  {
+   "nome": "Vírus e malware",
+   "n": 12
+  },
+  {
+   "nome": "Em apuração",
+   "n": 10
+  },
+  {
+   "nome": "Alteração ou exclusão não autorizada",
+   "n": 8
+  },
+  {
+   "nome": "Não informado",
+   "n": 7
+  },
+  {
+   "nome": "Descarte incorreto",
+   "n": 5
+  },
+  {
+   "nome": "Falha em hardware",
+   "n": 4
+  },
+  {
+   "nome": "Negação de serviço",
+   "n": 4
+  }
+ ],
+ "estados": [
+  {
+   "uf": "SP",
+   "nome": "São Paulo",
+   "total": 739,
+   "ransomware": 203
+  },
+  {
+   "uf": "RJ",
+   "nome": "Rio de Janeiro",
+   "total": 201,
+   "ransomware": 57
+  },
+  {
+   "uf": "MG",
+   "nome": "Minas Gerais",
+   "total": 144,
+   "ransomware": 39
+  },
+  {
+   "uf": "DF",
+   "nome": "Distrito Federal",
+   "total": 315,
+   "ransomware": 28
+  },
+  {
+   "uf": "RS",
+   "nome": "Rio Grande do Sul",
+   "total": 87,
+   "ransomware": 27
+  },
+  {
+   "uf": "PR",
+   "nome": "Paraná",
+   "total": 106,
+   "ransomware": 23
+  },
+  {
+   "uf": "PE",
+   "nome": "Pernambuco",
+   "total": 61,
+   "ransomware": 21
+  },
+  {
+   "uf": "SC",
+   "nome": "Santa Catarina",
+   "total": 104,
+   "ransomware": 20
+  },
+  {
+   "uf": "ES",
+   "nome": "Espírito Santo",
+   "total": 49,
+   "ransomware": 16
+  },
+  {
+   "uf": "BA",
+   "nome": "Bahia",
+   "total": 59,
+   "ransomware": 12
+  },
+  {
+   "uf": "CE",
+   "nome": "Ceará",
+   "total": 35,
+   "ransomware": 12
+  },
+  {
+   "uf": "GO",
+   "nome": "Goiás",
+   "total": 34,
+   "ransomware": 10
+  },
+  {
+   "uf": "MS",
+   "nome": "Mato Grosso do Sul",
+   "total": 18,
+   "ransomware": 8
+  },
+  {
+   "uf": "MT",
+   "nome": "Mato Grosso",
+   "total": 21,
+   "ransomware": 7
+  },
+  {
+   "uf": "PA",
+   "nome": "Pará",
+   "total": 10,
+   "ransomware": 6
+  },
+  {
+   "uf": "AL",
+   "nome": "Alagoas",
+   "total": 11,
+   "ransomware": 4
+  },
+  {
+   "uf": "RN",
+   "nome": "Rio Grande do Norte",
+   "total": 8,
+   "ransomware": 4
+  },
+  {
+   "uf": "SE",
+   "nome": "Sergipe",
+   "total": 10,
+   "ransomware": 4
+  },
+  {
+   "uf": "AM",
+   "nome": "Amazonas",
+   "total": 9,
+   "ransomware": 3
+  },
+  {
+   "uf": "PI",
+   "nome": "Piauí",
+   "total": 7,
+   "ransomware": 2
+  },
+  {
+   "uf": "RO",
+   "nome": "Rondônia",
+   "total": 7,
+   "ransomware": 2
+  },
+  {
+   "uf": "TO",
+   "nome": "Tocantins",
+   "total": 4,
+   "ransomware": 2
+  },
+  {
+   "uf": "AC",
+   "nome": "Acre",
+   "total": 1,
+   "ransomware": 1
+  },
+  {
+   "uf": "AP",
+   "nome": "Amapá",
+   "total": 2,
+   "ransomware": 1
+  },
+  {
+   "uf": "MA",
+   "nome": "Maranhão",
+   "total": 9,
+   "ransomware": 1
+  },
+  {
+   "uf": "PB",
+   "nome": "Paraíba",
+   "total": 9,
+   "ransomware": 0
+  }
+ ],
+ "foraDasUF": [
+  {
+   "nome": "Estrangeira",
+   "total": 107,
+   "ransomware": 22
+  },
+  {
+   "nome": "Não informado",
+   "total": 10,
+   "ransomware": 0
+  }
+ ]
+}

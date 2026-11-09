@@ -1,0 +1,45 @@
+name: Radar Brasil (estatísticas)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '30 6 * * *'
+  push:
+    paths:
+      - 'tools/build-radar-brasil.mjs'
+      - 'tools/radar-brasil-lib.mjs'
+      - 'tools/data/anpd.json'
+      - 'tools/data/mapa-uf.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: radar-brasil
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Testes (anonimização, trava e ANPD)
+        run: node tests/validar-radar-brasil.mjs
+      - name: Gerar Radar Brasil
+        # Baixa Ransomware.live (dado público, sem chave). Se a trava ou a fonte falharem, o job falha e a página anterior continua no ar.
+        run: node tools/build-radar-brasil.mjs
+      - name: Commit se houver mudanças
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add radar-brasil.html tools/data/historico-radar-brasil.csv
+          if git diff --staged --quiet; then
+            echo "Sem mudanças no Radar Brasil."
+          else
+            git commit -m "Atualiza Radar Brasil (Ransomware.live)"
+            git pull --rebase origin main
+            git push
+          fi

@@ -539,3 +539,38 @@ table.plat td:first-child{font-weight:600;color:var(--tx);white-space:nowrap}
 .nav-menu a:hover{background:var(--s2);color:var(--tx)}
 .nav-menu a[aria-current=page]{color:var(--tx);background:var(--s2)}
 @media(max-width:640px){.nav-menu{right:auto;left:0}}
+
+/* ===== Soluções de Sec ===== */
+.k.sub-36,.k.sub-28{display:block}
+.k.sub-36{margin-top:36px}
+.k.sub-28{margin-top:28px}
+
+/* ===== Radar Brasil (radar-brasil.html) ===== */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 8px}
+.kpi{border:1px solid var(--line2);border-radius:var(--r);padding:14px 16px;background:var(--s2)}
+.kpi b{display:block;font-size:28px;line-height:1.1;color:var(--tx)}
+.kpi span{display:block;margin-top:4px;font-size:13px;color:var(--mut)}
+.hb{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.hb li{display:grid;grid-template-columns:minmax(110px,40%) 1fr auto;align-items:center;gap:10px;font-size:14px}
+.hb-l{color:var(--tx2);overflow-wrap:anywhere}
+.hb-v{font:600 13px var(--mono);color:var(--tx);min-width:3ch;text-align:right}
+.hb-m{width:100%;height:10px;border:0;background:var(--line);border-radius:5px;overflow:hidden;-webkit-appearance:none;appearance:none}
+.hb-m::-webkit-meter-bar{background:var(--line);border:0;height:10px;border-radius:5px}
+.hb-m::-webkit-meter-optimum-value,.hb-m::-webkit-meter-suboptimum-value,.hb-m::-webkit-meter-even-less-good-value{background:var(--acc);border-radius:5px}
+.hb-m::-moz-meter-bar{background:var(--acc);border-radius:5px}
+.ch{width:100%;height:auto;max-width:760px;display:block;margin:8px 0 14px}
+.ch-b{fill:var(--acc)}.ch-ax{stroke:var(--line2);stroke-width:1}
+.ch-t{fill:var(--mut);font:12px var(--mono)}.ch-v{fill:var(--tx2);font:600 10px var(--mono)}
+.mapa-box{display:grid;grid-template-columns:minmax(0,420px) auto;gap:20px;align-items:center;margin:8px 0 14px}
+@media(max-width:720px){.mapa-box{grid-template-columns:1fr}}
+.mapa{width:100%;height:auto;display:block}
+.uf{fill:var(--acc);stroke:var(--bg);stroke-width:1}
+.uf.m0{fill-opacity:.07}.uf.m1{fill-opacity:.22}.uf.m2{fill-opacity:.42}.uf.m3{fill-opacity:.68}.uf.m4{fill-opacity:1}
+path.uf:hover{stroke:var(--tx);stroke-width:1.5}
+.uf-t{fill:var(--tx);font:600 9px var(--mono);pointer-events:none;paint-order:stroke;stroke:var(--bg);stroke-width:2px}
+.leg{list-style:none;margin:0;padding:0;display:grid;gap:6px;font:500 13px var(--mono);color:var(--tx2)}
+.leg li{display:flex;align-items:center;gap:8px}
+.leg i{display:inline-block;width:18px;height:12px;border-radius:3px;background:var(--acc)}
+.leg i.m0{opacity:.07}.leg i.m1{opacity:.22}.leg i.m2{opacity:.42}.leg i.m3{opacity:.68}.leg i.m4{opacity:1}
+.dados{margin:6px 0 18px}.dados summary{cursor:pointer;color:var(--acc);font-size:14px}
+.srcs li{margin:8px 0}
