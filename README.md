@@ -113,7 +113,7 @@ A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às págin
    tags: [web, defensivo]
    ---
    ```
-4. O Action `/.github/workflows/notas.yml` puxa o `notas-cyber` para `vault/`, roda o gerador e commita `teia-data.js` + `notas/`. Ele dispara manualmente, a cada 6h e quando o repo de notas avisar.
+4. O Action `/.github/workflows/notas.yml` puxa o `notas-cyber` para `vault/`, roda o gerador e commita `teia-data.js` + `notas/`. Ele dispara manualmente, toda segunda-feira (06:00 em Brasília) e quando o repo de notas avisar (veja o passo 5 para atualizar na hora).
 5. **(opcional) Atualização instantânea:** no `notas-cyber`, adicione um workflow que chama o `repository_dispatch` do site ao dar push (precisa de um PAT no secret `SITE_DISPATCH_TOKEN`):
    ```yaml
    on: { push: { branches: [main] } }

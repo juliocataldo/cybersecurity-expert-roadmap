@@ -3,7 +3,7 @@ name: Build Teia e Artigos (notas do Obsidian)
 # Regenera a Teia a partir do repo de notas. Dispara:
 #  - quando o repo de notas avisa (repository_dispatch), veja o passo de setup no README;
 #  - manualmente (workflow_dispatch);
-#  - a cada 6h (fallback);
+#  - toda segunda-feira às 06:00 de Brasília (fallback semanal);
 #  - quando o gerador muda ou um artigo (artigos/*.md) é editado.
 # Também regenera artigos.html, que lista as notas da Teia ao lado dos artigos.
 on:
@@ -11,7 +11,7 @@ on:
     types: [notas-update]
   workflow_dispatch: {}
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 9 * * 1'   # semanal: segunda-feira, 09:00 UTC = 06:00 em Brasília
   push:
     paths:
       - 'tools/build-notas.mjs'
