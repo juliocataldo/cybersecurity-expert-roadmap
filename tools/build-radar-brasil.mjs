@@ -12,6 +12,7 @@
 //  - Se a fonte vier cortada ou a trava falhar, o build aborta e a página anterior continua no ar.
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 import {
   agregar, normalizarMundo, contarSemPais, agregarPaises, travaSaida, travaPaises, validarFonte, validarAnpd, taxa, limitesQuintis, faixaDe,
   lerMatrizFerramentas, lerMatrizCves, topMatriz, travaMatriz, K, MIN_TAXA, OUTROS_GRUPOS, OUTROS_SETOR,
@@ -223,6 +224,7 @@ const NAV = `  <nav aria-label="Seções">
     </details>
     <a href="sugestoes.html">Sugestões</a>
   </nav>`;
+const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'))).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/)[9];
 const FOOT = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<footer'));
 
@@ -262,7 +264,7 @@ const PAGE = `<!doctype html>
 <meta name="description" content="Radar: ransomware no mundo, com o Brasil em destaque. Mapa-múndi de alegações em sites de vazamento, setores, grupos, comunicações de incidente à ANPD por estado e ferramentas e CVEs usados por grupos.">
 <title>Radar · Cyber Expert Guide</title>
 ${ICON}
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=${CSSV}">
 </head>
 <body>
 <header class="site">

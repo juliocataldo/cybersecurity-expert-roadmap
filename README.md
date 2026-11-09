@@ -21,6 +21,8 @@ O site tem estas partes:
 
 > Atividade formativa, **sem nota**.
 
+**Manutenção do CSS:** os links apontam para `styles.css?v=<hash>` para o navegador não usar um CSS antigo em cache (o servidor guarda por horas). Depois de mexer em `styles.css`, rode `node tools/bump-css.mjs`; `node tests/validar-css-versao.mjs` avisa se esquecer. Os geradores (`build-radar*.mjs`, `build-notas.mjs`) calculam a versão sozinhos.
+
 ## Como usar a trilha
 1. Abra a **Trilha** e comece pela fase **00. Base de lançamento**.
 2. Cada fase tem **missões** (estudo, prática e chefões, que são os labs da disciplina) e um **checkpoint** de 3 questões.

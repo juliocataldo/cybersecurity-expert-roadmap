@@ -2,8 +2,9 @@
 // Foco v1: Brasil (vítimas de ransomware) + grandes fornecedores (KEV).
 // Uso no GitHub Action: CHAVE_VEXDAY=<secret> node tools/build-radar.mjs
 // Sem chave ou com erro de rede, gera um placeholder (nunca quebra o build).
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const KEY = process.env.CHAVE_VEXDAY || process.env.VEXDAY_API_KEY || '';
@@ -68,6 +69,7 @@ const kev = cveBig.slice(0, 14).map(kevCard);
 const temDados = KEY && (victims.length || kev.length);
 const hoje = new Date().toISOString().slice(0, 10);
 
+const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'))).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
@@ -115,7 +117,7 @@ const PAGE = `<!doctype html>
 <meta name="description" content="Casos de ransomware citados em sites de vazamento no Brasil e vulnerabilidades em exploração ativa (KEV) de grandes fornecedores, via API Vexday.">
 <title>Casos e vulnerabilidades · Radar · Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=${CSSV}">
 </head>
 <body>
 <header class="site">
