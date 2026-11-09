@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Agents - MAC and Unix — nota do Cyber Expert Guide.">
+<title>Agents - MAC and Unix · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Agents - MAC and Unix</h1>
+    
+    <p>Type: <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="linux.html" class="wl">Linux</a> <span class="wl-missing">Micro-segmentation</span></p>
+<p></p>
+<ul><li>All agent sub components initiation is done service that is initiated by the launched service /Library/LauchDaemons/com.guardicore.macos.plist</li></ul>
+<h3>Installation</h3>
+<p>https://techdocs.akamai.com/segmentation-v48/docs/guardicore-macos-agent-deep-dive</p>
+<h4>Steps - Offilene Installation</h4>
+<ol><li>Fetch the Agent installation package from the Akamai e technical plalaform owner</li><li>Copy the package to the target server **/tmp/&lt;package_name&gt;</li><li>In case an old Agent is already installed on a server, remove the agent and log files in advance to reducre the footprint on the server</li><li><code></code>Shell</li></ol>
+<p>gc-agent uninstall<br>rm -f /var/log/gc-*log<br><code>4. Execute the LAUNCHCRT commands - print above ### Uninstall</code>Shell<br>gc-agent uninstall<br><code>### Commands Is the same of Linux CLI ### Agent log Located at: ==`/var/log== ==The file is the same of Linux files # Unix ## AIX Agent Enables: - Visibility - AIX Agents supports L4 + process-level information using pooling mode - Enforcement - The AIX agents supports L4 rules  (IP and ports) for Enforcement.  - Analysis - traffic flows for malicious processes or malicious IP #### CPU The Agent's process run as background job with low CPU priority. This is achieved by configuring a high niceness value to the Agent's process. Started of value of 10. `Niceness is a pretty weird name, but what it means is that processes have a number to determine their priority for the CPU. A high number means the process is nice and has a lower priority for the CPU and a low or negative number means the process is not very nice and it wants to get as much of the CPU as possible. #### Memory **Two memory limitation** 1. **The agent enables WLM (AIX Workload Manager)** by default during startup. It is possible to disable it by modifying the configuration file file /etc/default/guardicore, setting ENABLE_WLM=false and restarting the agent. 2. Setting the **environment variable** `CTRL_LDR_CNTRL=MAXDATA=&lt;value limit&gt;`for each process, which defines the **Hard memory limit. #### IP Filter Enforcement is based on IPF. The IPF module is built by Guardicore and is provided as an integrated part of the agent. - fr_statemax: 1000000 - fr_statesize: 250007 - fr_state_,msxbucket: 256 #### Installation - Start/stop script is auto are persist upo  reboot (etc/init.d/gc-agen) - Uninstalled, all processes are stopped and the start/stop script &lt;etc/init.d/gc-agent) will also be removed. ![[Pasted image 20231023001350.png]] #### Offline ![[Pasted image 20231023001419.png]] ### Uninstall</code>Shell<br>gc-agent uninstall<br>```</p>
+<h4>Installation</h4>
+<ol><li>Root permission</li><li>Port 443</li><li>POSIX compatible tools</li><li>wget version 1.91 or newer</li></ol>
+<h3>Solaris Agent</h3>
+<p>Enables:</p>
+<ul><li>Visibility - AIX Agents supports L4 + process-level information using pooling mode</li><li>Enforcement - The AIX agents supports L4 rules  (IP and ports) for Enforcement. </li><li>Analysis - traffic flows for malicious processes or malicious IP</li></ul>
+<p></p>
+<h4>Installation</h4>
+<p></p>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

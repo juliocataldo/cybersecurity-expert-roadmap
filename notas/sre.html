@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="SRE — nota do Cyber Expert Guide.">
+<title>SRE · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>SRE</h1>
+    
+    <p><span class="wl-missing">Cloud Computing</span></p>
+<h3>Intro </h3>
+<p>SRE - Site Reliability Engineering, que se concentra na confiabilidade, disponibilidade e desempenho dos sistemas e serviços. e as principais funções do SRE são:</p>
+<ul><li><b>Garantir disponibilidade e confiabilidade:</b> Assegurar que os sistemas estejam sempre acessíveis e funcionando corretamente para os usuários.</li><li><b>Automatizar tarefas:</b> Eliminar tarefas manuais e repetitivas, permitindo que os desenvolvedores se concentrem em atividades que agreguem valor ao produto.</li><li><b>Realizar testes de resiliência:</b> Simular falhas para verificar como o sistema responde e garantir que ele possa se recuperar de problemas.</li><li><b>Participar no desenvolvimento:</b> Colaborar com a equipe de desenvolvimento para garantir a confiabilidade e disponibilidade desde o início do projeto.</li><li><b>Ter aprendizado contínuo:</b> Aprender com as melhores práticas e com as falhas que ocorrem, para evitar que se repitam.</li></ul>
+<p>Os principais benefícios do SRE incluem:</p>
+<ol><li><b>Redução do tempo de inatividade:</b> O SRE visa garantir que as aplicações permaneçam disponíveis, evitando interrupções no serviço.</li><li><b>Aprimoramento da experiência da pessoa usuária:</b> Ao garantir a disponibilidade da aplicação, o SRE contribui para uma experiência mais positiva para a pessoa usuária.</li><li><b>Eficiência operacional:</b> O SRE automatiza processos, como atualizações de aplicações, aumentando a eficiência e reduzindo a necessidade de intervenção manual.</li><li><b>Alinhamento com metas de negócio:</b> O SRE garante que as aplicações críticas para a empresa estejam sempre operacionais, alinhando-se aos objetivos de negócio.</li><li><b>Redução de custos:</b> Embora a implementação inicial possa ter um custo, o SRE leva a uma redução de custos a longo prazo por meio da automação e da garantia da disponibilidade da aplicação.</li><li><b>Crescimento escalável:</b> O SRE é fundamental para monitorar e garantir a disponibilidade de aplicações que precisam escalar rapidamente.</li><li><b>Redução de riscos de reputação:</b> Ao garantir a disponibilidade da aplicação, o SRE ajuda a evitar a perda de confiança da clientela e a proteger a reputação da empresa.</li><li><b>Atendimento das expectativas da clientela:</b> O SRE ajuda a atender às altas expectativas da clientela em relação ao desempenho das aplicações.</li></ol>
+<h4>O que são Blameless postmortems?</h4>
+<p>Um processo já conhecido é a criação do <b>postmortem</b> (em português, “depois da morte”), que geralmente é um documento, e tem como objetivo ajudar os times a estruturar um processo para a discussão e análise desses incidentes.</p>
+<p>Este documento, geralmente, contém: <br>1) a descrição do ocorrido e a causa raiz; <br>2) em qual período a indisponibilidade ocorreu; <br>3) quais os impactos (perda de dados, por exemplo); <br>4) a linha do tempo dos fatos ocorridos (hora e descrição); <br>5) quais medidas foram tomadas para a solução; <br>6) e quais foram adotadas depois do problema, para evitar que ele ocorra novamente e evidenciar os aprendizados da equipe com a ocorrência.</p>
+<p>O uso do <b>postmortem</b> não deve ser iniciado de forma reativa, mas seu time deve estar preparado para usá-lo em qualquer momento. Também deve-se garantir um tempo do time para discutir os postmortems juntos. <br>-<br>Para garantir que o processo do postmortem seja maduro, não cause danos ao time e não crie um ambiente com uma cultura ruim, existe o conceito <b>Blameless postmortem</b> (ou em tradução livre, livre de culpa). Nesse formato, tudo é feito sem apontar nomes ou culpados, afinal o que queremos de resultado aqui não é gerar atritos, <b>é avaliar o que causou o problema e garantir que não se repita</b>, ou seja, <b>o foco aqui é o incidente ou falha e não as pessoas.</b></p>
+<hr>
+<p>Pirâmide SRE</p>
+<p></p>
+<ol><li><b>Testes de Resiliência:</b></li></ol>
+<ul><li><b>Teste de Carga:</b> Utilize ferramentas como o Locust para simular o tráfego de usuários e identificar gargalos na aplicação. Analise os resultados para entender quantos requests sua aplicação aguenta antes de começar a falhar ou ter latência alta.</li><li><b>Teste de Caos:</b> Introduza falhas controladas no sistema (como problemas de rede ou desligamento de serviços) para observar como a aplicação se comporta e se recupera.</li></ul>
+<ol><li><b>Planejamento de Capacidade:</b></li></ol>
+<ul><li>Use os dados dos testes de resiliência para prever as necessidades futuras da aplicação.</li><li>Considere perguntas como: A aplicação precisa ser mais rápida? É necessário aumentar o número de máquinas? Podemos reduzir recursos em momentos de baixa demanda?</li></ul>
+<ol><li><b>Desenvolvimento Orientado à Confiabilidade:</b></li></ol>
+<ul><li><b>Colaboração:</b> Garanta que o time de SRE trabalhe em conjunto com o time de desenvolvimento desde o início do projeto.</li><li><b>SLOs:</b> Defina e implemente SLOs claros para guiar a confiabilidade da aplicação.</li></ul>
+<ol><li><b>Monitoramento:</b></li></ol>
+<ul><li>Certifique-se de ter um sistema de monitoramento robusto que forneça informações detalhadas sobre o desempenho da aplicação.</li><li>Use essas informações para alimentar as outras etapas da pirâmide SRE.</li></ul>
+<h3>Princípios</h3>
+<ol><li><b>Identifique os SLOs</b>: Tente definir Objetivos de Nível de Serviço (SLOs) realistas para um sistema ou aplicação que você conhece. Pense em quais métricas são importantes para garantir a satisfação do usuário e a confiabilidade do serviço.</li><li><b>Calcule o Error Budget</b>: Com base nos SLOs definidos, calcule o Error Budget correspondente. Isso ajudará você a entender quanto tempo de inatividade ou quantos erros são aceitáveis antes de violar os SLOs.</li><li><b>Automatize Tarefas Repetitivas (TOIL)</b>: Identifique tarefas manuais e repetitivas em seu fluxo de trabalho e procure maneiras de automatizá-las. Isso pode envolver a criação de scripts, o uso de ferramentas de automação ou a implementação de pipelines de CI/CD.</li><li><b>Implemente Monitoramento Abrangente</b>: Configure um sistema de monitoramento que cubra todos os componentes críticos de sua aplicação. Certifique-se de coletar métricas relevantes, definir alertas e criar dashboards para visualizar o desempenho do sistema.</li><li><b>Compartilhe Responsabilidades</b>: Promova a colaboração e o compartilhamento de responsabilidades entre as equipes de SRE, DevOps e desenvolvimento. Incentive a comunicação aberta, a troca de conhecimento e a resolução conjunta de problemas.</li><li><b>Analise Sistemas Distribuídos</b>: Se você estiver trabalhando com sistemas distribuídos e complexos, mapeie as dependências entre os diferentes componentes e implemente estratégias para lidar com falhas e garantir a resiliência do sistema.</li></ol>
+<h4>SLIs e SLOs</h4>
+<p>os SLIs (Indicadores de Nível de Serviço) e eles são cruciais para medir e analisar a confiabilidade de um sistema, especialmente em relação aos SLOs (Objetivos de Nível de Serviço).</p>
+<p>Ou seja, SLIs são métricas quantitativas que nos ajudam a entender o desempenho real de um serviço, enquanto SLOs são metas estabelecidas pela equipe.</p>
+<p><b>Principais pontos abordados:</b></p>
+<ul><li><b>O que é SLI:</b> Um SLI é uma métrica que fornece diferentes opções para medir e analisar o comportamento de uma aplicação, bem como a confiabilidade do sistema.</li><li><b>Exemplos de SLIs:</b></li><li><b>Disponibilidade:</b> Medida pela proporção de requisições HTTP GET que retornam códigos de resposta 200, 300 ou 400 (excluindo 429), medida na saída do balanceador de carga.</li><li><b>Latência:</b> Medida pela proporção de requisições HTTP GET que retornam respostas dentro de um tempo específico (ex: 350 milissegundos), medida na entrada e saída do balanceador de carga.</li><li><b>SLIs para diferentes áreas:</b> SLIs podem ser criados para diversas áreas, como qualidade (requisição e resposta), processamento de dados (cobertura, correção, atualização e capacidade) e armazenamento (capacidade e latência).</li><li><b>Interação SLI e SLO:</b> O SLI é a métrica usada para verificar se o SLO está sendo atingido, representando a interação entre métrica e meta.</li></ul>
+<p>Em resumo, o SLI é uma ferramenta essencial para monitorar a performance e confiabilidade de um serviço, garantindo que os objetivos de nível de serviço (SLOs) sejam alcançados.</p>
+<hr>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

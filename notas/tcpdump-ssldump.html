@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Tcpdump &amp; SSLdump — nota do Cyber Expert Guide.">
+<title>Tcpdump &amp; SSLdump · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Tcpdump &amp; SSLdump</h1>
+    
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <span class="wl-missing">Network</span></p>
+<h2>Tcpdump Commands – A Network Sniffer Tool</h2>
+<p><b>tcpdump</b> is a most powerful and widely used command-line packets sniffer or package analyzer tool which is used to capture or filter <b>TCP/IP</b> packets that are received or transferred over a network on a specific interface.</p>
+<h3>How to Install tcpdump in Linux</h3>
+<p><code>`Unix $ sudo apt-get install tcpdump  [On **Debian, Ubuntu and Mint**] $ sudo yum install tcpdump           [On **RHEL/CentOS/Fedora** and **Rocky Linux/AlmaLinux**] $ sudo emerge -a sys-apps/tcpdump    [On **Gentoo Linux**] $ sudo pacman -S tcpdump             [On **Arch Linux**] $ sudo zypper install tcpdump        [On **OpenSUSE**]</code>`</p>
+<h4>1. Capture Packets from Specific Interface</h4>
+<p><code>`Unix # tcpdump -i eth0 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes 11:33:31.976358 IP 172.16.25.126.ssh &gt; 172.16.25.125.apwi-rxspooler: Flags [P.], seq 3500440357:3500440553, ack 3652628334, win 18760, length 196 11:33:31.976603 IP 172.16.25.125.apwi-rxspooler &gt; 172.16.25.126.ssh: Flags [.], ack 196, win 64487, length 0 11:33:31.977243 ARP, Request who-has tecmint.com tell 172.16.25.126, length 28 11:33:31.977359 ARP, Reply tecmint.com is-at 00:14:5e:67:26:1d (oui Unknown), length 46 11:33:31.977367 IP 172.16.25.126.54807 &gt; tecmint.com: 4240+ PTR? 125.25.16.172.in-addr.arpa. (44) 11:33:31.977599 IP tecmint.com &gt; 172.16.25.126.54807: 4240 NXDomain 0/1/0 (121) 11:33:31.977742 IP 172.16.25.126.44519 &gt; tecmint.com: 40988+ PTR? 126.25.16.172.in-addr.arpa. (44) 11:33:32.028747 IP 172.16.20.33.netbios-ns &gt; 172.16.31.255.netbios-ns: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST 11:33:32.112045 IP 172.16.21.153.netbios-ns &gt; 172.16.31.255.netbios-ns: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST 11:33:32.115606 IP 172.16.21.144.netbios-ns &gt; 172.16.31.255.netbios-ns: NBT UDP PACKET(137): QUERY; REQUEST; BROADCAST 11:33:32.156576 ARP, Request who-has 172.16.16.37 tell old-oraclehp1.midcorp.mid-day.com, length 46 11:33:32.348738 IP tecmint.com &gt; 172.16.25.126.44519: 40988 NXDomain 0/1/0 (121)</code>`</p>
+<h4> 2. Capture Only N Number of Packets</h4>
+<p>When you run the <b>tcpdump</b> command it will capture all the packets for the specified interface, until you <b>hit</b> the cancel button. But using <code>-c</code> option, you can capture a specified number of packets. The below example will only capture <b>6</b> packets.</p>
+<p><code>`Unix # tcpdump -c 5 -i eth0 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes 11:40:20.281355 IP 172.16.25.126.ssh &gt; 172.16.25.125.apwi-rxspooler: Flags [P.], seq 3500447285:3500447481, ack 3652629474, win 18760, length 196 11:40:20.281586 IP 172.16.25.125.apwi-rxspooler &gt; 172.16.25.126.ssh: Flags [.], ack 196, win 65235, length 0 11:40:20.282244 ARP, Request who-has tecmint.com tell 172.16.25.126, length 28 11:40:20.282360 ARP, Reply tecmint.com is-at 00:14:5e:67:26:1d (oui Unknown), length 46 11:40:20.282369 IP 172.16.25.126.53216 &gt; tecmint.com.domain: 49504+ PTR? 125.25.16.172.in-addr.arpa. (44) 11:40:20.332494 IP tecmint.com.netbios-ssn &gt; 172.16.26.17.nimaux: Flags [P.], seq 3058424861:3058424914, ack 693912021, win 64190, length 53 NBT Session Packet: Session Message **6 packets captured** 23 packets received by filter 0 packets dropped by kernel</code>`</p>
+<h4>3. Print Captured Packets in ASCII</h4>
+<p>The below <b>tcpdump</b> command with the option <code>-A</code> displays the package in <b>ASCII</b> format. It is a character-encoding scheme format.</p>
+<p><code>`Unix # tcpdump -A -i eth0 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes 09:31:31.347508 IP 192.168.0.2.ssh &gt; 192.168.0.1.nokia-ann-ch1: Flags [P.], seq 3329372346:3329372542, ack 4193416789, win 17688, length 196 M.r0...vUP.E.X.......~.%..&gt;N..oFk.........KQ..)Eq.d.,....r^l......m\.oyE....-....g~m..Xy.6..1.....c.O.@...o_..J....i.*.....2f.mQH...Q.c...6....9.v.gb........;..4.).UiCY]..9..x.)..Z.XF....'|..E......M..u.5.......ul 09:31:31.347760 IP 192.168.0.1.nokia-ann-ch1 &gt; 192.168.0.2.ssh: Flags [.], ack 196, win 64351, length 0 M....vU.r1~P.._.......... ^C09:31:31.349560 IP 192.168.0.2.46393 &gt; b.resolvers.Level3.net.domain: 11148+ PTR? 1.0.168.192.in-addr.arpa. (42) E..F..@.@............9.5.2.f+............1.0.168.192.in-addr.arpa..... 3 packets captured 11 packets received by filter 0 packets dropped by kernel</code>`</p>
+<h4>4. Display Available Interfaces</h4>
+<p><code>`Unix # tcpdump -D</code>``</p>
+<h4>5. Display Captured Packets in HEX and ASCII</h4>
+<p>The following command with option <code>-XX</code> capture the data of each packet, including its link level header in <b>HEX</b> and <b>ASCII</b> format.</p>
+<p><code>`Unix # tcpdump -XX -i eth0 11:51:18.974360 IP 172.16.25.126.ssh &gt; 172.16.25.125.apwi-rxspooler: Flags [P.], seq 3509235537:3509235733, ack 3652638190, win 18760, length 196         0x0000:  b8ac 6f2e 57b3 0001 6c99 1468 0800 4510  ..o.W...l..h..E.         0x0010:  00ec 8783 4000 4006 275d ac10 197e ac10  ....@.@.']...~..         0x0020:  197d 0016 1129 d12a af51 d9b6 d5ee 5018  .}...).*.Q....P.         0x0030:  4948 8bfa 0000 0e12 ea4d 22d1 67c0 f123  IH.......M&quot;.g..#         0x0040:  9013 8f68 aa70 29f3 2efc c512 5660 4fe8  ...h.p).....V`O.         0x0050:  590a d631 f939 dd06 e36a 69ed cac2 95b6  Y..1.9...ji.....         0x0060:  f8ba b42a 344b 8e56 a5c4 b3a2 ed82 c3a1  ...*4K.V........         0x0070:  80c8 7980 11ac 9bd7 5b01 18d5 8180 4536  ..y.....[.....E6         0x0080:  30fd 4f6d 4190 f66f 2e24 e877 ed23 8eb0  0.OmA..o.$.w.#..         0x0090:  5a1d f3ec 4be4 e0fb 8553 7c85 17d9 866f  Z...K....S|....o         0x00a0:  c279 0d9c 8f9d 445b 7b01 81eb 1b63 7f12  .y....D[{....c..         0x00b0:  71b3 1357 52c7 cf00 95c6 c9f6 63b1 ca51  q..WR.......c..Q         0x00c0:  0ac6 456e 0620 38e6 10cb 6139 fb2a a756  ..En..8...a9.*.V         0x00d0:  37d6 c5f3 f5f3 d8e8 3316 d14f d7ab fd93  7.......3..O....         0x00e0:  1137 61c1 6a5c b4d1 ddda 380a f782 d983  .7a.j\....8.....         0x00f0:  62ff a5a9 bb39 4f80 668a                 b....9O.f. 11:51:18.974759 IP 172.16.25.126.60952 &gt; mddc-01.midcorp.mid-day.com.domain: 14620+ PTR? 125.25.16.172.in-addr.arpa. (44)         0x0000:  0014 5e67 261d 0001 6c99 1468 0800 4500  ..^g&amp;...l..h..E.         0x0010:  0048 5a83 4000 4011 5e25 ac10 197e ac10  .HZ.@.@.^%...~..         0x0020:  105e ee18 0035 0034 8242 391c 0100 0001  .^...5.4.B9.....         0x0030:  0000 0000 0000 0331 3235 0232 3502 3136  .......125.25.16         0x0040:  0331 3732 0769 6e2d 6164 6472 0461 7270  .172.in-addr.arp         0x0050:  6100 000c 0001                           a.....</code>`</p>
+<h4>6. Capture and Save Packets in a File</h4>
+<p><code>`Unix # tcpdump -w 0001.pcap -i eth0</code>`</p>
+<h4>7. Read Captured Packets File</h4>
+<p><code>` # tcpdump -r 0001.pcap</code>`</p>
+<h4>8. Capture IP Address Packets</h4>
+<p><code>`Unix # tcpdump -n -i eth0</code>``</p>
+<h4>9. Capture only TCP Packets.</h4>
+<p><code>`Unix # tcpdump -i eth0 tcp</code>`</p>
+<h4>10. Capture Packet from Specific Port</h4>
+<p><code>`Unix # tcpdump -i eth0 port 22</code>`</p>
+<h4>11. Capture Packets from source IP</h4>
+<p><code>` Unix # tcpdump -i eth0 src 192.168.0.2</code>` </p>
+<h4>12. Capture Packets from destination IP</h4>
+<p><code>`Unix tcpdump -i eth0 dst 50.116.66.139</code>`</p>
+<h4>13. Verbose capture - IP both sides</h4>
+<p><code>`Unix tcpdump -nni 0.0 -vvv host 177.32.240.218 -s 0 -w /var/log/LOG.pcap  ##To save packets in a file tcpdump -nni 0.0 -vvv host 177.32.240.218 and port 443</code>`</p>
+<h4>14.  To examine server-side traffic from one client</h4>
+<p><code>` Unix tcpdump -vvv -s 0 -nni 0.0 -w /var/tmp/www-ssl-server.cap host 192.168.22.33 and net 10.1.1.0/24 and port 8080</code>`</p>
+<ul><li><b>-vvv</b> Maximum verbosity</li><li><b>-s</b> Snaplength (0 captures full packets)</li><li><b>-nn</b> Do not resolve host or service names</li><li><b>-i</b> Interface - can be ifname or vlan name</li><li><b>-w</b> Write output to file</li></ul>
+<pre><code>#comando de captura e importa para um arquivo, no caso (icmp.pcap) 
+tcpdump -v -i eth0 icmp -w icmp.pcap 
+
+#read and more details (and verbose) 
+tcpdump -vnr icmp.pcap 
+
+#read and more details (and verbose and eth) 
+tcpdump -venr icmp.pcap 
+
+#filtro tcp 
+tcpdump -vnr aula.pcap tcp 
+
+#filtrar pelo host- Destino ou Origem(source) 
+tcpdump -vnr aula.pcap dst(src) host 192.168.0.200 
+
+#filtrar pelo host- Destino ou Origem(source) 
+tcpdump -vnr aula.pcap src host 192.168.0.200 and dst host 192.168.0.1 
+#filtrar pela porta 
+tcpdump -vnr aula.pcap port 80 
+
+################################################ #CAPTURAR pacote
+tcpdump -vnw ftp.pcap 
+#read and more details (and verbose) 
+tcpdump -vnr ftp.pcap | greg &quot;PASS&quot; 
+
+################################### #portscan (n2) pega as duas primeiras duas linhas 
+tcpdump -vnr arquivo.pcap | head -n2 
+
+## verificar potas abertas 
+tcpdump -vnr portscan.pcap src host 192.168.0.104 | cut -d &quot;,&quot; -f1 | grep -v tos | grep -v &quot;S&quot; #tcpdump -vnr(captura, importa com detalhes)... portscan é o aqruivo ... src host é o #host de origem ... cut é para separar por virgula e só o que está na linha 1 ... #grep é para retirar a linha que possui 'tos'.... grep de novo para retirar o que possui 'S'.. 
+
+############################################ # SE tem a FLAG (F) é porque fez o three way handshake e a conexão foi com sucesso 
+tcpdump -vnr portscan.pcap src host 192.168.0.104 | cut -d &quot;,&quot; -f1 | grep -v tos | grep -v &quot;S&quot; | grep &quot;F\.&quot;
+</code></pre>
+<h4>Estudo técnico: Ping Sweep</h4>
+<p>TCPDUMP para escutar o que está acontecendo</p>
+<p><code>tcpdump -cn -i tun0 host 172.90.0.151 and 172.16.1.5 -e #-e para visualizar 'real time' # SSLDUMP _ssldump_ is an SSL/TLS network protocol analyzer. It identifies TCP connections on the chosen network interface and attempts to interpret them as SSL/TLS traffic. When it identifies SSL/TLS traffic, it decodes the records and displays them in a textual form to stdout. If provided with the appropriate keying material, it will also decrypt the connections and display the application data traffic. #### To listen to traffic on interface _le0_ port _443_</code>`Unix<br>ssldump -i eth0 port 443<br><code>` #### To listen traffic to the server _romeo_ on port _443_.</code>`Unix<br>ssldump -i le0 port 443 and host romeo<br><code>` #### To listen traffic from any host</code>`Unix<br>ssldump -i any host 177.32.240.218<br>````</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

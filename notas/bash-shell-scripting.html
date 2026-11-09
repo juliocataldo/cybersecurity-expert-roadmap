@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Bash Shell Scripting — nota do Cyber Expert Guide.">
+<title>Bash Shell Scripting · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Bash Shell Scripting</h1>
+    
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <span class="wl-missing">Code</span> <span class="wl-missing">Hacking</span></p>
+<h3>List of shells which are available with your operating system, use this command:</h3>
+<p><code>` shell cat /etc/shells` # /etc/shells: valid login shells /bin/sh /bin/bash /usr/bin/bash /bin/rbash /usr/bin/rbash /bin/dash /usr/bin/dash /usr/bin/tmux /usr/bin/screen`</code>`</p>
+<h3>Creating your shell</h3>
+<p>To create your first shell, open a text edito like vi or vim:<br>`vi myfirstshell.sh</p>
+<p>Here is an example:</p>
+<p><code>` shell #! /bin/bash s=&quot;Hello word!&quot; echo &quot;$s&quot;`</code>`</p>
+<p>The output is:<br>`Hello Word!</p>
+<p>You need to change the permission, look here:</p>
+<p><code>` shell jayce@ADMND8960546570:~/docs/study/shell$ ls -lrt  -rw-r--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
+<p>Use this command to change de file permission to have execution mode to user:</p>
+<p><code>` shell chmod u+x myfirstshell.sh`</code>`</p>
+<p>And now:</p>
+<p><code>` shell jayce@ADMND8960546570:~/docs/study/shell$ ls -lrt total 0 -rwxr--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
+<h3>Variables</h3>
+<p>Simple variable<br>X = 4</p>
+<p>We created a variable called X and in that we stored a value called for 4.</p>
+<p>==Important: With you use single quotes, the shell understands it is string and the output is exactly what is inside the simple quotes, but now, if you use double quotes the shell understands it is variable and the output is what is inside that variable (stored in variable)</p>
+<h4>In Linux Shell Scripting, there are two types of variable:</h4>
+<ol><li>System variables:</li><li>created and maintained by Operating System itself</li><li>This type of variable are defined in CAPITAL LETTERS</li><li>We can see them by using <b>set</b> command</li><li>Example: HOME, USER ....</li><li>User Defined Variables</li><li>Created an maintained by the yuser</li><li>This type of variable are defined in lower letters</li><li>But we can algo take combination of upper and lower case letters.</li></ol>
+<h4>Rules to Define User Defined Variables</h4>
+<ul><li>Variables name should contain only a-z or A-Z, 0-9 and _ characters.</li><li>Variable Name length should be less than or equal to 20 characters.</li><li>Variable Names are case sensitive</li><li>Do not provide space on either sides of equal symbol</li><li>x=4 --&gt; Valid</li><li>x = 4 --&gt; Invalid</li><li>No need to declare variable type, automatically it will take care while executing command or scripts</li><li>We can store the output of a command into a variable as follows:</li><li>$(command)</li><li>$<code>command</code></li></ul>
+<h3>Advanced Usage of *echo command</h3>
+<p>To execute escape characteres:<br><code>`shell #! /bin/bash echo &quot;The currently loggedin user is:&quot; echo &quot;$(whoami)&quot; echo -e &quot;The currently loggedin user is:\n$(whoami)&quot;</code>`</p>
+<p>THE OUTPUT:</p>
+<p>The currently loggedin user is:<br>jayce<br>The currently loggedin user is:<br>jayce</p>
+<ul><li>Escape characters:</li><li>\\n New Linw</li><li>\\t Horizontal Tab</li><li>\\v Vertical Tab</li><li>\\b Backspace</li><li>\\r Carriage Return</li><li>\\ Escape Character etc...</li></ul>
+<h4>To use color:</h4>
+<p><code>` #Reset: Color_off= '033[0m' #Regular Colors Black= '033[0;30m' Red= '033[0;31m' Green = '033[0;32m' Yellow= '033[0;33m' Blue= '033[0;34m' Purple = '033[0;35m' Cyan = '033[0;36m' White = '033[0;37m' #Bold BBlack= '033[1;30m' . . .</code>`</p>
+<p>Example: `echo -e &quot;\033[0;33mThe current/working directory is:\n$PWD\033[0m&quot;</p>
+<h3>Examples of <code>cat &lt;&lt;EOF</code> syntax usage in Bash:</h3>
+<p>The <code>cat &lt;&lt;EOF</code> syntax is very useful when working with multi-line text in Bash, eg. when assigning multi-line string to a shell variable, file or a pipe.</p>
+<h4>1. Assign multi-line string to a shell variable</h4>
+<pre><code>$ sql=$(cat &lt;&lt;EOF
+SELECT foo, bar FROM db
+WHERE foo='baz'
+EOF
+)
+</code></pre>
+<p><i>The <code>$sql</code> variable now holds the new-line characters too. You can verify with <code>echo -e &quot;$sql&quot;</code>.</i></p>
+<h4>2. Pass multi-line string to a file in Bash</h4>
+<pre><code>$ cat &lt;&lt;EOF &gt; print.sh
+#!/bin/bash
+echo \$PWD
+echo $PWD
+EOF
+</code></pre>
+<p><i>The <code>print.sh</code> file now contains:</i></p>
+<pre><code>#!/bin/bash
+echo $PWD
+echo /home/user
+</code></pre>
+<h4>3. Pass multi-line string to a pipe in Bash</h4>
+<pre><code>$ cat &lt;&lt;EOF | grep 'b' | tee b.txt
+foo
+bar
+baz
+EOF
+</code></pre>
+<p>The <code>b.txt</code> file contains <code>bar</code> and <code>baz</code> lines.</p>
+<h4>4. Example</h4>
+<p><code>`bash jayce@ADMND8960546570:~/docs/study/shell$ cat &lt;&lt; EOF &gt; multiline.txt &gt; Line 1 &gt; Line 2 &gt; Line 3 &gt; EOF jayce@ADMND8960546570:~/docs/study/shell$ cat multiline.txt Line 1 Line 2 Line 3 jayce@ADMND8960546570:~/docs/study/shell$ cat &lt;&lt; EOF | grep 2 &gt; multiline_secondline.txt Line 1 Line 2 Line 3 EOF jayce@ADMND8960546570:~/docs/study/shell$ cat multiline_secondline.txt Line 2</code>`</p>
+<h3>Using #!/usr/bin/env bash</h3>
+<p><b>It is also a shebang line used in script files to execute commands with a bash shell</b>. the difference is it uses the env command to display the environment variable present in the system, then executes commands with a defined interpreter.system, then executes commands with a defined interpreter. The env command works by instructing the system to look for specifies interpreters through the $PATH variable and use the first occurrence found. </p>
+<h3>String Operations</h3>
+<p><code>`Unix jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo $MYVARIABLE Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$HOSTNAME&quot; Are you safe?ADMND8960546570 jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$USER&quot; Are you safe?jayce jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE^^}&quot; ARE YOU SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE,,}&quot; are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; | tr [a-z] [A-Z] ARE YOU SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE/safe/SAFE}&quot; Are you SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; |sed s/safe/SAFE/g Are you SAFE?</code>`</p>
+<h2>Set command - Debbug</h2>
+<p>set -e -&gt; Exit Script if any command fails<br>set -n -&gt; No Execution, Purely for syntax check.<br>set -x -&gt; Prints the command before executinf it in scrip#set -n</p>
+<p><code>` Unix #!/usr/bin/bash #Script criado para treinar Debug #set -e #--&gt; Exit Script if any command fails #set -n #--&gt; No Execution, Purely for syntax check. #set -x #--&gt; Prints the command before executinf it in scrip#set -n user=$(whoami) echo &quot;Path directory&quot; pwd echo &quot;Date&quot; date echo &quot;------&quot; read -p &quot;Your name: &quot; name read -p &quot;Your age: &quot; echo &quot;Your age is $REPLY&quot; user=$(whoami) echo &quot;${user^^} welcome in the Hacker World. Are you safe, $name?&quot;</code>`</p>
+<h3>Arithmetic Operations</h3>
+<p>The bc command is <b>an interactive process that provides arbitrary-precision arithmetic</b>. The bc command first reads any input files specified by the File parameter and then reads the standard input</p>
+<p>https://www.ibm.com/docs/en/aix/7.1?topic=b-bc-command</p>
+<p><code>`Unix #! /bin/bash #Shell used to study arithmetic Operations echo -e &quot;==========\033[0;31mWelcome to Arithmetic Operatione\033[0m=========\n&quot; read -p &quot;Tell me one number: &quot; first read -p &quot;Tell me second number: &quot; second echo -e &quot;\n&quot; sum=$(bc&lt;&lt;&lt;&quot;scale=2;$first+$second&quot;) echo -e &quot;The addition of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$sum\033[0m&quot; sub=$(bc&lt;&lt;&lt;&quot;scale=2;$first-$second&quot;) echo -e &quot;The subtraction of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$sub\033[0m&quot; mul=$(bc&lt;&lt;&lt;&quot;scale=2;$first*$second&quot;) echo -e &quot;The multiplication of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$mul\033[0m&quot; div=$(bc&lt;&lt;&lt;&quot;scale=2;$first/$second&quot;) echo -e &quot;The division of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$div\033[0m&quot; sqt_first=$(bc&lt;&lt;&lt;&quot;scale=2;sqrt($first)&quot;) sqt_second=$(bc&lt;&lt;&lt;&quot;scale=2;sqrt($second)&quot;) echo -e &quot;The square root of \033[0;35m$first\033[0m is: $sqt_first and \033[0;35m$second\033[0m is: \033[0;35m$sqt_second\033[0m&quot;</code>`</p>
+<h3>Using CASE (Conditions)</h3>
+<p><code>`Unix #! /bin/bash #Shell used to study arithmetic Operations echo -e &quot;==========\033[0;31mWelcome to Arithmetic Operations\033[0m=========\n&quot; read -p &quot;Tell me one number: &quot; first read -p &quot;Tell me second number: &quot; second echo -e &quot;\n&quot; read -p &quot;Enter your option (1.Addition, 2.Subtraction, 3. Multiplication, 4.Division and 5.Square root): &quot; opt case $opt in         1)                 sum=$(bc&lt;&lt;&lt;&quot;scale=2;$first+$second&quot;)                 echo -e &quot;The addition of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$sum\033[0m&quot;         ;;         2)                 sub=$(bc&lt;&lt;&lt;&quot;scale=2;$first-$second&quot;)                 echo -e &quot;The subtraction of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$sub\033[0m&quot;         ;;         3)                 mul=$(bc&lt;&lt;&lt;&quot;scale=2;$first*$second&quot;)                 echo -e &quot;The multiplication of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$mul\033[0m&quot;         ;;         4)                 div=$(bc&lt;&lt;&lt;&quot;scale=2;$first/$second&quot;)                 echo -e &quot;The division of \033[0;35m$first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$div\033[0m&quot;         ;;         5)                 sqt_first=$(bc&lt;&lt;&lt;&quot;scale=2;sqrt($first)&quot;)                 sqt_second=$(bc&lt;&lt;&lt;&quot;scale=2;sqrt($second)&quot;)                 echo -e &quot;The square root of \033[0;35m$first\033[0m is: \033[0;35m$sqt_first\033[0m and \033[0;35m$second\033[0m is: \033[0;35m$sqt_second\033[0m&quot;         ;;         *)                 echo &quot;You selected a invalid option.. Try again&quot; esac echo -e &quot;\n=============\033[0;31mThe End\033[0m============\n&quot;</code>`</p>
+<h3>Meu primeiro script</h3>
+<pre><code>#! /bin/bash
+#Meu primeiro Script 
+echo &quot;Desec Security&quot;
+echo &quot;Sistema ligado por:&quot; $(uptime - p) #Mostra o time que o sistema esta ligado. Use $
+
+echo &quot;Diretorio atual: &quot; $(pwd) 
+echo &quot;Usuario Atual: &quot; 
+whoaim 
+
+ip = 192.168.0.1 
+porta = 80 
+echo &quot;Varrendo o host: $ip na porta: $porta&quot; 
+
+echo &quot;Digite o ip&quot; #Dessa forma o usuário pode interagir 
+read ip 
+echo &quot;Varrendo o host&quot; $ip 
+ping -c1 $ip
+--------------------------------------- 
+echo &quot;Digite o serviço a ser iniciado&quot; 
+read var 
+service $var restart 
+echo &quot;Serviços ativos:&quot; 
+ps aux | grep $var 
+echo &quot;Portas abertas&quot; 
+netstat -nlpt
+</code></pre>
+<p>Para executar o script, precisamos DAR PERMISSÃO com o comando...</p>
+<p>**chmod + x script.sh</p>
+<p>Depois executar....</p>
+<p>./script.sh.sh</p>
+<h3>FOR</h3>
+<p>You can use the CLI in Linux </p>
+<p><code>for ip in {1..10}; do echo 192.168.00.$ip;done</code></p>
+<p>OR text editor</p>
+<pre><code>#!/bin/bash 
+for ip in $(cat arquivo.txt); 
+do echo 172.16.1.$ip; 
+done
+
+</code></pre>
+<h3>Logical and Logical Operators</h3>
+<p>Semi-colon - Run first command and then second<br>Logical AND -- Run second command only if 1 succeeded<br>Logical OR -- Eu second only if the q failed<br>Logical AND - OR e Operators --  Run second command if the 1 is success else run the another command.</p>
+<h3>Executing Block of code</h3>
+<h4>Standard streams</h4>
+<p> <b>standard streams</b> are interconnected input and output communication channels between a computer program and its environment when it begins execution. The three input/output (I/O) connections are called <b>standard input</b> (<b>stdin</b>), <b>standard output</b> (<b>stdout</b>) and <b>standard error</b> (<b>stderr</b>).</p>
+<p>The standard streams for input, output, and error:<br></p>
+<p>To redirect stdout to <code>file.txt</code>:</p>
+<pre><code>echo test &gt; file.txt
+</code></pre>
+<p>This is equivalent to:</p>
+<pre><code>echo test 1&gt; file.txt
+</code></pre>
+<p>To redirect stderr to <code>file.txt</code>:</p>
+<pre><code>echo test 2&gt; file.txt
+</code></pre>
+<p>To redirect stdout to stderr:</p>
+<pre><code>echo test 1&gt;&amp;2   # equivalently, echo test &gt;&amp;2
+</code></pre>
+<p>To redirect stderr to stdout:</p>
+<pre><code>echo test 2&gt;&amp;1
+</code></pre>
+<p>Thus, in <code>2&gt;&amp;1</code>:</p>
+<ul><li><code>2&gt;</code> redirects stderr to an (unspecified) file.</li><li><code>&amp;1</code> redirects stderr to stdout.</li></ul>
+<p>redirects standard output (<code>stdout</code>) to <code>/dev/null</code>, which discards it.</p>
+<pre><code>&gt;&gt; /dev/null
+</code></pre>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="shell-script.html">Shell Script</a></li></ul></div>
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

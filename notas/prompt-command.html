@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="XSS — nota do Cyber Expert Guide.">
-<title>XSS · Teia</title>
+<meta name="description" content="Prompt Command — nota do Cyber Expert Guide.">
+<title>Prompt Command · Teia</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../styles.css?v=e6e699ca">
 </head>
@@ -38,14 +38,69 @@
 <main class="wrap">
   <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
   <article class="sec-g prose">
-    <h1>XSS</h1>
-    <p class="nota-tags"><span class="nota-tag">#web</span> <span class="nota-tag">#ofensivo</span></p>
-    <p><b>Cross-Site Scripting (XSS)</b> é quando a aplicação devolve input do usuário sem tratar, e o navegador executa isso como HTML/JavaScript. Está no <a href="owasp-top-10.html" class="wl">OWASP Top 10</a> desde sempre.</p>
-<h3>Tipos</h3>
-<ul><li><b>Refletido</b> — o payload vem na requisição e volta na resposta.</li><li><b>Armazenado</b> — o payload fica salvo (num comentário, por exemplo) e atinge todo mundo que abre a página.</li><li><b>DOM</b> — acontece no próprio JavaScript do cliente.</li></ul>
-<h3>Defesa</h3>
-<p>Faça <b>output encoding</b> no contexto certo (HTML, atributo, JS) e aplique uma Content Security Policy. Como quase tudo em web, começa em <a href="validacao-de-input.html" class="wl">Validação de input</a> e termina em tratar toda saída como potencialmente perigosa.</p>
-    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="owasp-top-10.html">OWASP Top 10</a></li><li><a href="validacao-de-input.html">Validação de input</a></li></ul></div>
+    <h1>Prompt Command</h1>
+    
+    <p>Type: <a href="windows.html" class="wl">Windows</a><br>Skills: <span class="wl-missing">BlueTeam</span> <span class="wl-missing">Hacking</span></p>
+<h3>PROMPT COMANDO WINDOWS</h3>
+<p>CMD (command prompt)</p>
+<pre><code>#Mostra o diretoria que estamos
+echo %cd%
+# visualizar o que tem de um diretorio
+dir
+#criar pasta
+mkdir curso
+#criar aqruivo
+echo Julio &gt; nomes.txt
+#limpar tela
+cls 
+#visualizar conteudo
+type meses.txt
+#escrver sem sobrescrever
+echo Gomes &gt;&gt; nomes.txt
+#copiar arquivo
+copy nomes.txt novo.txt
+#mover arquivo
+move novo.txt ../
+#deletar arquivo
+del nomes.txt
+#ocultar arquivo
+attrib +h nomes.txt
+#desfazer comando oculto attrib
+attirib -h *nome arquivo*
+#HELP DO COMANDO
+*comando* /?
+#visu arqv ocultos
+dir /a
+#remover diretorio(pasta)
+rmdir *nome_pasta*
+#remover pasta com conteudo dentro
+rmdir /s *nome_pasta*
+##Buscar algum conteudo 
+dir /S *nome.extensao*
+
+#################################################
+#mostra as conexoes
+netstat -n 
+#mostra tcp
+netstat -p tcp
+#processos em execucao
+tasklist
+#encerrar processo (passa o PID)
+taskkill -pid 6928
+#usuarios que existem no sistema
+net user
+#usuario com detalhes 
+net user Administrator
+#add user (comando + nome + senha + /add)
+net user desec Admin@123 /add
+#remover usuer
+net user desec /delete
+#trabalhar com rede.. 
+net user
+#Network configurations shortcut
+ncpa.cpl
+</code></pre>
+    
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Labeling — nota do Cyber Expert Guide.">
+<title>Labeling · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Labeling</h1>
+    
+    <p>Type: <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="linux.html" class="wl">Linux</a> <span class="wl-missing">Micro-segmentation</span></p>
+<p>A Label is a Key:Value pair, describing an attribute of assets. Labels allow you to categorize your assets by adding any metadata information.</p>
+<p>=================================<br>Environment Segmentation - Servers from different environments (e.g.: PROD and DEV) should not communicate, except for explicitly allowed communications DMZ/Internal segregation</p>
+<p>Critical Application Ring-Fencing - Segmentation in Application</p>
+<p>Micro Segmentation  - Segmentation with users, services. In this step we know my server and which communications that this server do. To me import the traffic in the network and between the servers</p>
+<p>Control Privileged Access to Servers - </p>
+<p></p>
+<p>============</p>
+<p>Guardicore is agnostic because the format your network have does not import.</p>
+<p>Best practice:<br>	Ring fence inbound traffic - a MUST<br>	Ring fence outbound traffic - OPTIONAL (depending on nature of Application)</p>
+<p>Rules:</p>
+<ol><li>Allow all external dependencies of A </li><li>Allow A to A - Application to itself in order not to block internal communication</li><li>Alert Any -&gt; A</li><li>Alerta A -&gt; Any </li><li>Block Any --&gt; A</li><li>Block A --&gt; Any </li></ol>
+<p>============================</p>
+<p>Granulation is possible 7 levels .. Process level allow (PATH) is the last...</p>
+<p></p>
+<p>Image granulation flag level ..</p>
+<p>==========================</p>
+<h4>Shared servers</h4>
+<p>servers that are part of multiple applications<br>Challenges: </p>
+<ul><li>Labeling </li><li>Servers with multiple values per key are not presented in a predictable way on the map </li><li>Policy</li><li>Servers that are used by multiple applications need to be part of multiple segments </li><li>Policy has to be reviewed by multiple applications owners</li></ul>
+<p>====================================================================</p>
+<h4>Assets</h4>
+<ul><li>Labels are attached to Assets, objects that represent workloads</li><li>There are 3 types of assets: <b>Managed and Unmanaged.</b></li></ul>
+<p>==<b>Managed assets</b></p>
+<ul><li>Creation of managed assets: </li><li>Agent Installation</li><li>Orchestration (VMWares, AWS, Azure, kubernets)</li><li>Asset creation via API</li><li>Blue icon</li></ul>
+<p>==<b>Unmanaged assets:</b></p>
+<ul><li>IP elements which are not associated with any managed asset, but that take part in traffic flows.</li><li>Displayed with gray icons</li></ul>
+<ul><li>**Labels can be attached to both managed and unmanaged assets</li><li>Labels allow you to visualize the network in a common business language that your organization uses.</li></ul>
+<p>================</p>
+<h4>Using labels for visibility</h4>
+<p></p>
+<h4>Labels usage - Policy Creation</h4>
+<p></p>
+<p>We can create rules with label using &amp; (AND) or just selecting (OR) - The &amp; option inform the asset need have the three labels to be part of this rule.</p>
+<ul><li>Labels are the preferred method for policy segmentation rules, rather than direct assets.</li><li>shorter, more readable rules</li><li>managing label members</li><li>Labels help manage assets:</li><li>in case of a breach, labels allow you to easily isolate the breached asset without impairing data center performance. </li></ul>
+<h4>Labels Usage - RBAC configuration</h4>
+<p>Is possible to create a role and in the role defined the labels that is visible.</p>
+<h4>Project lifecycle</h4>
+<p></p>
+<h4>Explicit vc Dynamic label</h4>
+<p><b>Explicit:</b><br>In the Asset, you can create a label. Once associated, explicit labels are 'sticky'.<br>It is good to unmanaged asset.</p>
+<p><b>Dynamic:</b><br>In the Labels page, you can create a new label with criteria (e.g. name is xxx, ip address in range 192.160.101.1-192.168.101.5). In the momento you install a new agent with this criteria, this agent will appear in the console with the label you created.</p>
+<h4>Labeling methods </h4>
+<ul><li>REST API / CMDB Integration / SCM Playbook Integration</li><li>CLI</li><li>Automatic --&gt; Label page</li><li>Orchestration</li><li>Manual --&gt; Map or Assets page</li><li>Label Groups</li></ul>
+<h4>Best practices </h4>
+<ol><li>Labeling scheme should have</li><li>Use the only keys that are necessary to support your Business Goals</li><li>Use only the values necessarily to support each defined key</li><li>Define 'mandatory Key' and 'optional Key', so that global policies and uniform views may easily be implemented across the environment. </li><li>Per asset,  use only a single Valeu  for each key.</li><li>This will preserve consistent grouping of the Reveal map</li><li>With multiple keys policy rules would be derived properly </li></ol>
+<h4>Labeling best-practices - multi-purpose servers</h4>
+<p></p>
+<h4>Automatic labeling </h4>
+<p>By default, Guardicore automatically categorize OS Type and OS name</p>
+<h3>LAB</h3>
+<p>How to label assets using different methods.</p>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Disc Usage - Folder Sizes - CPU Info — nota do Cyber Expert Guide.">
+<title>Disc Usage - Folder Sizes - CPU Info · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Disc Usage - Folder Sizes - CPU Info</h1>
+    
+    <p>Type:<a href="linux.html" class="wl">Linux</a> #Linux</p>
+<p>df = report file system disk space usage<br>df - h = print sizes system disk space usage in human readable mode<br>du = estimate file space usage<br>du -h = estimate file space usage in human readable mode<br>du -sh * = estimate file space usage in human readable mode for directories </p>
+<h3>==Finding Files</h3>
+<p>find . -name &quot;*.csv&quot;= Search for files in a current directory with extension .csv<br>find . -type f -size +100k = search for files in a current directory with more 100 Kilobytes<br>find /home/jayce -type d -size +100M = search for directories with more 100 megabytes on /home/jayce</p>
+<p>locate =  Searches for files and directories in a prebuilt database.<br>locate myfile.txt</p>
+<h3>==Process Listings</h3>
+<p>top = display Linux processes<br>ps = process list<br>ps u = all process list to the current user<br>ps au = all process list to the current user, root and guest<br>ps aux = displays the most amount of information a user usually needs to understand the current state of their system’s running processes.<br>ps -He = Viewing the Process Hierarchy<br>ps -axjf = output with more columns<br>ps aux | grep firefox = to find an especif process<br>ps aux --sort=-pcpu = To classify in CPU order </p>
+<h4>==Kill command</h4>
+<p>kill -9 PID = the KILL signal (signal number 9) to the process with process ID like 1234 kill immediately<br>killall firefox = The terminate signal to all the process that are named firefox</p>
+<p>Signals used with the KILL command:</p>
+<ul><li><b>TERM (15)</b> − This is the default signal used by the &quot;<b>kill</b>&quot; command. It requests that the process terminate gracefully, allowing it to clean up any resources or save any data before exiting.</li></ul>
+<ul><li><b>HUP (1)</b> − This signal is used to hang up or disconnect a process. It's often used to restart a process or to refresh its configuration.</li></ul>
+<ul><li><b>INT (2)</b> − This signal is used to interrupt a process, and is similar to pressing the &quot;CTRL+C&quot; keys on the keyboard.</li></ul>
+<ul><li><b>KILL (9)</b> − This signal is used to immediately terminate a process, without allowing it to clean up or save any data. This signal cannot be ignored by the process.</li></ul>
+<ul><li><b>STOP (19)</b> − This signal is used to stop a process temporarily, allowing it to be resumed later.</li></ul>
+<h3>CPU/Memory Information</h3>
+<p>cat /proc/cpuinfo = Information about CPU<br>cat /proc/meminfo = Information about memory<br>cat /proc/PID/status = Status about specif process</p>
+<h4>==Monitor</h4>
+<p>**Command:</p>
+<p>watch 'cat /proc/PID/status | grep voluntary' = every two seconds refresh, wasy way to monitor</p>
+<p>watch -n 1 'cat /proc/PID/status | grep voluntary' = every one seconds refresh, wasy way to monitor</p>
+<h4>==Interfaces and Ports</h4>
+<p>ifconfig<br>nslookup<br>ping<br>ping -c 5<br>netstat -ntlp = n (to resolve name) t (show tcp connections) l (show listening sockets) p (showing the process associate )<br>netstat -ntlp | grep 22</p>
+<h4>==Uptime</h4>
+<p>Veja neste exemplo que há CPU de sobra:</p>
+<p>$ uptime  <br> 20:35:37 up 31 days,  9:41,  1 user,  load average: 0,02, 0,02, 0,00</p>
+<p>A opção -p mostra desde quando o sistema está ligado no estilo contagem de dias:</p>
+<p>$ uptime -p  <br>up 4 weeks, 3 days, 9 hours, 45 minutes</p>
+<p>E a opção -s mostra desde quanto tempo o sistema está ligado no formato de data:</p>
+<p>$ uptime -s  <br>2019-08-15 10:53:45</p>
+<p>A quantidade de CPUs de um sistema pode ser visualizada no arquivo /proc/cpuinfo, com parâmetro “model name”:</p>
+<p>$ grep -c 'model name' /proc/cpuinfo  </p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

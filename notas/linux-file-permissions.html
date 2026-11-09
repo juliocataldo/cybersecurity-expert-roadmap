@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Linux file permissions — nota do Cyber Expert Guide.">
+<title>Linux file permissions · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Linux file permissions</h1>
+    
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>skills: <span class="wl-missing">Hacking</span> </p>
+<p>In Linux, file permissions determine the access levels and rights that are granted to users and groups for interacting with files and directories. Linux file permissions are represented by a series of letters and symbols, often displayed when using the <code>ls -l</code> command.</p>
+<p>Each file or directory in Linux has three sets of permissions:</p>
+<ol><li><b>Owner Permissions:</b> These permissions apply to the owner of the file or directory.</li></ol>
+<ol><li><b>Group Permissions:</b> These permissions apply to the group associated with the file or directory.</li></ol>
+<ol><li><b>Other (or World) Permissions:</b> These permissions apply to all other users who are not the owner or in the group.</li></ol>
+<p>Each set of permissions consists of three basic permissions:</p>
+<ul><li><b>Read (<code>r</code>):</b> Allows the reading of a file or the listing of a directory's contents.</li><li><b>Write (<code>w</code>):</b> Allows modifying or deleting a file, as well as creating, deleting, or renaming files within a directory.</li><li><b>Execute (<code>x</code>):</b> Allows executing a file as a program or accessing a directory and its contents.</li></ul>
+<p>Here's an example of how file permissions are represented:</p>
+<pre><code>-rw-r--r--  1 owner group  4096 May 31 10:15 example.txt
+</code></pre>
+<p>In this example, the first character (<code>-</code>) indicates that it is a regular file. The next three characters (<code>rw-</code>) represent the owner's permissions, which are read and write. The next three characters (<code>r--</code>) represent the group's permissions, which are read-only. The last three characters (<code>r--</code>) represent the permissions for other users, which are also read-only.</p>
+<p>To modify file permissions, you can use the <code>chmod</code> command in Linux, followed by a numerical value or symbolic representation to specify the desired permissions. For example:</p>
+<pre><code>chmod 755 example.txt
+</code></pre>
+<p>This command would give the owner read, write, and execute permissions (7), and read and execute permissions to both the group and other users (5).</p>
+<p>Understanding and properly managing file permissions is crucial for maintaining the security and integrity of files and directories in Linux systems. It ensures that only authorized users can access or modify sensitive information.</p>
+<p>The [<code>chmod</code>] command in Linux is used to change the permissions of files and directories. It stands for &quot;change mode.&quot; With <code>chmod</code>, you can modify the read, write, and execute permissions for the owner, group, and other users.</p>
+<p>The basic syntax of the <code>chmod</code> command is as follows:</p>
+<pre><code>chmod [options] mode file(s)
+</code></pre>
+<p>Here's an explanation of the different components:</p>
+<ul><li><code>[options]</code>: This is an optional part of the command and is used to specify any additional options for the <code>chmod</code> command.</li></ul>
+<ul><li><code>mode</code>: The <code>mode</code> parameter defines the new permissions you want to set. It can be specified using either symbolic notation or numeric notation.</li></ul>
+<ul><li><b>Symbolic notation</b>: Symbolic notation uses letters (<code>u</code>, <code>g</code>, <code>o</code>, <code>a</code>) to represent the permission categories (<code>user</code>, <code>group</code>, <code>other</code>, <code>all</code>). The symbols <code>+</code>, <code>-</code>, and <code>=</code> are used to add, remove, or set permissions, respectively. For example:</li><li><code>u+r</code> adds read permission for the user.</li><li><code>g-w</code> removes write permission for the group.</li><li><code>o=x</code> sets execute permission for others.</li></ul>
+<ul><li><b>Numeric notation</b>: Numeric notation represents permissions using three digits (ranging from 0 to 7) for each permission category. Each digit represents a combination of read (<code>4</code>), write (<code>2</code>), and execute (<code>1</code>) permissions. For example:</li><li><code>755</code> grants read, write, and execute permission for the owner, and read and execute permissions for the group and others.</li></ul>
+<ul><li><code>file(s)</code>: This parameter specifies the file(s) or directories for which you want to modify the permissions. You can provide multiple files or use wildcard characters to specify a pattern.</li></ul>
+<p>Here are some commonly used options with the <code>chmod</code> command:</p>
+<ul><li><code>-R</code> or <code>--recursive</code>: Recursively changes permissions for files and directories within a directory.</li></ul>
+<ul><li><code>-v</code> or <code>--verbose</code>: Displays detailed output, showing the modifications made by the command.</li></ul>
+<ul><li><code>-c</code> or <code>--changes</code>: Outputs only when changes are made to file permissions.</li></ul>
+<p>Here are a few examples of using the <code>chmod</code> command:</p>
+<pre><code>chmod u+r example.txt
+</code></pre>
+<p>This command adds read permission for the owner of the file <code>example.txt</code>.</p>
+<pre><code>chmod go-w file.txt
+</code></pre>
+<p>This command removes write permission for both the group and others from the file <code>file.txt</code>.</p>
+<pre><code>chmod 755 directory/
+</code></pre>
+<p>This command sets read, write, and execute permission for the owner, and read and execute permissions for both the group and others on the directory <code>directory/</code>.</p>
+<p>Understanding and correctly using the <code>chmod</code> command is important for managing file permissions and ensuring the appropriate level of access to files and directories in Linux.</p>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

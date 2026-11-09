@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Protocolos Ethernet — nota do Cyber Expert Guide.">
+<title>Protocolos Ethernet · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Protocolos Ethernet</h1>
+    
+    <p>Skills: <span class="wl-missing">Network</span> <a href="cyber.html" class="wl">Cyber</a></p>
+<h4>Protocolo Ethernet</h4>
+<p>Estrutura do protocolo ethernet</p>
+<p>Mac Destino: Contém o endereço físico da paca de rede destino <br>Mac Origem: Contém o endereço físico da placa de rede de origem <br>Tipo: Código de identifica o tipo de protocol (0900 = IP / 0806 = ARP) <br>Payload: Contém os dados a serem transportados, o tamanho máximo do payload é de 1500 bytes.</p>
+<hr>
+<p>Broadcast é o endereço que indica todo segmento ethernet (ff:ff:ff:ff:ff:ff)<br></p>
+<h4>Protocolo ARP</h4>
+<p>O ARP tem a habilidade de descobrir qual endereço MAC está associado a um determinado endereço IP. Para fazer isso o ARP utiliza os famosos ARP Request e ARP Reply</p>
+<p>ARP Request pergunta quem tem determinado IP e qual o seu endereço MAC. ARP Reply é a resposta enviada pelo host que tem o IP requisitado, ao responder ao ARP Request o host envia seu endereço MAC.</p>
+<p>O host que recebe a resposta armazena o IP e MAC por um tempo.</p>
+<h4>Estrutura Protocolo ARP</h4>
+<p>A estrutura do ARP tem 4 bytes de largura MAC = 6 bytes IP = 4 bytes<br>Como o MAC tem tamanho 6 e a estrutura ARP só cabe 4 por linha, ela faz a adaptação</p>
+<h4>Protocolo IP</h4>
+<p>Responsável por realizar a entrega de pacotes entre máquinas.</p>
+<p>Ele não é confiável, ele apenas entrega o pacote sem realizar nenhum tipo de verificação após a entrega.</p>
+<p>Se quisermos confiabilidade podemos associar o protocolo IP ao protocolo TCP e se quisermos velocidade podemos associar o protocolo IP ao protocolo UDP.</p>
+<p>IP + TCP = Confiabilidade IP + UDP = Velocidade</p>
+<hr>
+<p>Estrutura do protocolo IP:<br></p>
+<p>Analisando abaixo um caso específico, temos:</p>
+<p>Version: Versão 4 (IPV4) <br>IHL: 5 (tamanho do header = 20 bytes) significa que usou 5 linhas, porque ele faz colunas x linhas <br>Type of service: (0) serve para uma melhoria do serviço <br>Total length: 64 (Tamanho total do pacote) <br>Identification: 0 (Não foi fragmentado e não precisou de uma identificação)</p>
+<p>Flags: DF (Don't Fragment) <br>Fragment off set: 0 (A Flag não foi fragmentada, então aqui ficará 0) <br>Time to live: 64 (Serve para definir o SO, Sistema Operacional, 64 = Linux, 128 = Windows, 155 = unix) Esse valor pode ser alterado, porém esse é o padrão. <br>Protocol: TCP 6 <br>Checksum: verificação do header <br>Source Address: IP remetente <br>Destination Address: IP destinatário</p>
+<h4>Fragmentação de Pacotes</h4>
+<p>Um frame ethernet aceita por padrão no máximo 1500 bytes, sendo assim, se o pacote tiver mais de 1500 bytes ele deverá em diversos pedaços, o que chamamos de fragmentação de pacotes.</p>
+<p>Exemplo: O host cliente envia um ping para o host servidor com um pacote com 4000 bytes de tamanho.<br></p>
+<h4>Protocolo TCP</h4>
+<p>O protocolo TCP é um protocolo confiável para transmissão de dados pois ele garante a entrega das informações.</p>
+<p>O TCP é orientado a conexão, isso significa que ele só transmite se garantir que uma conexão foi estabelecida om sucesso. (Three-way Handshake) O segmento TCP se comunica com portas.</p>
+<hr>
+<p>Estrutura protocolo TCP<br></p>
+<p>Source Port: A porta de origem é gerada automaticamente, random. <br>Destination Port: Porta de destino, do servidor, é uma porta fixa. <br>Sequence Number: Identifica que é <br>TCP Acknowledgment Number: Identifica qual o próximo numero da sequencia <br>Data Offset: (tamanho do header) <br>Reserved: Espaço reservado <br>Flags: URG, ACK, PSH, PST, SYN, FIN <br>Window: tamanho máximo do próximo segmento que ele aceita<br>Checksum: Verificação do header, payload.. <br>Urgent Pointer: Prioridade para o conteúdo.</p>
+<h4>3WHS - Three-way Handshake</h4>
+<p>O TCP é orientado a conexão, isso significa que ele só transmite se garantir uma conexão foi estabelecida com sucesso.</p>
+<h4>Encerramento da conexão</h4>
+<p>Quando os hosts desejam encerrar a conexão nós veremos a flag FIN em ação.</p>
+<h4>Problema na conexão</h4>
+<p>O cliente enviou um SYN para estabelecer a conexão e o servidor retornou RST porque a porta não estava aberta, então retornou com problema na conexão.</p>
+<h4>PROTOCOLO UDP</h4>
+<p>O protocolo UDP assim cmo o TCP é um protocolo de transporte de dados, no entanto, não é confiável pois NÃO garante a entrega de dados.</p>
+<p>O protocol UDP não é orientado a conexão, ou seja, não é necessário estabelecer uma conexão antes de começar a transmitir.</p>
+<p>Sendo assim, ele entrega muito mais rápido e amplamente usado com streaming de vídeo, áudio... comunicações onde o foco é velocidade.</p>
+<h3>Protocolo HTTP</h3>
+<p>Funciona através de trocas de requisições entre cliente e servidor.</p>
+<p>A estrutura é composta de HEADER e BODY.</p>
+<p>O protocolo suporta vários métodos tais como GET, POST, HEAD, PUT, DELETE e OPTIONS</p>
+<p>HTTP Request x HTTP Response O protocolo HTTP funciona com requisições, por exemplo, as de solicitações são chamadas de HTTP Request as de respostas são chamadas de HTTP Response.</p>
+<h4>Protocolo ICMP</h4>
+<p>O protocolo ICMP é um protocolo de alerta por mensagens, ele emite avisos sobre a situação da rede.</p>
+<p>A estrutura básica do ICMP é simples, composta de tipos e códigos, cada um com sua função.## PING</p>
+<p>O ping normalmente é utilizado para verificar a comunicação de rede entre hosts.</p>
+<p>A resposta permite saber se a comunicação está ocorrendo, medir tempo de resposta e detectar problemas de lentidão.</p>
+<h3>Entendendo TTL</h3>
+<p>TTL ou tempo de vida do pacote IP serve justamente para que o pacote não fique vagando eternamente pela rede. Cada vez que o pacote IP passa por um roteador(hop) o seu TTL é decrementado (-1) até se tornar 0, quando o valor se torna 0 o roteador descarta o pacote.</p>
+<p>O Windows usa TTL padrão 128 o Linux usa o TTEL padrão 64</p>
+<p>O Unix usa o TTL padrão 255</p>
+<h3>TRACEROUTE com ICMP</h3>
+<p>Quando o TTL se torna 0 normalmente o roteador utiliza o protocolo ICMP para avisar, então ele utiliza o ICMP de tipo 11 e código 0.</p>
+<p>Sendo assim, podemos manipulas o TTL afim de descobrir o caminho e a rota que o pacote percorre.</p>
+<pre><code>#ping com TTL para ir descobrindo a rota
+ping -c 1 -t 1 www.businesscorp.com.br
+ping -c 1 -t 2 www.businesscorp.com.br
+ping -c 1 -t 3 www.businesscorp.com.br
+.
+.
+.
+#TRACEROUTE faz esse procedimento automaticamente. -n é para só trazer os IPS.
+traceroute -n www.businesscorp.com.br
+
+</code></pre>
+<h3>Bytes na rede</h3>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

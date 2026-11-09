@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="AntiDDoS — nota do Cyber Expert Guide.">
+<title>AntiDDoS · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>AntiDDoS</h1>
+    
+    <p>Skills: <span class="wl-missing">Network</span> <a href="cyber.html" class="wl">Cyber</a></p>
+<h2>Blackhole</h2>
+<p>A &quot;<span class="wl-missing">blackhole</span>&quot; in networking refers to a mechanism used to discard or redirect unwanted network traffic, effectively blocking it from reaching its intended destination. Implementing a blackhole can be valuable for mitigating certain types of security threats or managing unwanted traffic.</p>
+<p>Is a countermeasure to mitigate a DDoS attack in which network traffic is routed to a &quot;black hole&quot; and lost. When blackhole filtering is integrated without specific restriction criteria, legitimate and malicious network traffic is routed to a null route or black hole and discarded from the network. When using connectionless protocols such as UDP, no notification of discarded data will be returned to the source. With connection-oriented protocols such as TCP that encourage a handshake to connect to the target system, a notification will be returned if data is discarded.</p>
+<p>For organizations that have no other means of blocking an attack, blackholing is a widely available option. <b>This mitigation method can have unpleasant consequences, making it possibly an undesirable option for mitigating a DDoS attack. Similar to the way antibiotics destroy the good and bad bacteria, when implemented repeatedly, this type of DDoS mitigation will indiscriminately disrupt sources of traffic to the network or service.</b> Sophisticated attacks also use variable IP addresses and attack vectors, which can limit the strength of this type of mitigation as the sole means of stopping the attack.</p>
+<p><b>An important consequence of using blackhole routing when good traffic is also affected is that the attacker has accomplished his goal of disrupting traffic to the target network or service.</b> While it can help a malicious actor achieve his goal, blackhole routing can still be useful when the target of the attack is a small website that is part of a larger network. In this case, blocking traffic directed to the target site can protect the larger network from the effects of the attack.</p>
+<p>Here's how you can implement a blackhole in your company:</p>
+<p><i>1. Define the Purpose:</i><br>Determine why you need a blackhole. Are you trying to block malicious traffic, reduce network congestion, or manage unwanted requests?</p>
+<p><i>2. Choose the Technique:</i><br>There are different ways to implement a blackhole, depending on your network setup and requirements:</p>
+<ul><li><i>Null Routing:</i> Configure your network devices to route traffic to a null or void route, effectively discarding the traffic.</li><li><i>Firewall Rules:</i> Use your firewall to drop or reject packets from specific sources or based on specific criteria.</li><li><i>BGP Blackholing:</i> If you have control over Border Gateway Protocol (BGP), you can announce routes to a blackhole, directing traffic away from your network.</li></ul>
+<p><i>3. Configure Network Devices:</i><br>Access your routers, switches, or firewall devices and configure them to implement the chosen blackhole technique. This might involve creating routing rules, access control lists, or BGP announcements.</p>
+<p><i>4. Specify Targets:</i><br>Identify the IP addresses, IP ranges, or specific criteria for traffic that you want to blackhole. This could include known malicious IPs, spam sources, or excessive traffic sources.</p>
+<p><i>5. Monitor and Fine-Tune:</i><br>Regularly monitor the effectiveness of your blackhole implementation. Analyze network traffic patterns and adjust your blackhole rules as needed to ensure legitimate traffic isn't mistakenly blocked.</p>
+<p><i>6. Document and Communicate:</i><br>Keep detailed records of the blackhole implementation process, including configurations, criteria, and any changes made. Communicate this information to relevant teams to ensure everyone understands how the blackhole operates.</p>
+<p><i>7. Consider Automation:</i><br>For larger networks or ongoing threats, consider automating the blackhole implementation process using network automation tools or scripts.</p>
+<p><i>8. Review and Update:</i><br>Regularly review the effectiveness of the blackhole implementation. Update the criteria as new threats emerge or network requirements change.</p>
+<p>Remember, implementing a blackhole should be done carefully to avoid inadvertently blocking legitimate traffic. It's important to have a clear understanding of your network and the potential impacts of implementing a blackhole. If you're unsure about any aspect, consider consulting with network security professionals before making changes.</p>
+<h2>What is BGP?</h2>
+<p>Border Gateway Protocol (<a href="bgp.html" class="wl">BGP</a>) is the postal service of the Internet. When someone drops a letter into a mailbox, the Postal Service processes that piece of mail and chooses a fast, efficient route to deliver that letter to its recipient. Similarly, when someone submits data via the Internet, BGP is responsible for looking at all of the available paths that data could travel and picking the best route, which usually means hopping between autonomous systems.</p>
+<p>BGP is the protocol that makes the Internet work by enabling data routing. When a user in Singapore loads a website with origin servers in Argentina, BGP is the protocol that enables that communication to happen quickly and efficiently.</p>
+<h3>What is an autonomous system?</h3>
+<p>The Internet is a network of networks. It is broken up into hundreds of thousands of smaller networks known as autonomous systems (ASes). Each of these networks is essentially a large pool of routers run by a single organization.</p>
+<p>!<a href="https://www.cloudflare.com/img/learning/security/glossary/what-is-bgp/network-of-networks.svg &quot;Internet topography&quot;" target="_blank" rel="noopener noreferrer">Internet topography</a></p>
+<p>If we continue to think of BGP as the Postal Service of the Internet, ASes are like individual post office branches. A town may have hundreds of mailboxes, but the mail in those boxes must go through the local postal branch before being routed to another destination. The internal routers within an AS are like mailboxes. They forward their outbound transmissions to the AS, which then uses BGP routing to get these transmissions to their destinations.</p>
+<p>!<a href="https://www.cloudflare.com/img/learning/security/glossary/what-is-bgp/bgp-simplified.svg &quot;BGP Simplified&quot;" target="_blank" rel="noopener noreferrer">BGP Simplified</a></p>
+<p>The diagram above illustrates a simplified version of BGP. In this version there are only six ASes on the Internet. If AS1 needs to route a packet to AS3, it has two different options:</p>
+<p>Hopping to AS2 and then to AS3:</p>
+<p>AS2 → AS3</p>
+<p>Or hopping to AS6, then to AS5, AS4, and finally to AS3:</p>
+<p>AS6 → AS5 → AS4 → AS3</p>
+<p>In this simplified model, the decision seems straightforward. The AS2 route requires fewer hops than the AS6 route, and therefore it is the quickest, most efficient route. Now imagine that there are hundreds of thousands of ASes and that hop count is only one part of a complex route selection algorithm. That is the reality of BGP routing on the Internet.</p>
+<p>The structure of the Internet is constantly changing, with new systems popping up and existing systems becoming unavailable. Because of this, every AS must be kept up to date with information regarding new routes as well as obsolete routes. This is done through peering sessions where each AS connects to neighboring ASes with a TCP/IP connection for the purpose of sharing routing information. Using this information, each AS is equipped to properly route outbound data transmissions coming from within.</p>
+<h3>Who operates BGP autonomous systems?</h3>
+<p>ASes typically belong to Internet service providers (ISPs) or other large organizations, such as tech companies, universities, government agencies, and scientific institutions. Each AS wishing to exchange routing information must have a registered autonomous system number (ASN). Internet Assigned Numbers Authority (IANA) assigns ASNs to Regional Internet Registries (RIRs), which then assigns them to ISPs and networks. ASNs are 16 bit</p>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="antiddos-plan.html">AntiDDoS - Plan</a></li></ul></div>
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

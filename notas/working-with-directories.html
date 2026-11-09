@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Working with directories — nota do Cyber Expert Guide.">
+<title>Working with directories · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Working with directories</h1>
+    
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux</p>
+<p>============== Expert <a href="linux.html" class="wl">Linux</a> Command Cheat Sheet===================</p>
+<p>cd - change directory<br>cd - = Back to last directory<br>ls - list files or list directory<br>ls -R =  Recursive <br>ls directory/*.csv = List all files with csv extension<br>ls -l = list all files in a long listing format<br>ls -lh = list all files in a long listing format in human readable mode<br>ls -la = (List Detailed Directory Contents):F<br>cp -r = copy directories with files<br>rm -r = remove directories with files</p>
+<p>mkdir -p d1/d2/d3 = Creating tree folder<br>whatis &lt;command&gt; = Like 'man' command, short explain<br>file --&gt; when you want to know what file type, you can use the command &quot;file *&quot;<br>wc = priint newline, word, and byte counts for each file<br>history = GNU history library<br>cat = concatenate files and print on the standard output<br>cat text.txt | wc = The &quot;cat&quot; command pipes to &quot;wc&quot; the contents of all the TXT files in the directory. &quot;wc-w&quot; counts the total number of words.<br>cat text.txt | grep &quot;setosa&quot; | grep &quot;3.5&quot; | wc = This command tell us which words, newline and bytes there are in the text file on the line where the word setosa adn 3.5 were found<br>passwd =Allows a user to change their password.</p>
+<h2>Tailing Files</h2>
+<h3>Command GREP</h3>
+<p>grep = print lines that match patterns<br>grep &gt; text.txt = save lines that match patterns and save on txt<br>grep -r &quot;setosa&quot; . = Find the string in all files in a folder<br>cat lista.txt | grep 'pass' &gt; password.txt = concatenate file, match patterns and save on file txt.<br>grep -A 1 file = match patterns and print the one line above<br>grep -B 1 file = match patterns and print the one line bellow<br>grep -C 1 file = match patterns and print the one line both (above and bellow)<br>grep 'word with space' * = match patterns in all directory's file and print<br>grep -i &quot;Word&quot; file.txt = -i to ignore case sensitive<br>grep -w &quot;word&quot; file.txt = To match a whole word<br>grep -v &quot;word&quot; file.txt = To display the lines which are not having given string<br>grep -o &quot;word&quot; file.txt = To display only mathed parts from matched lines<br>grep -n ... = To display the matched line numbers<br>grep -c = Count<br>grep -e &quot;#&quot; -e &quot;Iterate&quot; -ie &quot;compare&quot; check_hash.sh = To match multiples word<br>grep -iE &quot;Iterate|compare&quot; check_hash.sh = To match multiples word<br>grep -i &quot;[i-l]terate&quot; check_hash.sh = matches for any letters between i and l<br>grep ''^for&quot; file = matches for the linws whitch are starting with 'for'<br>grep &quot;done$&quot; file = matches for the lines which are ending with done<br>grep  &quot;^$&quot; check_hash.sh = Matches for the empty lines.<br>grep -E &quot;\^&quot; file = To remove the special character<br>grep &quot;t..s&quot; file = To macht any words with starting with 't' and endind with 's'<br>grep -E &quot;[ [:digit:] ]&quot; check_hash.sh = To display digits <br>Other ways:<br>:alnum: -  :alpha: - :blank: - :lower: - :space:<br>ls -lrt | grep -E &quot;^d&quot; = To list directories and files and just display directories</p>
+<p>==Using grep to match IPv4:</p>
+<p>ip a | grep -E &quot;\b[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\b&quot; (in this command exists the backslash symbol, but obsidian hidden )</p>
+<h3>Command CUT</h3>
+<p>cut -c 1 file = To display just the first caractere from all lines<br>cut -c 1-10 file = To display the caracteres between range 1 to 10 from all lines<br>cut -c 4- file = To display all the caracteres after 4 caractere<br>cut -c -4 file = To display all the caracteres before 4 caractere<br>cut -f 2 file = To display two columns, it works when we have TAB in the text<br>cut -d ':' -f 4 /etc/passwd = To display the fourth column separated by :<br>cut -d ':' -f -4 /etc/passwd --output-delimeter=&quot;|&quot; = To change the : to |<br>cut -sf 1 file.txt = to display the lines that have match with condicional (TAB)<br>cut -d &quot;:&quot; -sf 2 file.txt = to display second lines that have match with condicional (:)<br>httpd -v | grep -E &quot;version&quot; | cut -d &quot;/&quot; -f 2 | cut -d &quot; &quot; -f 1 = To display just de version number</p>
+<h3>Command AWK</h3>
+<p>SYNTAX = `awk [options] '[selection_criteria] {action}' input-file<br>awk 'NR&gt;=6 &amp;&amp; NR&lt;=12 {print}' file = The same result the command above</p>
+<p>awk -F '[ /]'   '/version/ { print $4 }' file =  Use square brackets and inside we have written some we want cut, in this case is space and slash and after this write print and the position (number) thw word you want. The '/version/' is like 'grep version', is good when you have multiples lines and need select the specific line using some word</p>
+<p>awk  '{ print $3,$1 }' file = It is possible to revert the position<br>awk  '{ print NR,$0,NF }' file = NR could count the line, $0 could show all file and NF could count the words in the line</p>
+<h3>Command TAIL</h3>
+<p>tail = output the last part of files (10)<br>tail -f = following the dile outputting the changes are occurring (real time) useful in tshoot.<br>tail folder/file | wc = count the words in the last 10 lines.<br>tail - 2 file = to see just the last two lines.</p>
+<h3>Command SED</h3>
+<p>sed s/8080/80/g wiki.py &gt; wiki2.py = to replace te port and copy another file<br>sed -n '6,12p' file = To display the lines between a range</p>
+<h3>Command TR and TEE</h3>
+<p>tr = translate</p>
+<p><code>tr [:upper:] [:lower:] file.txt</code> = to replace  upper case to lower case<br><code>tr [a-z] [A-Z] file.txt</code> = to replace lower case to upper case<br><code>tr 'i' 'I' file.txt</code> = to replace i to I</p>
+<p>`docker -v | cut -d &quot; &quot; -f 3 | tr -d &quot;,&quot; = Command to show just the docker version, and the TR deletes the ,</p>
+<p>Exemple using <b>AWK + TR</b><br><code>` Unix # systemctl status docker | awk '/Active {print}' Active: active (running) since Sun 2020-08-16 # systemctl status docker | awk '/Active {print $3}' (running) # systemctl status docker | awk '/Active {print $3}' | tr -d &quot;(&quot; | tr -d &quot;)&quot; running # systemctl status docker | awk '/Active {print $3}' | tr -d &quot;[()]&quot; running</code>`</p>
+<p>Example using TR with Sting Usage:</p>
+<pre><code>jayce@ADMND8960546570:~/docs/study/shell$ echo &quot;Hello Word!&quot; | tr [a-z] [A-Z]
+HELLO WORD!
+
+jayce@ADMND8960546570:~/docs/study/shell$ tr [a-z] [A-Z] &lt;&lt;&lt; &quot;Hello Word!&quot;
+HELLO WORD!
+</code></pre>
+<p>ls -lrt &gt; ls_out.txt --&gt; Just record the output inside the file<br>ls -lrt | tee ls_out.txt --&gt; Record the output in my screen and inside the file</p>
+<p>command | tee -a file --&gt; It's to add the output to the file without deleting what's there </p>
+<h3>Others</h3>
+<p>more -2 file = To see the first two lines with the possibility of to see more<br>more +4 file = To start to see from the 4 line with the possibility of to see more<br>head -2 file = to see just the initials two  line<br>head -12 file | tail - 7 file = To see the lines between a range<br>sed -n '6,12p' file = the same result the command above</p>
+<p>&lt;mark class=&quot;yellow&quot;&gt;Three methods of entering the same commands that you have previously entered: &lt;/mark&gt;</p>
+<ol><li>UP Arrow</li><li>Command 'history'</li><li>CTRL + R -&gt; to reverse search</li><li></li></ol>
+<h4>==Shortcut</h4>
+<p>CTRL + A = cursor jumps to the beginning<br>CTRL + E = cursor jumps to the end<br>CTRL + L = clean the screen <br>CTRL + U = cut everthing before the cursor<br>CTRL + K = cut everting after the cursor<br>CTRL + Y = paste</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

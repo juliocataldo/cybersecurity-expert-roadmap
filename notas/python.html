@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Python — nota do Cyber Expert Guide.">
+<title>Python · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Python</h1>
+    
+    <p>Type:<span class="wl-missing">Hacking</span> <br>Skills: <a href="linux.html" class="wl">Linux</a> <span class="wl-missing">Network</span></p>
+<p>Aula 1.1: Variables, Data Types and Operators<br>Aula 1.2: Lists and Tuples</p>
+<pre><code># Declare abaixo uma variável chamada year 
+# e atribua a ela o ano em que Python foi criado (tipo int).
+year = 1989
+print (year)
+
+# Declare abaixo uma variável chamada third_principle e
+# atribua a ela a 3ª linha do &quot;Zen of Python&quot; (tipo string).
+third_principle = &quot;Simple is better than complex.&quot;
+print (third_principle)
+
+# Declare abaixo uma variável chamada am_i_learning e armazene
+# o valor True (tipo boolean).
+am_i_learning = True
+print (am_i_learning)
+
+# Declare abaixo uma variável chamada MyHouseColorIsBlue, porém
+# corrija seu padrão de nomenclatura para o estilo Python (snake_case).
+# Em seguida, atribua a ela o valor True (tipo boolean).
+MyHouseColorIsBlue = False
+my_house_color_is_blue = MyHouseColorIsBlue
+my_house_color_is_blue = True
+print(my_house_color_is_blue)
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# Atribua à variável answer o valor da variável (option_a ou option_b)
+# que tiver a resposta correta da pergunta apresentada no print:
+
+print(&quot;O que significa Mutable?&quot;)
+option_a = &quot;significa que pode ser alterado&quot;
+option_b = &quot;significa que nao pode ser alterado&quot;
+answer = option_a
+print (answer)
+
+# Atribua à variavel answer o valor True ou False, com base na afirmação
+# dentro do print (True = afirmação verdadeira. False = afirmação falsa):
+
+print(&quot;Uma lista (list) no Python é mutável.&quot;)
+answer = True
+print(answer)
+print(&quot;Objects of built-in types like (list, set, dict) are mutable&quot;)
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# Atribua à variável numbers uma lista dos números de 1 a 5 em 
+# sequência (todos tipo int).
+
+numbers = [1, 2, 3, 4 ,5]
+print(numbers)
+
+# Atribua à variável size_number o tamanho da lista numbers criada no
+# exercício anterior. Dica - use uma função para descobrir o tamanho.
+
+size_numbers = len(numbers)
+print(&quot;Tamanho da lista: &quot;,size_numbers)
+
+# Use o print para imprimir a soma das variáveis n1 e n2 (não mexa 
+# na declaração das variáveis, apenas no print).
+
+n1 = 10
+n2 = &quot;40&quot;
+print(n1+int(n2))
+
+# Atribua à variavel answer o valor True ou False, com base na afirmação
+# dentro do print:
+
+print(&quot;Uma Tuple é mutavel.&quot;)
+answer = False
+print(answer)
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# Na variavel order, insira no dicionário as seguintes keys e values:
+## order_id = 1337
+## order_value = 12.40
+## customer_email = contato@maratonapython.com.br
+## customer_phone = 112233445
+## customer_zip_code = 989222-119
+
+order = {
+  &quot;order_id&quot;: 1337,
+  &quot;order_value&quot;: 12.40,
+  &quot;customer_email&quot;: &quot;contato@maratonapython.com.br&quot;,
+  &quot;customer_phone&quot;: 112233445,
+  &quot;customer_zip_code&quot;: 989222-119
+}
+print(order,'\\n')
+
+# Com base no dict order (criado acima), imprima o valor da key
+# &quot;customer_email&quot;.
+
+print(order[&quot;customer_email&quot;])
+
+# Com base no dict order (criado acima), imprima o valor da key
+# &quot;order_id&quot;.
+
+print(order[&quot;order_id&quot;])
+
+# Com base no dict order (criado acima), adicione uma nova key chamada
+# status com o value string de &quot;delivered&quot; (usando apenas 1 linha)..
+
+order[&quot;status&quot;]=&quot;delivered&quot;
+print(order)
+
+# Com base no dict order (criado acima), imprima o valor da key &quot;status&quot;.
+
+print(order[&quot;status&quot;])
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# Abaixo está criada uma lista com alguns alunos da Maratona Python e 
+# vamos agora trabalhar um pouco com ela.
+
+students = [&quot;Bruno&quot;, &quot;Fernando&quot;, &quot;Luiza&quot;, &quot;Henrique&quot;, &quot;Fernanda&quot;, &quot;Lucas&quot;]
+
+# Ops! Esqueci do aluno Michael. Adicione ele na última posição da lista.
+## OBS - Não altere a declaração da lista! 
+## Adicione o aluno na lista students com uma linha de código nova, 
+## utilizando uma função.
+
+students.append(&quot;Michael&quot;)
+print(students)
+
+# Ops! A Luiza saiu do projeto. Remova a Luiza da lista.
+
+students.remove(&quot;Luiza&quot;)
+print(students)
+
+# Quantos alunos estão na lista? (consulte a quantidade usando a função 
+# &quot;len&quot; dentro do print).
+print(len(students))
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# No print faça uma operação para verificar se a &quot;Bruno&quot; está na lista students.
+print(students.count(&quot;Bruno&quot;))
+
+# No print faça uma operação para verificar se a &quot;Luiza&quot; está na lista students.
+print(students.count(&quot;Luiza&quot;))
+print(&quot;$$$$$$$$$$\\n&quot;)
+
+# No print imprima a lista students em ordem reversa (reverse).
+
+print(&quot;First option&quot;)
+print(students[::-1])
+
+print(&quot;Second option&quot;)
+print(students)
+students.reverse()
+print(students,&quot;\\n&quot;)
+
+# Atribua à variável answer o valor da variável (option_a ou option_b)
+# que tiver a resposta correta da pergunta apresentada no print:
+
+print(&quot;De onde vem o print() e o len()?&quot;)
+option_a = &quot;Da Python Standard library&quot;
+option_b = &quot;Do além&quot;
+answer = option_a
+print(answer)
+
+## Linha de Chegada ##
+print(&quot;\\n Winners win&quot;)
+print(u&quot;\\U0001F40D&quot; + &quot; Maratona Python&quot;)
+# © 2020 Maratona Python. Todos os direitos reservados.
+# &lt;https://www.maratonapython.com.br&gt;
+</code></pre>
+<p>ARGUMENTOS</p>
+<pre><code>#!/usr/bin/python
+import sys
+print &quot;Varrendo ip:&quot;, sys.argv[1], &quot;na porta&quot;, sys.argv[2]
+##### python script.py 192.168.0.10 8080
+------------------------------------------
+
+#!/usr/bin/python
+import sys
+print &quot;Verificando portas abertas&quot;
+os.system(&quot;netstat -nlpt)&quot;
+##### python script.py 192.168.0.10
+------------------------------------------
+
+</code></pre>
+<p>CONDIÇÕES</p>
+<pre><code>#!/usr/bin/python
+import sys
+if (len.sys.argv) &lt;= 2:
+	print &quot;Modo de uso do programa: script.py 10.1.1.1 80&quot;
+else:
+	print &quot;Varrendo ip:&quot;, sys.argv[1], &quot;na porta&quot;, sys.argv[2]
+##### python script.py 192.168.0.10 8080
+------------------------------------------
+
+</code></pre>
+<p>REPETIÇÕES</p>
+<pre><code>for ip in range(1,10):
+	print ip
+</code></pre>
+<p>SOCKET</p>
+<pre><code>#!/usr/bin/python
+import socket, sys
+
+ip = sys.argv[1]
+porta = int(sys.argv[2])
+
+if (len.sys.argv) &lt;=2:
+	print &quot;Modo de uso do programa: 127.0.0.1 8080&quot;
+else:
+	meusocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	res = meusocket.connect_ex((ip, porta))
+	if (res ==0):
+		print &quot;Porta aberta&quot;
+	else:
+		print &quot;porta fechada&quot;
+##### python script.py 192.168.0.10 8080
+------------------------------------------
+	
+</code></pre>
+<h4>WHOIS</h4>
+<pre><code>WHOIS EM PYTHON ipv6
+#!/usr/share/python
+import socket 
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+s.connect((&quot;200:12ff:0:2::3,43&quot;))
+s.send(&quot;businesscorp.com.br&quot;+&quot;\\r\\n&quot;)
+resposta = s.recv(1024)
+print resposta
+---------------------------------------------
+WHOIS EM PYTHON ipv4
+#!/usr/share/python
+import socket,sys
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+s.connect((&quot;whois.registro.br,43&quot;))
+s.send(sys.argv[1]+&quot;\\r\\n&quot;)
+resposta = s.recv(1024)
+print resposta
+s.close()
+</code></pre>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

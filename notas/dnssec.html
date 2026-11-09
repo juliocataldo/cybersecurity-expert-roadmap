@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="DNSSEC — nota do Cyber Expert Guide.">
+<title>DNSSEC · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>DNSSEC</h1>
+    
+    <p>Skills: <span class="wl-missing">Network</span></p>
+<h2>Como funciona o DNSSEC</h2>
+<p>O DNS (sistema de nomes de domínio) costuma ser considerado como a lista telefônica da internet, dizendo aos computadores para onde enviar e onde recuperar informações. Infelizmente, também aceita qualquer endereço que lhe for oferecido, sem questionar.</p>
+<p>Os servidores de e-mail usam o DNS para rotear suas mensagens, o que significa que ficam vulneráveis a problemas de segurança na infraestrutura do DNS. Em setembro de 2014, pesquisadores da CMU encontraram e-mails supostamente enviados pelos servidores do Yahoo!, Hotmail e Gmail que, na verdade, estavam vindo de servidores de e-mail não autorizados. Os invasores estavam explorando uma vulnerabilidade muito antiga do DNS (Sistema de Nomes de Domínio): o sistema não verifica as credenciais antes de aceitar uma resposta.</p>
+<p>A solução é um protocolo chamado DNSSEC, que adiciona uma camada de confiança ao DNS ao fornecer autenticação. Quando um resolvedor de DNS está procurando o subdomínio blog.cloudflare.com ,os nameservers .com ajudam o resolvedor a verificar os registros retornados para a Cloudflare, enquanto a Cloudflare ajuda a verificar os registros retornados para o blog. Os nameservers do DNS raiz ajudam a verificar o domínio .com e as informações publicadas pelo raiz são confirmadas por um procedimento de segurança minucioso, incluindo a Cerimônia de Assinatura da Zona Raiz.</p>
+<h3>Uma apresentação suave do DNSSEC</h3>
+<p>O DNSSEC cria um sistema de nomes de domínio seguro ao adicionar assinaturas criptográficas aos registros de DNS existentes. Essas assinaturas digitais são armazenadas nos nameservers do DNS juntamente com tipos comuns de registros, como o A, o AAAA, o MX, o CNAME etc. Ao verificar a assinatura associada, é possível verificar se um registro de DNS solicitado vem do nameserver autoritativo e não foi alterado pelo caminho, ao invés de um registro falso injetado em um ataque man-in-the-middle.</p>
+<p>Para facilitar a validação da assinatura, o DNSSEC adiciona alguns novos tipos de registro de DNS:</p>
+<ul><li><b>RRSIG</b> — contém uma assinatura criptográfica</li><li><b>DNSKEY</b> — contém uma chave de assinatura pública</li><li><b>DS</b> — contém o hash de um registro DNSKEY</li><li><b>NSEC</b> e <b>NSEC3</b> — para uma negação de existência explícita de um registro de DNS</li><li><b>CDNSKEY</b> e <b>CDS</b> — para uma zona filha solicitando atualizações de registros DS na zona mãe.</li></ul>
+<p>Neste artigo, falaremos sobre a interação entre os registros DS, DNSKEY e RRSIG e também como adicionam uma camada de confiança ao DNS.</p>
+<h3>RRsets</h3>
+<p>O primeiro passo para proteger uma zona com DNSSEC é agrupar todos os registros de mesmo tipo em um conjunto de registros de recursos (RRSet). Por exemplo, se você tivesse três registros AAAA em sua zona no mesmo rótulo (por exemplo, rótulo.exemplo.com), todos seriam agrupados em um único RRSet AAAA.</p>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-rrsets.svg &quot;diagrama de rrsets&quot;" target="_blank" rel="noopener noreferrer">diagrama de rrsets</a></p>
+<p>Na verdade, é esse RRSet completo que é assinado digitalmente, e não os registros de DNS individuais. Evidentemente, isso também significa que você deve solicitar e validar todos os registros AAAA de uma zona com o mesmo rótulo, ao invés de validar apenas um deles.</p>
+<h3>Chaves de assinatura de zona</h3>
+<p>Cada zona no DNSSEC tem um par de chaves de assinatura de zona (ZSK): a parte privada da chave assina digitalmente cada RRSet na zona, enquanto a parte pública verifica a assinatura. Para habilitar o DNSSEC, um operador de zona cria assinaturas digitais para cada RRSet usando a ZSK privada e as armazena em seu nameserver como registros RRSIG. É como dizer o seguinte: “Esses são meus registros de DNS. Eles vêm do meu servidor e devem ter essa aparência”.</p>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-zone-signing-keys-1.svg &quot;diagrama de chaves de assinatura de zona 1&quot;" target="_blank" rel="noopener noreferrer">diagrama de chaves de assinatura de zona 1</a></p>
+<p>No entanto, esses registros RRSIG são inúteis, a menos que os resolvedores de DNS tenham uma maneira de verificar as assinaturas. O operador de zona também precisa disponibilizar sua ZSK pública adicionando-a ao nameserver em um registro DNSKEY.</p>
+<p>Quando um resolvedor de DNSSEC solicita um tipo de registro específico (por exemplo, AAAA), o nameserver também retorna o RRSIG correspondente. O resolvedor pode, em seguida, extrair do nameserver o registro DNSKEY que contém a ZSK pública. Juntos, o RRSet, o RRSIG e a ZSK pública podem validar a resposta.</p>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-zone-signing-keys-2.svg &quot;diagrama de chaves de assinatura de zona 2&quot;" target="_blank" rel="noopener noreferrer">diagrama de chaves de assinatura de zona 2</a></p>
+<p>Se confiarmos na chave de assinatura de zona no registro DNSKEY, será possível confiar em todos os registros existentes na zona. Mas, e se a chave de assinatura de zona tiver sido comprometida? Precisamos de uma maneira de validar a ZSK pública.</p>
+<h3>Chaves de assinatura de chave</h3>
+<p>Além de uma chave de assinatura de zona, os nameservers DNSSEC também têm uma chave de assinatura de chave (KSK). A KSK valida o registro DNSKEY exatamente da mesma maneira que nossa ZSK protegeu o resto de nossos RRSets na seção anterior: ela assina a ZSK pública (que é armazenada em um registro DNSKEY), criando um RRSIG para o DNSKEY.</p>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-key-signing-keys-1.svg &quot;diagrama de chaves de assinatura de chave 1&quot;" target="_blank" rel="noopener noreferrer">diagrama de chaves de assinatura de chave 1</a></p>
+<p>Assim como a ZSK pública, o nameserver publica a KSK pública em outro registro DNSKEY, o que nos fornece o RRSet do DNSKEY mostrado acima. Tanto a KSK pública quanto a ZSK pública são assinadas pela KSK privada. Os resolvedores podem, em seguida, usar a KSK pública para validar a ZSK pública.</p>
+<p>Agora, a validação para os resolvedores tem a seguinte aparência:</p>
+<ul><li>Solicite o RRSet desejado, que também retorna o registro RRSIG correspondente.</li><li>Solicite os registros DNSKEY que contêm a ZSK pública e a KSK pública, que também retornam o RRSIG para o RRSet do DNSKEY.</li><li>Verifique o RRSIG do RRSet solicitado com a ZSK pública.</li><li>Verifique o RRSIG do RRSet do DNSKEY com a KSK pública.</li></ul>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-key-signing-keys-2.svg &quot;diagrama de chaves de assinatura de chave 2&quot;" target="_blank" rel="noopener noreferrer">diagrama de chaves de assinatura de chave 2</a></p>
+<p>Evidentemente, o RRSet do DNSKEY e os registros RRSIG correspondentes podem ser armazenados em cache, de forma que os nameservers do DNS não sejam constantemente bombardeados por solicitações desnecessárias.</p>
+<p>Por que usamos chaves de assinatura de zona e chaves de assinatura de chave separadas? Como discutiremos na próxima seção, é difícil trocar uma KSK antiga ou comprometida. Mudar a ZSK, por outro lado, é muito mais fácil. Isso nos permite usar uma ZSK menor sem comprometer a segurança do servidor, minimizando a quantidade de dados que o servidor precisa enviar com cada resposta.</p>
+<p>Agora, estabelecemos confiança dentro da nossa zona. No entanto, o DNS é um sistema hierárquico, e as zonas raramente operam de forma independente. Para complicar ainda mais as coisas, a chave de assinatura de chave é assinada por ela mesma, o que não proporciona nenhuma confiança adicional. Precisamos de uma maneira de conectar a confiança em nossa zona com sua zona mãe.</p>
+<h3>A cadeia de confiança</h3>
+<p>Certo, então temos uma maneira de estabelecer a confiança dentro de uma zona e conectá-la com sua zona mãe. Mas como podemos confiar no registro DS? Bem, o registro DS é assinado exatamente como qualquer outro RRSet. Isso significa que tem um RRSIG correspondente na zona mãe. O processo inteiro de validação se repete até chegarmos à KSK pública da mãe. Para verificar isso, precisamos ir ao registro DS da mãe e assim por diante, à medida que avançamos na cadeia de confiança.</p>
+<p>!<a href="https://www.cloudflare.com/img/products/ssl/diagram-the-chain-of-trust.svg &quot;diagrama da cadeia de confiança&quot;" target="_blank" rel="noopener noreferrer">diagrama da cadeia de confiança</a></p>
+<p>No entanto, quando finalmente chegamos à zona raiz do DNS, temos um problema: não há registro DS mãe frente ao qual validar. É aqui que vemos um lado muito humano da internet global.</p>
+<p>Na Cerimônia de Assinatura da Zona Raiz, vários indivíduos selecionados de todo o mundo se reúnem e assinam o RRSet do DNSKEY raiz de uma forma muito pública e altamente auditada. A cerimônia produz um registro RRSIG que pode ser usado para verificar a KSK e a ZSK públicas do nameserver raiz. Ao invés de confiar na KSK pública por conta do registro DS da mãe, <i>presumimos</i> que ela é válida porque confiamos nos procedimentos de segurança em torno do acesso à KSK privada.</p>
+<p>A capacidade de estabelecer confiança entre as zonas mãe e filha é uma parte integrante do DNSSEC. Se alguma parte da cadeia for violada, não poderemos confiar nos registros que estamos solicitando porque um man-in-the-middle poderia alterar os registros e nos direcionar para qualquer endereço de IP que quisesse.</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

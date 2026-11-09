@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="ASVS — nota do Cyber Expert Guide.">
+<title>ASVS · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>ASVS</h1>
+    
+    <p>Type: <a href="cyber.html" class="wl">Cyber</a> <span class="wl-missing">Hacking</span></p>
+<p>Link:<br>https://github.com/OWASP/ASVS<br>https://top10proactive.owasp.org/<br>https://cheatsheetseries.owasp.org/</p>
+<p>https://web.dev/articles/samesite-cookies-explained?hl=pt-br</p>
+<h4>Application Security Verification Levels </h4>
+<p>The Application Security Verification Standard defines three security verification levels, with each level increasing in depth.</p>
+<p>• ASVS Level 1 is for low assurance levels, and is completely penetration testable <br>• ASVS Level 2 is for applications that contain sensitive data, which requires protection and is the recommended level for most apps<br>• ASVS Level 3 is for the most critical applications - applications that perform high value transactions, contain sensitive medical data, or any application that requires the highest level of trust.</p>
+<p>==============</p>
+<h3>V2 Authentication</h3>
+<h4>Control Objective </h4>
+<p>Authentication is the act of establishing, or confirming, someone (or something) as authentic and that claims made by a person or about a device are correct, resistant to impersonation, and prevent recovery or interception of passwords.</p>
+<h4>V2.1 Password Security </h4>
+<p>Passwords, called &quot;Memorized Secrets&quot; by NIST 800-63, include passwords, PINs, unlock patterns, pick the correct kitten or another image element, and passphrases. They are generally considered &quot;something you know&quot;, and often used as single-factor authenticators. There are significant challenges to the continued use of single-factor authentication, including billions of valid usernames and passwords disclosed on the Internet, default or weak passwords, rainbow tables and ordered dictionaries of the most common passwords</p>
+<ul><li>Verify that user set passwords are at least 12 characters in length (after multiple spaces are combined). (C6) ✓ ✓ ✓ </li><li>Verify that passwords of at least 64 characters are permitted, and that passwords of more than 128 characters are denied. (C6) ✓ ✓ ✓ </li><li>Verify that password truncation is not performed. However, consecutive multiple spaces may be replaced by a single space. (C6) ✓ ✓ ✓</li><li>Verify that any printable Unicode character, including language neutral characters such as spaces and Emojis are permitted in passwords. ✓ ✓ ✓ </li><li>Verify users can change their password. ✓ ✓ ✓ </li><li>Verify that password change functionality requires the user's current and new password.</li><li>Verify that passwords submitted during account registration, login, and password change are checked against a set of breached passwords either locally (such as the top 1,000 or 10,000 most common passwords which match the system's password policy) or using an external API.</li></ul>
+<h4>V2.2 General Authenticator Security </h4>
+<p>Authenticator agility is essential to future-proof applications. Refactor application verifiers to allow additional authenticators as per user preferences, as well as allowing retiring deprecated or unsafe authenticators in an orderly fashion.</p>
+<ul><li>Verify that anti-automation controls are effective at mitigating breached credential testing, brute force, and account lockout attacks. Such controls include blocking the most common breached passwords, soft lockouts, rate limiting, CAPTCHA, ever increasing delays between attempts, IP address restrictions, or risk-based restrictions such as location, first login on a device, recent attempts to unlock the account, or similar. Verify that no more than 100 failed attempts per hour is possible on a single account. </li><li>Verify that the use of weak authenticators (such as SMS and email</li><li>Verify that secure notifications are sent to users after updates to authentication details, such as credential resets, email or address changes, logging in from unknown or risky locations.</li><li>Verify impersonation resistance against phishing, such as the use of multi-factor authentication, cryptographic devices with intent</li><li>Verify that where a Credential Service Provider (CSP) and the application verifying authentication are separated, mutually authenticated TLS is in place between the two endpoints.</li><li>Verify replay resistance through the mandated use of One-time Passwords (OTP) devices</li></ul>
+<h4>V2.3 Authenticator Lifecycle</h4>
+<p>Authenticators are passwords, soft tokens, hardware tokens, and biometric devices. The lifecycle of authenticators is critical to the security of an application - if anyone can self-register an account with no evidence of identity, there can be little trust in the identity assertion. For social media sites like Reddit, that's perfectly okay. For banking systems, a greater focus on the registration and issuance of credentials and devices is critical to the security of the application.</p>
+<ul><li>Verify system generated initial passwords or activation codes SHOULD be securely randomly generated, SHOULD be at least 6 characters long, and MAY contain letters and numbers, and expire after a short period of time. These initial secrets must not be permitted to become the long term password.</li></ul>
+<h4>V2.4 Credential Storage  (L2 e L3)</h4>
+<p>Architects and developers should adhere to this section when building or refactoring code. This section can only be fully verified using source code review or through secure unit or integration tests. Penetration testing cannot identify any of these issues</p>
+<ul><li>Verify that passwords are stored in a form that is resistant to offline attacks. Passwords SHALL be salted and hashed using an approved one-way key derivation or password hashing function.</li></ul>
+<h4>V2.5 Credential Recovery</h4>
+<ul><li>2.5.1 Verify that a system generated initial activation or recovery secret <b>is not sent in clear text to the user.</b> It would be &quot;send a time-limited random activation code&quot; or push notification</li><li>2.5.2 Verify password hints or knowledge-based authentication (socalled &quot;secret questions&quot;) are not present. ✓ ✓ ✓ 640 </li><li>2.5.3 Verify password credential recovery does not reveal the current password in any way.</li><li>2.5.4. Verify shared or default accounts are not present (e.g. &quot;root&quot;, &quot;admin&quot;, or &quot;sa&quot;).</li><li>2.5.5 Verify that if an authentication factor is changed or replaced, that the user is notified of this event. </li><li>2.5.6 Verify forgotten password, and other recovery paths use a secure recovery mechanism, such as time-based OTP (TOTP) or other soft token, mobile push, or another offline recovery mechanism. (C6)</li></ul>
+<h3>V2.6 Look-up Secret Verifier  (L2 e L3)</h3>
+<p>Look up secrets are pre-generated lists of secret codes, similar to Transaction Authorization Numbers (TAN), social media recovery codes, or a grid containing a set of random values. These are distributed securely to users. These lookup codes are used once, and once all used, the lookup secret list is discarded. This type of authenticator is considered &quot;something you have&quot;.</p>
+<h4>V2.7 Out of Band Verifier </h4>
+<p>In the past, a common out of band verifier would have been an email or SMS containing a password reset link. Attackers use this weak mechanism to reset accounts they don't yet control, such as taking over a person's email account and re-using any discovered reset links. There are better ways to handle out of band verification. </p>
+<p>Secure out of band authenticators are physical devices that can communicate with the verifier over a secure secondary channel. Examples include push notifications to mobile devices. This type of authenticator is considered &quot;something you have&quot;. When a user wishes to authenticate, the verifying application sends a message to the out of band authenticator via a connection to the authenticator directly or indirectly through a third party service. The message contains an authentication code (typically a random six digit number or a modal approval dialog). The verifying application waits to receive the authentication code through the primary channel and compares the hash of the received value to the hash of the original authentication code. If they match, the out of band verifier can assume that the user has authenticated. </p>
+<p>The ASVS assumes that only a few developers will be developing new out of band authenticators, such as push notifications, and thus the following ASVS controls apply to verifiers, such as authentication API, applications, and single sign-on implementations. If developing a new out of band authenticator, please refer to NIST 800- 63B § 5.1.3.1.</p>
+<ul><li>Verify that clear text out of band (NIST &quot;restricted&quot;) authenticators, such as SMS or PSTN, are not offered by default, and stronger alternatives such as push notifications are offered first</li><li>Verify that the out of band verifier expires out of band authentication requests, codes, or tokens after 10 minutes.</li><li>Verify that the out of band verifier authentication requests, codes, or tokens are only usable once, and only for the original authentication request.</li><li>Verify that the out of band authenticator and verifier communicates over a secure independent channel.</li></ul>
+<h4>V2.8 One Time Verifier </h4>
+<p>Single-factor One-time Passwords (OTPs) are physical or soft tokens that display a continually changing pseudo-random one-time challenge. These devices make phishing (impersonation) difficult, but not impossible. This type of authenticator is considered &quot;something you have&quot;. Multi-factor tokens are similar to single-factor OTPs, but require a valid PIN code, biometric unlocking, USB insertion or NFC pairing or some additional value (such as transaction signing calculators) to be entered to create the final OTP.</p>
+<ul><li>Verify that time-based OTPs have a defined lifetime before expiring.</li></ul>
+<h4>V2.9 Cryptographic Verifier (L2 e L3)</h4>
+<p>Cryptographic security keys are smart cards or FIDO keys, where the user has to plug in or pair the cryptographic device to the computer to complete authentication. Verifiers send a challenge nonce to the cryptographic devices or software, and the device or software calculates a response based upon a securely stored cryptographic key. The requirements for single-factor cryptographic devices and software, and multi-factor cryptographic devices and software are the same, as verification of the cryptographic authenticator proves possession of the authentication factor.</p>
+<h4>V2.10 Service Authentication (L2 e L3)</h4>
+<p>This section is not penetration testable, so does not have any L1 requirements. However, if used in an architecture, coding or secure code review, please assume that software (just as Java Key Store) is the minimum requirement at L1. Clear text storage of secrets is not acceptable under any circumstances.</p>
+<h3>V3 Session Management </h3>
+<h4>Control Objective</h4>
+<p>One of the core components of any web-based application or stateful API is the mechanism by which it controls and maintains the state for a user or device interacting with it. Session management changes a stateless protocol to stateful, which is critical for differentiating different users or devices. </p>
+<p>Ensure that a verified application satisfies the following high-level session management requirements: <br>• Sessions are unique to each individual and cannot be guessed or shared.<br>• Sessions are invalidated when no longer required and timed out during periods of inactivity</p>
+<h3>V3.1 Fundamental Session Management Security</h3>
+<ul><li>3.1.1 Verify the application never reveals session tokens in URL parameters.</li></ul>
+<h4>V3.2 Session Binding</h4>
+<ul><li>3.2.1 Verify the application generates a new session token on user authentication.</li><li>3.2.2 Verify that session tokens possess at least 64 bits of entropy.</li><li>3.2.3 Verify the application only stores session tokens in the browser using secure methods such as appropriately secured cookies (see section 3.4) or HTML 5 session storage.</li></ul>
+<h4>V3.3 Session Termination</h4>
+<p>Session timeouts have been aligned with NIST 800-63, which permits much longer session timeouts than traditionally permitted by security standards. Organizations should review the table below, and if a longer time out is desirable based around the application's risk, the NIST value should be the upper bounds of session idle timeouts.</p>
+<ul><li>3.3.1 Verify that logout and expiration invalidate the session token, such that the back button or a downstream relying party does not resume an authenticated session, including across relying parties</li><li>3.3.2 If authenticators permit users to remain logged in, verify that re-authentication occurs periodically both when actively used or after an idle period. </li></ul>
+<h4>V3.4 Cookie-based Session Management</h4>
+<ul><li>3.4.1 Verify that cookie-based session tokens have the 'Secure' attribute set. </li><li>3.4.2 Verify that cookie-based session tokens have the 'HttpOnly' attribute set. </li><li>3.4.3 Verify that cookie-based session tokens utilize the 'SameSite' attribute to limit exposure to cross-site request forgery attacks. </li><li>3.4.4 Verify that cookie-based session tokens use the &quot;___Host-&quot; prefix so cookies are only sent to the host that initially set the cookie. </li><li>3.4.5 Verify that if the application is published under a domain name with other applications that set or use session cookies that might disclose the session cookies, set the path attribute in cookie-based session tokens using the most precise path possible</li></ul>
+<h4>V3.5 Token-based Session Management  (L2 e L3)</h4>
+<p>Token-based session management includes JWT, OAuth, SAML, and API keys. Of these, API keys are known to be weak and should not be used in new code</p>
+<h4>V3.6 Federated Re-authentication (L2 e L3)</h4>
+<p>This section relates to those writing Relying Party (RP) or Credential Service Provider (CSP) code. If relying on code implementing these features, ensure that these issues are handled correctly.</p>
+<h4>V3.7 Defenses Against Session Management Exploits</h4>
+<p>There are a small number of session management attacks, some related to the user experience (UX) of sessions. Previously, based on ISO 27002 requirements, the ASVS has required blocking multiple simultaneous sessions. Blocking simultaneous sessions is no longer appropriate, not only as modern users have many devices or the app is an API without a browser session, but in most of these implementations, the last authenticator wins, which is often the attacker. This section provides leading guidance on deterring, delaying and detecting session management attacks using code.</p>
+<ul><li>3.7.1 Verify the application ensures a full, valid login session or requires reauthentication or secondary verification before allowing any sensitive transactions or account modifications.</li></ul>
+<h3>V4 Access Control </h3>
+<h4>Control Objective </h4>
+<p>Authorization is the concept of allowing access to resources only to those permitted to use them. Ensure that a verified application satisfies the following high level requirements: <br>• Persons accessing resources hold valid credentials to do so. <br>• Users are associated with a well-defined set of roles and privileges.<br>• Role and permission metadata is protected from replay or tampering.</p>
+<h4>V4.1 General Access Control Design</h4>
+<ul><li>4.1.1 Verify that the application enforces access control rules on a trusted service layer, especially if client-side access control is present and could be bypassed. </li><li>4.1.2 Verify that all user and data attributes and policy information used by access controls cannot be manipulated by end users unless specifically authorized.</li><li>4.1.3 Verify that the principle of least privilege exists - users should only be able to access functions, data files, URLs, controllers, services, and other resources, for which they possess specific authorization. This implies protection against spoofing and elevation of privilege. (C7) </li><li>4.1.4 DELETED, DUPLICATE OF 4.1.3</li><li>4.1.5 Verify that acccess controls fail securely including when an exception occurs</li></ul>
+<h4>V4.2 Operation Level Access Control</h4>
+<ul><li>4.2.1 Verify that sensitive data and APIs are protected against Insecure Direct Object Reference (IDOR) attacks targeting creation, reading, updating and deletion of records, such as creating or updating someone else's record, viewing everyone's records, or deleting all records. </li><li>4.2.2 Verify that the application or framework enforces a strong anti-CSRF mechanism to protect authenticated functionality, and effective antiautomation or anti-CSRF protects unauthenticated functionality.</li></ul>
+<h4>V4.3 Other Access Control Considerations</h4>
+<ul><li>4.3.1 Verify administrative interfaces use appropriate multi-factor authentication to prevent unauthorized use. </li><li>4.3.2 Verify that directory browsing is disabled unless deliberately desired. Additionally, applications should not allow discovery or disclosure of file or directory metadata, such as Thumbs.db, .DS_Store, .git or .svn folders. </li></ul>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Passive Reconnaissance — nota do Cyber Expert Guide.">
+<title>Passive Reconnaissance · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Passive Reconnaissance</h1>
+    
+    <p>Type:<span class="wl-missing">Hacking</span> <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="linux.html" class="wl">Linux</a> </p>
+<h3><b>Passive Reconnaissance</b></h3>
+<p><b>Passive API Reconnaissance</b> is the act of obtaining information about a target without directly interacting with the target’s systems. When you take this approach, your goal is to find and document public information about your target’s attack surface.</p>
+<p>Typically, passive reconnaissance leverages open-source intelligence (OSINT), which is data collected from publicly available sources. You will be on the hunt for API endpoints, exposed credentials, version information, API documentation, and information about the API’s business purpose. Any discovered API endpoints will become your targets later, during active reconnaissance. Credential-related information will help you test as an authenticated user or, better, as an administrator. Version information will help inform you about potential improper assets and other past vulnerabilities. API documentation will tell you exactly how to test the target API. Finally, discovering the API’s business purpose can provide you with insight into potential business logic flaws.</p>
+<p>As you are collecting OSINT, it is entirely possible you will stumble upon a critical data exposure, such as API keys, credentials, Java Web Tokens (JWT), and other secrets that would lead to an instant win. Other high-risk findings would include leaked PII or sensitive user data such as SSN, full names, email addresses, and credit card information. These sorts of findings should be documented and reported immediately because they present a valid critical weakness.</p>
+<p>Now we will check out a few passive reconnaissance techniques that can be leveraged to discover APIs. Including Google Dorking, Git Dorking, API Repositories, the Way Back Machine, and Shodan.</p>
+<h3><b>Google Dorking</b></h3>
+<p>Even without any Dorking techniques, finding an API as an end-user could be as easy as a quick search.</p>
+<p>However, sometimes you may not get the exact results you were hoping for. If you are getting too many irrelevant results then you could deploy some Google Dorking techniques to more effectively discover APIs.</p>
+<h3><b>GitDorking</b></h3>
+<p>Regardless of whether your target performs its own development, it’s worth checking GitHub (<a href="http://www.github.com" target="_blank" rel="noopener noreferrer">www.github.com</a>) for sensitive information disclosure. Developers use GitHub to collaborate on software projects. Searching GitHub for OSINT could reveal your target’s API capabilities, documentation, and secrets, such as API keys, passwords, and tokens, which could prove useful during an attack. Similar to Google Dorking, with GitHub, you can specify parameters like:</p>
+<p><b>filename</b>:swagger.json</p>
+<p><b>extension</b>: .json</p>
+<p>Begin by searching GitHub for your target organization’s name paired with potentially sensitive types of information, such as “api key,” &quot;api keys&quot;, &quot;apikey&quot;, &quot;authorization: Bearer&quot;, &quot;access_token&quot;, &quot;secret&quot;, or “token.” Then investigate the various GitHub repository tabs to discover API endpoints and potential weaknesses. Analyze the source code in the Code tab, find bugs in the Issues tab, and review proposed changes in the Pull requests tab.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/vJHflsacRw6gsCDkbd2c_GithubExposed.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/vJHflsacRw6gsCDkbd2c_GithubExposed.png</a></p>
+<p>Code contains the current source code, readme files, and other files. This tab will provide you with the name of the last developer who committed to the given file, when that commit happened, contributors, and the actual source code.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/Dn6kLSBGmQ2mI5S484Ao_GithubCode.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/Dn6kLSBGmQ2mI5S484Ao_GithubCode.png</a></p>
+<p>Using the Code tab, you can review the code in its current form or use ctrl-F to search for terms that may interest you (such as API, key, and secret). Additionally, view historical commits to the code by using the History button found near the top-right corner of the above image.  If you came across an issue or comment that led you to believe there were once vulnerabilities associated with the code, you can look for historical commits to see if the vulnerabilities are still viewable.</p>
+<p>When looking at a commit, use the Split button to see a side-by-side comparison of the file versions to find the exact place where a change to the code was made.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/I7Zza4TSRgG0dQ5NFdQg_GithubHistory.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/I7Zza4TSRgG0dQ5NFdQg_GithubHistory.png</a></p>
+<p>The Split button (top right of the above image) allows you to separate the previous code (left) and the updated code (right). Here, you can see a commit to an application that removed the Google Maps API key from the code, revealing both the key and the API endpoint it was used for.</p>
+<p>The Issues tab is a space where developers can track bugs, tasks, and feature requests. If an issue is open, there is a good chance that the vulnerability is still live within the code.</p>
+<p>This is an example, of an open GitHub issue that provides the exact location of an exposed API key in the code of an application. If the issue is closed, note the date of the issue and then search the commit history for any changes around that time.</p>
+<p>The Pull requests tab is a place that allows developers to collaborate on changes to the code. If you review these proposed changes, you might sometimes get lucky and find an API exposure that is in the process of being resolved. As this change has not yet been merged with the code, we can easily see that the API key is still exposed under the Files changed tab. The Files changed tab reveals the section of code the developer is attempting to change.</p>
+<p>If you don’t find weaknesses in a GitHub repository, use it instead to develop the profile of your target. Take note of programming languages in use, API endpoint information, and usage documentation, all of which will prove useful moving forward.</p>
+<h3><b>TruffleHog</b></h3>
+<p>TruffleHog is a great tool for automatically discovering exposed secrets. You can simply use the following Docker run to initiate a TruffleHog scan of your target's Github.</p>
+<p>$ sudo docker run -it -v &quot;$PWD:/pwd&quot; trufflesecurity/trufflehog:latest github --org=target-name</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/01s4gYuoQmq9GgdZg4oG_TruffleHogv3.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/01s4gYuoQmq9GgdZg4oG_TruffleHogv3.png</a></p>
+<p>In the above example, you can see that the org that was targeted was Venmo and the results of the scan indicate URLs that should be investigated for potentially leaked secrets. In addition to searching Github, TruffleHog can also be used to search for secrets in other sources like Git, Gitlab, Amazon S3, filesystem, and Syslog. To explore these other options use the &quot;-h&quot; flag. For additional information check out <a href="https://github.com/trufflesecurity/trufflehog" target="_blank" rel="noopener noreferrer">https://github.com/trufflesecurity/trufflehog</a>.</p>
+<h2><b>API Directories</b></h2>
+<p><a href="http://Programmableweb.com" target="_blank" rel="noopener noreferrer">Programmableweb.com</a> is a go-to source for API-related information (<a href="https://www.programmableweb.com/apis/directory" target="_blank" rel="noopener noreferrer">https://www.programmableweb.com/apis/directory</a>). To learn about APIs, you can use their API University. To gather information about your target, use the API Directory, a searchable database of over 23,000 APIs. Expect to find API endpoints, version information, business logic information, the status of the API, source code, SDKs, articles, API documentation, and a changelog.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/Pl5zVW8Rde4fCFd32jz3_twilioapidirectory.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/Pl5zVW8Rde4fCFd32jz3_twilioapidirectory.png</a></p>
+<p><i>Twilio API page on <a href="http://programmableweb.com" target="</i>blank" rel="noopener noreferrer">programmableweb.com</a>._</p>
+<p>Click through the various tabs in the directory listing and note the information you find. To see the API endpoint location, portal location, and authentication model. To see information about the APIs version history, select a specific version listed under the Versions tab. In this case, both the portal and endpoint links lead to API documentation as well. In the case of Twilio, you can see all the specs related to the current version of the REST API.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/8Zn6Z9PIRse67JCxJz8s_twilioapidirectory2.png" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/8Zn6Z9PIRse67JCxJz8s_twilioapidirectory2.png</a></p>
+<p><i>The Twilio specs page on <a href="http://programmableweb.com" target="</i>blank" rel="noopener noreferrer">programmableweb.com</a>._</p>
+<p>On the Twilio specs page, you can learn all sorts of useful information about the API. For instance, the API endpoint URL is listed, the forum for the API, the developer support URL, the authentication model, and more are all listed on this page. At the bottom of the Specs page, you can also see articles related to the API and developers of the API, all of which could prove useful when attacking the API.</p>
+<h3><b>Shodan</b></h3>
+<p>Shodan is the go-to search engine for devices accessible from the internet. Shodan regularly scans the entire IPv4 address space for systems with open ports and makes their collected information public on <a href="https://shodan.io" target="_blank" rel="noopener noreferrer">https://shodan.io</a>. You can use Shodan to discover external-facing APIs and get information about your target’s open ports, making it useful if you have only an IP address or organization’s name to work from. Like with Google dorks, you can search Shodan casually by entering your target’s domain name or IP addresses; alternatively, you can use search parameters like you would when writing Google queries. The following table shows some useful Shodan queries.</p>
+<h3>****</h3>
+<h3>****</h3>
+<h2><b>The Way Back Machine</b></h2>
+<p>The Way Back Machine is an archive of various web pages over time. This is great for passive API reconnaissance because this allows you to check out historical changes to your target. If, for example, the target once advertised a partner API on their landing page, but now hides it behind an authenticated portal, then you might be able to spot that change using the Way Back Machine. Another use case would be to see changes to existing API documentation. If the API has not been managed well over time, then there is a chance that you could find retired endpoints that still exist even though the API provider believes them to be retired. These are known as Zombie APIs. Zombie APIs fall under the Improper Assets Management vulnerability on the OWASP API Security Top 10 list. Finding and comparing historical snapshots of API documentation can simplify testing for Improper Assets Management.</p>
+<p>!<a href="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/FGPF2fPT8ysfQHtTHQbk_Wayback1.PNG" target="_blank" rel="noopener noreferrer">https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147573912/products/FGPF2fPT8ysfQHtTHQbk_Wayback1.PNG</a></p>
+<p>Check for differences between the API documentation. Later, when you are actively testing the API, make sure to test using old endpoints,</p>
+<h3><b>Conclusion</b></h3>
+<p>In this module, we covered some basic techniques that can be deployed to gather about your target's API attack surface. The first step to hacking a target's APIs is to uncover as much information about them as possible. Using these reconnaissance techniques can not only help you discover the existence of APIs, but can also lead to critical vulnerability findings. Next we will focus on active recon techniques.</p>
+<p>|Google Dorking Query|Expected results|<br>|---|---|<br>|inurl:&quot;/wp-json/wp/v2/users&quot;|Finds all publicly available WordPress API user directories.|<br>|intitle:&quot;index.of&quot; intext:&quot;api.txt&quot;|Finds publicly available API key files.|<br>|inurl:&quot;/api/v1&quot; intext:&quot;index of /&quot;|Finds potentially interesting API directories.|<br>|ext:php inurl:&quot;api.php?action=&quot;|Finds all sites with a XenAPI SQL injection vulnerability. (This query was posted in 2016; four years later, there are currently 141,000 results.)|<br>|intitle:&quot;index of&quot; api_key OR &quot;api key&quot; OR apiKey -pool|This is one of my favorite queries. It lists potentially exposed API keys.|</p>
+<p>|Shodan Queries|Purpose|<br>|---|---|<br>|hostname:&quot;<a href="http://targetname.com" target="_blank" rel="noopener noreferrer">targetname.com</a>&quot;|Using hostname will perform a basic Shodan search for your target’s domain name. This should be combined with the following queries to get results specific to your target.|<br>|&quot;content-type: application/json&quot;|APIs should have their content-type set to JSON or XML. This query will filter results that respond with JSON.|<br>|&quot;content-type: application/xml&quot;|This query will filter results that respond with XML.|<br>|&quot;200 OK&quot;|You can add &quot;200 OK&quot; to your search queries to get results that have had successful requests. However, if an API does not accept the format of Shodan’s request, it will likely issue a 300 or 400 response.|<br>|&quot;wp-json&quot;|This will search for web applications using the WordPress API.|</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

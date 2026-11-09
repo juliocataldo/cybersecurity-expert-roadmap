@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Agents - Windows — nota do Cyber Expert Guide.">
+<title>Agents - Windows · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Agents - Windows</h1>
+    
+    <p>Type: <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="windows.html" class="wl">Windows</a><span class="wl-missing">Micro-segmentation</span></p>
+<p>Agents can be install in these OS</p>
+<ul><li>Windows</li><li>Linux</li><li>MAC</li><li>Unix</li></ul>
+<p>==The policy is applied through the <b>driver</b> (windows), <b>kernel</b>(linux), <b>native pf fw</b> (MacOS).</p>
+<h3>Agents - Modules/Bundles</h3>
+<ul><li>Reveal Module - Enables process-level (L7) visibility and file reputation - Responsible for reporting the visibility data collected by the Agents and also the enforcement log</li><li>Enforcement Modules - Blocks traffic based on network-level process-level and collects responses for DNS requests</li><li>Deception Module - Detects failed/blocked connection attempts and redirects those to the Deception Server for further investigation</li><li>Detection Module - Responsible for insight capabilites</li></ul>
+<h4>Additional Internal module</h4>
+<ul><li>Controller Module - Communication channel between the Agent and the Aggregator for monitoring and control of the Agent</li></ul>
+<p>|Agent Side| Aggregator Side|<br>|---|---|<br>|Reveal module| gc-mitigation |<br>|Enforcement module| gc-enforcement|<br>|Deception module| gc-datapath|<br>|Detection module| gc-detection-agents-server|<br>|Controller| gc-controller-server|</p>
+<h4>Agent Resilience </h4>
+<ul><li>In case connectivity between the Agent and the Agg is lost, the agent will continue its operation</li><li>Last updated policy revision will be enforced</li><li>the policy is stored in a file that requires root privileges to access it</li><li>New traffic flow data will be cached in the memory and reported once the connectivity to the aggregator is renewed.</li><li>the flow data is stored in memory, until a configurable limit of numbers of network is reached</li><li>When agent process are killed, a wathcdog service will restart them.</li></ul>
+<h3>Windows</h3>
+<p></p>
+<h4> Storage, CPU and Memory Utilization</h4>
+<p>There are 3 pre-configured resource usage limitation profiles:</p>
+<ul><li>low</li><li>medium (default)</li><li>high</li></ul>
+<p>All module share the same limitation values</p>
+<ul><li>Soft limits - restrict usage for the current process, but may be exceeded in situations when the resource is not requested by concurrent processes. <b>The soft limit default value is 2% and can be changed per Agent</b></li><li>Hard Limits - restrict resource usage to an absolute ceiling cannot be exceeded. <b>The hard limit default value is 5% and can be changed per Agent</b></li></ul>
+<p>==In most windows environment it is found to utilize less than 1% of CPU. CPU Limitations are enforced starting 2k12, using <b>Windows Job Objects mechanism</b>.</p>
+<p>==In most windows environment it is found to utilize less than 50MB of RAM. Memory limit are enforced starting 2003, using <b>Windows Job Objects mechanism</b>.</p>
+<p></p>
+<h4>Storage</h4>
+<p></p>
+<p>==All agent sub components initiation is done using a service named GC-AGENTS-SERVICE - In case of failure, the process is restarted after a 20 second wait time</p>
+<h4>Online vs offline</h4>
+<p>Online: The installation flow pulls the Agent package from the Aggregator, then the flow installs and configures the Agent. The installation instructions for this option per OS are included in Centra. <b>Online installation allos installing the latest version</b></p>
+<p>Offline: A package file is placed in the customers repo and copied and installed on a target server by customer's scripts. <b>Offline installation allows control of the deployed binaries.</b> It can be also used in case the Aggregator cannot yet be reached but the project already wants to deploy an Agent.</p>
+<p></p>
+<h4>Agent installation profile</h4>
+<ul><li>The default profile is the base profile</li><li>any agent that is installed without an installation profile is associated with the default</li><li>installation profile are relevant for install time only</li><li>Agent configuration can <b>always be changed</b> after install </li><li>To change an Agent's attributes, you need to override its configuration</li><li>To change an Agent's installation profile, you will need to uninstall the Agent and reinstall it.</li></ul>
+<p>==Akamai suggest to never change the default installation profile and never edit</p>
+<ul><li>We can specify the installation profile using the installer CLI interface:</li></ul>
+<p>`windows_installer.exe /q /a &lt;AGGR_IP/FQDN&gt; /p &lt;passowrd&gt; /installation-profile &lt;installation_profile_name&gt;</p>
+<h4>Uninstalling</h4>
+<p>From Windows: Control Panel --&gt; Uninstall (no downtime)</p>
+<h4>Upgrade</h4>
+<p>The usual upgrade procedure is to reinstall the Agent. An agent can also be upgraded from Centra.</p>
+<h4>Remote agent upgrade (RAU)</h4>
+<p>Administrators can upgrade agents directly from Centra-s Agents screen. Simply selects the Agent(s) to be upgraded and clicks the <b>remote agents upgrade</b> button.</p>
+<ul><li>You can select 1000 agents at a time, the batch size is 100 - average 30 seconds per agent</li><li>Remote agent upgrade feature is supported to Linux and Windows</li></ul>
+<p>**If agent admin lock enabled, disable it first, before you begin the upgrade.</p>
+<h3>Windows Agent Adm Lock</h3>
+<ul><li>Agent lock prevents Agent tampering by an unprivileged server adm which may causa the agent to be suspended or disabled.</li></ul>
+<p>To prevent disabling the Agent, the following is prevented:</p>
+<ul><li>Uninstalling the agent through Add/Remove programs.</li><li>Stopping/Restarting/Disabling the Agent service </li><li>Killing the agent process in the task manager.</li></ul>
+<hr>
+<p>==On other Operations System (OS):</p>
+<ul><li>The adm lock <b>protects only</b> <b>the gc -agent binary</b>, which controls the Agent status.</li><li>The adm lock <b>does not protect</b> Agent from being uninstalled or stopped by using standard OS methods.</li></ul>
+<p>BY DEFAULT, THE AGENT TAMPER PREVENTION LOCK IS <b>DISABLED</b> FOR EXISTING AGETNS OR NEWLY INSTALLED AGENTS.</p>
+<ul><li>In Centra ADM installs the agent with the locked enabled using profile configuration </li><li>Centra Adm uses Administration lock option on the agents screen to change an Agent's state to Locked.</li></ul>
+<h4>Verify agent</h4>
+<ul><li>GUI in the Centra (lock icon)</li><li>Services in the windows - options is disabled</li></ul>
+<h4>(Un)locking Agent</h4>
+<ul><li>GUI in the Centra</li><li>Administration lock option - This is preferable option</li><li>Using password </li><li>Agent UI</li><li>Click in the icon on the windows agent and suspend agent option</li><li>CLI </li><li>To lock the agent</li><li><code>c:\program files\Guardicore&gt; gc-agents-service.exe --ctrl set-adminlock-state --args LOCKED</code></li><li>To unlock the agent</li><li>`c:\program files\Guardicore&gt; gc-agents-service.exe --ctrl set-adminlock-state --args UNLOCKED:&lt;enter_your_password&gt;</li></ul>
+<h4>Agent Screen</h4>
+<ul><li>After 24 hours of not being connected to the management, agents are automatically removed from the agent screen. </li><li>Once reconnected, the agents are automatically added back to the screnn</li></ul>
+<h4>Agent Flags </h4>
+<ul><li>Information</li><li>Warning</li><li>Error</li></ul>
+<p>https://techdocs.akamai.com/segmentation-v48/docs/agent-administration</p>
+<h3>Enforcement Modes</h3>
+<p>Enforcement state:</p>
+<ul><li>Enforcing</li><li>Monitoring</li><li>Reveal Only</li></ul>
+<p></p>
+<h3>Agent Roaming </h3>
+<p>Centra enables Enforcement policies to be disabled on laptops that are taken out of the company network. (Supported <b>for windows desktop agents</b>). To do this, is import to mark in Centra 'disable enforce module outside the office network and record the office domain name (FQDN)'</p>
+<h4>Agent Log Screen</h4>
+<p>Logs....</p>
+<h4>Agent Administration UI</h4>
+<ul><li>View agents info</li><li>show current status installed modules</li><li>view segmentation policy rules and revision loaded </li><li>temporarily suspend the agents</li><li>set verbosity level</li><li>save diagnostics package</li></ul>
+<p>UI or CLI<br>`C:\Program Files\Guardicore\gc-agents-service.exe --ctrl</p>
+<p>The mind dash show</p>
+<ul><li>high level status</li><li>modules status</li><li>agent activity summary</li></ul>
+<p>After reboot - 'validating' state is expected - should not take more than 60 seconds.</p>
+<h4>Blocked connections</h4>
+<ul><li>See the traffic both side</li><li>See a notification (pop-up)</li></ul>
+<h4>Policy Rules</h4>
+<p>Screen the lists the rules</p>
+<p>==IF NEEDED, YOU CAN TEMPORARILY SUSPEND AGENT OPERATION...<br></p>
+<h4>Agent Logs</h4>
+<p>Windows logs are located at </p>
+<pre><code>C:\ProgramDAta\Guardicore\logs
+</code></pre>
+<p></p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

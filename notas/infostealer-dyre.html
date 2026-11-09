@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Infostealer.Dyre — nota do Cyber Expert Guide.">
+<title>Infostealer.Dyre · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Infostealer.Dyre</h1>
+    
+    <p>Type:<a href="windows.html" class="wl">Windows</a> <a href="malware.html" class="wl">Malware</a><br>Skills: <span class="wl-missing">Code</span> <span class="wl-missing">Hacking</span></p>
+<p>We will look at the basic analysis procedure of a malware sample called Infostealer.Dyre. The malware sample can be found in <a href="https://github.com/ytisf/theZoo" target="_blank" rel="noopener noreferrer">theZoo</a>.</p>
+<h2>Analysis</h2>
+<p>Place the malware sample on the Windows XP VM desktop (drag and drop) and unzip it using <i>7Zip</i> (password — <i>infected)</i>. In the <i>Original</i> sub-folder, there is a file named <i>Document-772976</i>829712.scr_ which is the malware sample that we’ll analyze.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*TsGSe-2QsGkIMCFs.png)</p>
+<h2>Is the sample executable?</h2>
+<p>This question is quite unnecessary since the file extension is <i>.scr</i> and we know that it is a Windows executable. However, we will confirm it using <i>010 Editor</i>.</p>
+<p>On opening the executable in <i>010</i> Editor, we notice that the first 2 bytes of the file is <i>MZ</i> in ASCII. This is the <i>magic number</i> that identifies a Windows executable.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*Ies_aUiNQnvNfB3A.png)</p>
+<h2>Is the sample packed?</h2>
+<p>Many malware authors obfuscate their code to make it difficult for malware analysts. Obfuscation techniques include packing, encryption, etc. It is common to find malwares that are packed using <a href="https://upx.github.io/" target="_blank" rel="noopener noreferrer">UPX</a>. In such cases, the malware sample needs to be unpacked (using the UPX <a href="https://github.com/upx/upx/releases/tag/v3.95" target="_blank" rel="noopener noreferrer">program</a>) and then analyzed.</p>
+<p>To check whether our malware sample is packed, we’ll use the <i>PEiD</i> program. On opening the malware sample in <i>PEiD</i>, we notice that it recognizes the malware sample as a <i>Microsoft Visual C++ 6.0</i> executable. Since <i>PEiD</i> recognizes this, we can confirm that the malware sample is not packed.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*MZVmkX9TqzCb4tbG.png)</p>
+<h2>When was the sample compiled?</h2>
+<p>Knowledge of the malware sample’s compile time can help us know if AV databases might contain its signatures. An old compile time suggests that the malware is not new and AV databases probably may contain its signature, whereas a newer compile time suggests that the malware may be part of a zero-day attack.</p>
+<p>We can determine the compile time using <i>PEView</i>. On opening the sample in <i>PEView</i>, navigate to the <i>IMAGE</i>FILE_HEADER_ section. Notice that the <i>Time Date Stamp</i> is <i>1983/05/22 Sun 19:49:14 UTC</i>.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*rlw8Xr2k4QgGjz2P.png)</p>
+<p>It seems like our malware sample is old and AV databases would likely contain its signatures. However, the crux of this post is to reverse engineer our malware sample, so we will ignore this information.</p>
+<p>==Keep in mind that malware authors can fake the compile time. So, if you don’t find signatures of a supposedly old malware, it is possible that the compile time was faked.</p>
+<h2>What sub-system does the sample operate in?</h2>
+<p>Some malwares are solely command-line based and do not have a GUI component. When such samples are executed, they run in the background and will not interact with any windows. For malwares with GUI components, they may interact with one or more windows during their execution.</p>
+<p>We can confirm the sub-system of our malware sample in <i>PEView.</i> On opening the sample in <i>PEView</i>, navigate to the <i>IMAGE</i>OPTIONAL_HEADER_ section. Notice that the sub-system is <i>IMAGE</i>SUBSYSTEM_WINDOWS_GUI_. Therefore, our malware sample has a GUI component to it and will open one or more windows on execution.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*q34cr-iIY74r5qQa.png)</p>
+<h2>Does the sample have other embedded executables?</h2>
+<p>Some malwares have other embedded executables in them which are extracted during execution. In the <i>PEView</i> window, notice that our malware sample has a <i>.rsrc</i> section. It is not unheard of that some malware embed executables in the <i>.rsrc</i> section.</p>
+<p>To determine if executables are embedded in the <i>.rsrc</i> section, we use <i>ResourceHacker</i>. On opening the sample in <i>ResourceHacker</i>, we can confirm that there are no other embedded executables in our malware sample.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*6G9A0dvoZQeqfwy-.png)</p>
+<h2>What functions does the sample import / export?</h2>
+<p>Knowing the functions that the malware imports / exports can help us understand the purpose of the malware. For example, if a malware sample uses the function <i>CreateMutexA()</i>, it suggests that the malware probably uses mutexes in its operation. With this knowledge, we can specifically look for strings that look like a mutex name.</p>
+<p>We can determine which functions are imported / exported using <i>PEView</i> under the <i>.rdata</i> section.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*UkMlbPaOykr7imqL.png)</p>
+<p>Hmm… we cannot see any function names, but we can see hexadecimal characters. This is another way of importing functions in a program — through ordinal numbers. At this point, <i>PEView</i> is at its limits. To determine the function names, we need to use another application, <i>Dependency Walker</i>.</p>
+<p>On opening the malware sample in <i>Dependency Walker</i>, we can see the function names and associated ordinal numbers in the top right window.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*GxO7FURsVHjgTRGE.png)</p>
+<p>We can now crosscheck the ordinal numbers from <i>PEView</i> and determine the function names from <i>Dependency Walker</i>. As you can imagine, this is quite laborious and in my opinion the outcome is not as rewarding. So, I’m going to skip this step. At this point, we have no idea what functions are being imported / exported.</p>
+<h2>Does the sample have any clear text strings?</h2>
+<p>Clear text strings are great for finding IP addresses, domain names, mutex names, etc. We can check for clear text strings using <i>IDA Pro</i> under the <i>Strings Sub View</i>. Ensure that the <i>Minimal String Length</i> is set to 1. This allows <i>IDA Pro</i> to display strings which may be short command line arguments.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*E20yfJhgMP6hMAOB.png)</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*38kz66KwKy8hMhNH.png)</p>
+<p>We can see that there are loads of strings in the window, but they are incomprehensible. We can put a filter to parse through the results. I filtered the <i>String</i> column to contain a period character, but as we can see there are no interesting strings.</p>
+<p>![](https://miro.medium.com/v2/resize:fit:700/0*15Suvw081ZF3EyOE.png)</p>
+<p>This suggests that critical strings in the malware sample may be encrypted and are probably decrypted at runtime.</p>
+<p><b>Note:</b> At this point, we have reached a dead end as far as basic static analysis goes. After this point, basic dynamic analysis (malware will be executed) would be able to give us more information. Ensure that you have a snapshot of the Windows XP VM ready.</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

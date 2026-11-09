@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="OWASP Top 10 — nota do Cyber Expert Guide.">
-<title>OWASP Top 10 · Teia</title>
+<meta name="description" content="Troubleshooting commands — nota do Cyber Expert Guide.">
+<title>Troubleshooting commands · Teia</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../styles.css?v=e6e699ca">
 </head>
@@ -38,14 +38,27 @@
 <main class="wrap">
   <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
   <article class="sec-g prose">
-    <h1>OWASP Top 10</h1>
-    <p class="nota-tags"><span class="nota-tag">#web</span> <span class="nota-tag">#fundamentos</span></p>
-    <p>O <b>OWASP Top 10</b> é a lista das categorias de risco mais comuns em aplicações web. Não é um checklist completo, mas é o melhor ponto de partida para quem está aprendendo <span class="wl-missing">Segurança de aplicações</span>.</p>
-<h3>Categorias que mais aparecem</h3>
-<ul><li>Injeção — o caso clássico é o <a href="sql-injection.html" class="wl">SQL Injection</a>, mas também vale para comandos e LDAP.</li><li>Falhas de <a href="autenticacao.html" class="wl">Autenticação</a> e de controle de acesso.</li><li>Cross-Site Scripting, o <a href="xss.html" class="wl">XSS</a>.</li></ul>
-<h3>Como usar</h3>
-<p>Leia cada categoria, reproduza a falha num laboratório (PortSwigger, Juice Shop) e conecte com a defesa: quase tudo volta para <a href="validacao-de-input.html" class="wl">Validação de input</a> e para pensar em <a href="threat-modeling.html" class="wl">Threat Modeling</a> desde o design.</p>
-    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="autenticacao.html">Autenticação</a></li><li><a href="sql-injection.html">SQL Injection</a></li><li><a href="threat-modeling.html">Threat Modeling</a></li><li><a href="validacao-de-input.html">Validação de input</a></li><li><a href="xss.html">XSS</a></li></ul></div>
+    <h1>Troubleshooting commands</h1>
+    
+    <p>Type: <a href="windows.html" class="wl">Windows</a></p>
+<h4>IP configurations ALL</h4>
+<pre><code>ipconfig /all
+</code></pre>
+<h4>Network configurations shortcut</h4>
+<pre><code>ncpa.cpl
+</code></pre>
+<h4>Trace-route</h4>
+<p>Pathping generates statistics</p>
+<p>-n = no name resolution<br>-d = no name resolution</p>
+<pre><code>pathping -n www.tomcarpenter.net
+tracerout -d www.tomcarpenter.net
+</code></pre>
+<h4>Established TCP sessions</h4>
+<p>-s = statistics<br>-a = address and ports</p>
+<pre><code>netstat
+netstat -s
+</code></pre>
+    
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>

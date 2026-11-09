@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Notepad ++ — nota do Cyber Expert Guide.">
+<title>Notepad ++ · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Notepad ++</h1>
+    
+    <p>Skills: <span class="wl-missing">Code</span> <span class="wl-missing">Hacking</span></p>
+<p>==All characters before a certain character in Notepad ++ can be easily found and replaced with Find &amp; Replace. For this, only the use of RegEx expressions is necessary.</p>
+<p>==As an example search term functions here e.g.</p>
+<pre><code>.+(\:)
+</code></pre>
+<p>Here everything before the character “:” is searched and replaced.</p>
+<p>To replace everything after the character “:” you can also use</p>
+<pre><code>[|].*
+</code></pre>
+<p>can be used.</p>
+<h3>Adding characters to the beginning or end of each line</h3>
+<p>To add something to the beginning or the end of each line you can use the RegEx identifiers</p>
+<pre><code>^
+</code></pre>
+<p>and</p>
+<pre><code>$
+</code></pre>
+<p>can be used, where “^” stands for the beginning and “$” for the end.</p>
+<h3>Merging two files in Notepad ++</h3>
+<p>To merge two files we must first number them in each Notepad++ tab using “Alt + C” and the following settings:</p>
+<p>![](https://www.lautenbacher.io/s/img/wp-content/uploads/2022/03/grafik-2.png.webp)</p>
+<p>Then we insert the content of the second tab below the content of the first tab and first sort the lines with “Edit-&gt;Line Operations-&gt;Sort Lines Lex. Ascending”.</p>
+<p>Then we open the Find &amp; Replace dialog, here we search for</p>
+<pre><code>(?-s)^.{4}(.*?\R)
+</code></pre>
+<p>which we replace with</p>
+<pre><code>\1
+</code></pre>
+<p>replace. “Wrap around and Regular Expression must be enabled</p>
+<p>If your numbering has more or less than 4 digits, the “4” in the above example must be adjusted according to the number of digits.</p>
+<p><b>Now all lines are below each other</b> and we can connect them by replacing the line break, for example:</p>
+<p>![](https://www.lautenbacher.io/wp-content/uploads/2022/03/grafik-3.png)</p>
+<h3>Delete every second line break</h3>
+<p>Alternatively, we can also remove every second line break directly, by adding a new line break after</p>
+<pre><code>(.*?)\r\n(.*?\r\n)
+</code></pre>
+<p>and ending it with</p>
+<pre><code>\1 \2
+</code></pre>
+<p>.</p>
+<h3>Remove every second line</h3>
+<p>Every second line can be removed by searching for</p>
+<pre><code>([^\n]*\n)[^\n]*\n
+</code></pre>
+<p>and ending it with</p>
+<pre><code>$1
+</code></pre>
+<p>replace.</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

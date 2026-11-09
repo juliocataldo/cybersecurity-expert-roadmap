@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Tarring Files and Compress — nota do Cyber Expert Guide.">
+<title>Tarring Files and Compress · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Tarring Files and Compress</h1>
+    
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux</p>
+<p>Tar is used to create a single (tar) file that contains multiple files. The tar command archives and extracts files to and from a single file called a tarfile. A set of files can be &quot;tarred&quot; to create a single tar file, and a tar file can be &quot;untarred&quot; to extract the individual files.</p>
+<h3>Command TAR</h3>
+<p>tar -cvf L4H.tar Linux4Hackers.sh Linux4Hackers2.sh Linux4Hackers3.sh = C means create, v means verbose and f means write to the following file<br>tar -tvf L4H.tar = T means to show content inside the TAR file.<br>tar -xvf L4H.tar = X means extract <br>tar -xf L4H.tar= If we do not use the -v switch, this command will show which files are being extract in the output. If we do not use -v, we do 'silently' </p>
+<h3>Command GZIP - Compress</h3>
+<p>The <b>gzip</b> command is very simple to use. You just type &quot;gzip&quot; followed by the name of the file you want to compress. Unlike the commands described above, <b>gzip</b> will encrypt the files &quot;in place&quot;. In other words, the original file will be replaced by the encrypted file.</p>
+<p><code>`Unix $ gzip bigfile $ ls -l bigfile* -rw-rw-r-- 1 shs shs  21606751 Apr 15 17:57 bigfile.gz</code>`</p>
+<h4>GZIP - Decompress</h4>
+<p>We can decompress that same file by using the gunzip command, short for GNU unzip</p>
+<p>gunzip bigfile.tar.gz</p>
+<h3>Command bzip2  - Compress </h3>
+<p>As with the <b>gzip</b> command, <b>bzip2</b> will compress the file that you select &quot;in place&quot;, leaving only the original file.</p>
+<p><code>` Unix $ bzip bigfile $ ls -l bigfile* -rw-rw-r-- 1 shs shs  18115234 Apr 15 17:57 bigfile.bz2</code>`</p>
+<h4>bzip2 - Decompress</h4>
+<p>We can decompress that same file by using the bunzip2 command, short for GNU unzip</p>
+<p>bunzip2 bigfile.tar.bz2</p>
+<h3>Comparisons to consider</h3>
+<p>Most people have heard it said that &quot;size isn't everything&quot;. So, let's compare file size as well as some other issues to be considered when you make plans for how you want to compress your files.</p>
+<p>The stats shown below all relate to compressing the single file – bigfile – used in the example commands shown above. This file is a large and fairly random text file. Compression rates will depend to some extent on the content of the files.</p>
+<h4>Size reduction</h4>
+<p>When compared, the various compression commands shown above yielded the following results. The percentages represent how the compressed files compare with the original file.</p>
+<p>-rw-rw-r-- 1 shs shs 103270400 Apr 16 14:01 bigfile</p>
+<hr>
+<p>-rw-rw-r-- 1 shs shs 18115234 Apr 16 13:59 bigfile.bz2    ~17%<br>-rw-rw-r-- 1 shs shs 21606751 Apr 16 14:00 bigfile.gz     ~21%<br>-rw-rw-r-- 1 shs shs 21608322 Apr 16 13:59 bigfile.tgz    ~21%<br>-rw-rw-r-- 1 shs shs 13427236 Apr 16 14:00 bigfile.xz     ~13%<br>-rw-rw-r-- 1 shs shs 21606889 Apr 16 13:59 bigfile.zip    ~21%</p>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

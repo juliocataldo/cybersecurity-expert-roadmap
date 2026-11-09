@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Linux — nota do Cyber Expert Guide.">
+<title>Linux · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=e6e699ca">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../roadmap.html">Roadmaps</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../checklist.html">Checklist</a>
+        <a href="../plataformas.html">Plataformas</a>
+
+        <a href="../eventos.html">Eventos</a>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+      </div>
+    </details>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Linux</h1>
+    
+    <p>==To see the OS version use the command:<br><code>lsb_release -a</code></p>
+<h4>TERMINAL LINUX</h4>
+<p>pwd → Print the full filename of the current working directory<br>ls → List information<br>cd → Ir para um diretorio<br>cd .. → voltar<br>clear → limpar tela<br>mkdir → Create the directory, if they do not already exist.<br>touch → Update the acess and modification time of each FILE to the current time, (create documents)<br>ls -l → List information with more details</p>
+<ul><li>→ criar arquivo</li></ul>
+<p>touch .oculto → Criar um arquivo com o nome (todo arquivo iniciado com PONTO fica oculto)<br>ls -la → -l para informações e -a para informar todos os arquivos, até os ocultos</p>
+<p>echo → the String to standard output → Escrever via linha de comando em algum arquivo. Ex.: echo Julio &gt; meses (escrever Julio no arquivo meses) porém irá sobrescrever.</p>
+<p>echo <i>conteudo</i> &gt;&gt; <i>arquivo</i> → irá escrever embaixo sem sobrescrever o que já existe.</p>
+<p>cat → Concatenate Files to standard output (Também lê arquivos) Ex.: cat .oculto (o retorno será o conteudo dentro do arquivo)<br>tac → é o cat reverso</p>
+<p>rm <i>arquivo</i> → Remove o arquivo<br>cp <i>arquivo</i> <i>new</i>archive_ → copia o arquivo para outro arquivo nomeado no comando(new_archive)<br>mv <i>arquivo</i> <i>caminho</i>→ move o arquivo para o caminho informado. Ex mv .oculto ../<br>head → Mostra apenas o começo do arquivo (5 primeiras linhas)<br>head -n_qtd_linhas_ <i>arquivo</i> → mostra quantas linhas forem informadas. Ex.: head -n3 .oculto<br>tail <i>arquivo</i> → mostra o arquivo se não for muito grande<br>tail -n1 → mostra última linha e o -n pode variar quantas linhas de baixo pra cima quero ver.<br>tail -f <i>arquivo</i> → mostra em tempo real o arquivo (útil para monitorar log)<br>rm -rf <i>arquivo</i> → remove recursivo force (forçar uma remoção mesmo com arquivos dentro)</p>
+<h3>Gerenciar usuário</h3>
+<p>$ sudo passwd root → definir senha root</p>
+<p>su root → trocar para usuário root (ou qualquer outro)<br>adduser <i>name</i> → adicionar novo usuário<br>cat /etc/passwd → Verificar lista de usuários e serviços<br>deluser <i>user</i> → Deleta o usuário<br>useradd -d <i>caminho diretorio</i> -s <i>caminho shell</i> <i>name</i>user_ → -d é o diretorio a ser criado, o -s é o caminho do shell que pode ser bin/false ou bin/bash, por exemplo.<br>passwd <i>name</i>user_ → para definir a senha quando usa o useradd</p>
+<h4>Adicionar usuario com privilegio adm</h4>
+<p>adduser <i>name</i>user_ <i>group</i> → adduser julio sudo (agora ele faz parte do grupo adm)</p>
+<p>sudo adduser <i>name</i> → com usuario do grupo de adm, precisa digitar sudo antes de comandos administrativos</p>
+<p>deluser julio sudo → remove julio do grupo de adm</p>
+<p>**cat /var/log/auth.log → ver log de usuário</p>
+<h3>Gerenciar Rede</h3>
+<p>ifconfig → network iterfaces.<br>ifconfig eth0 <i>new</i>ip_ netmask <i>new</i>mask_ → ifconfig eth0 10.1.1.23 netmask 255.255.255.0<br>nano /etc/network/interfaces → abrirá a interface nano e podemos digitar</p>
+<pre><code>auto eth0
+#iface eth inet dhcp #(para na rede eth0 rodar com DHCP) 
+#ou
+iface eth inet static 
+address 192.168.0.200
+netmask 255.255.255.0
+gateway 192.168.0.1
+#salvar, sair e reiniciar
+</code></pre>
+<p>reboot → reiniciar</p>
+<h4>Reiniciar adaptador de rede</h4>
+<p>service networking restart ou /etc/init.d/networking restart<br>ou dhclient eth0 (pegar ip automático quando for DHCP)</p>
+<h4>Tabela rotemaento</h4>
+<p>route → show or manipulate the IP routing table<br>route -n → ver ip do gateway<br>route del default → apaga rota do gateway<br>route add default gw 192.168.0.1 → define rota do gateway</p>
+<h4>NETSTAT</h4>
+<p>comando para visualizar conexoes de rede<br>netstat -lt → -l listen e t = tcp<br>netstat -lu → -l listen e t = udp<br>service ssh start → iniciar serviço SSH<br>netstat -lnt → -l = listen, n= numero porta e t = tcp<br>service ssh stop → para o serviço SSH</p>
+<h3>Editores de texto</h3>
+<p>nano<br>ctrl K → copia<br>ctrl U → cola<br>ctrl x → sai do nano<br>ctrl w → search<br>vi → outro editor<br>I→ de insert para inserir dados<br>D 2x → d duas vezes para deletar uma linha<br>esc +/ → esc mais barra para buscar algo no editor<br>: q → sair<br>:q! → forçar sair sem salvar<br>:wq → salvar e sair<br>gedit → editor com interface gráfica<br>leafpad → editor com interface gráfica</p>
+<h3>Gerenciar pacotes</h3>
+<pre><code>cd /etc/apt/
+nano serch.list
+#arquivo de pacotes
+#para manter atualizado
+apt update
+#e upgrade também
+apt upgrade
+# search pacotes 
+apt search php 
+#instalar (-y instalar sem perguntar)
+apt install *nome do programa* -y
+#remover pacote (-y instalar sem perguntar)
+apt remove *nome do programa*
+</code></pre>
+<pre><code>#pacote .deb USAR O dpkg
+dpkg -i arquivo.deb
+#vsualizar pacotes 
+dpkg -l
+</code></pre>
+<h3>Trabalhando com serviços</h3>
+<pre><code>#iniciar servico
+service start ssh
+#visualizar serivcos tcp com ip e porta
+netstat -nlpt
+#apache
+service apache2 start 
+#abrir page apache
+firefox localhost
+#parar servico
+service apache2 stop
+#reiniciar servico
+service ssh restart
+#iniciar com servico já habilitado
+update-rc.d ssh enable
+#reiniciar sistema
+reboot
+#desabilitar
+update-rc.d ssh disable
+</code></pre>
+<h3>Localizar arquivos</h3>
+<pre><code>#comanda para localizar ... LOCATE
+locate access.log
+locate sshd_config
+#update locate (para atualziar o locate)
+updatedb
+#outra forma de localizar - whereis arquivo
+whereis nmap
+# onde fica o binário -&gt; which arquivo
+which ping
+#outra forma FIND -&gt; find / -name desec* (find +caminho + -name + nome arquivo
+fnd /root/ -name *arquivo*
+
+</code></pre>
+<h3>GREP, AWK, CUT, SED</h3>
+<p>Usa grep quando está usando arquivo muito grande e quer buscar algo</p>
+<pre><code>#cat /etc/passwd -&gt; arquivo com muitas linhas, para filtrar, usamos grep. vamos fazer
+#uma busca por bin/bash nesse arquivo
+cat /etc/passwd | grep &quot;/bin/bash&quot;
+#ou
+grep &quot;bin/bash&quot; /etc/passwd
+
+#Poderiamos também mover essa busca par aoutro arquivo. #temshell é o nome do arquivoNEW
+grep &quot;bin/bash&quot; /etc/passwd **&gt; temshell**
+#Para não trazer algo de um arquivo usadmos -v e o nome do arquivo
+grep -v &quot;nologin&quot; /etc/passwd
+#USANDO EGREP -&gt; uma busca concatenada de dois filtros para não trazer algo(-v)
+egrep -v &quot;nologin|/bin/false&quot; /etc/passwd
+#USANDO EGREP -&gt; uma busca concatenada de dois filtros para buscar algo
+egrep &quot;nologin|/bin/false&quot; /etc/passwd
+
+###########################################
+
+#AWK -&gt; Ele irá trazer uma coluna especifica do arquivo, precisamos informar o que
+#separa as colunas, no caso os ':'.. usamos -F (field), indicamos qual coluna e arq.
+awk -F : '{print $1}' /etc/passwd
+#mais completo
+awk -F : '{print  &quot;O usuario &quot; $1 &quot;tem o dir&quot; $6}' /etc/passwd
+
+############################################
+
+#CUT -&gt; passamos o demilitaor das colunas, o -f1 (1 é o numero da coluna) e o arq.
+cut -d : -f1 temshell
+
+#############################################
+
+#SED -&gt; substitui algum conteúdo
+sed 's/EVE/FEV/' teste. txt #'s = substitui .. EVE = é a string errada ... FEV = a string certa
+# e por fim o nome do arquivo
+</code></pre>
+<h3>Análise de Logs</h3>
+<pre><code>#baixar arq.
+wget www.businesscorp.com.br/acess.log
+#ver tamanho do log
+wc -l acess.log
+#Visualizar o HEAD, primeira linha
+head -n1 access.log
+#Vimos que a primeira coluna são os ips.. vamos listar todos os ips ÚNICOS
+cat access.log | cut -d &quot; &quot; -f 1 | sort -u
+#Vamos ver o número de ocorrência de cada IP, para tentar identificar um ataque
+cat access.log | cut -d &quot; &quot; -f 1 | sort | uniq -c
+#Vamos organizar em ordem númerica, do menor para o maior (um 'r' no final = reverse)
+cat access.log | cut -d &quot; &quot; -f 1 | sort | uniq -c | sort -un#r
+
+########################################
+#Localizamos um IP suspeito, vamos fazer uma análise. (head -n1 primeira linha)
+cat access.log | grep &quot;177.132.28.7&quot; | head -n1
+#Vamos ver que horas foi último log desse IP (tail -n1 última linha)
+cat access.log | grep &quot;177.132.28.7&quot; | tail -n1
+#Vamos olhar as primeiras 500 linhas e ver o horário e qual a ferramenta usada
+cat access.log | grep &quot;177.132.28.7&quot; | head -n500
+
+#Identificamos que centenas de acessos foram realizados no MESMO SEGUNDO e a ferramenta
+#utilizada foi NMAP 
+
+#Agora vamos identificar que horas começou o NMAP e que horas encerrou
+cat access.log | grep &quot;177.132.28.7&quot; | grep &quot;Nmap&quot; | head -n1
+cat access.log | grep &quot;177.132.28.7&quot; | grep &quot;Nmap&quot; | tail -n1
+
+#Será que teve requisição com NIKTO?
+cat access.log | grep &quot;177.132.28.7&quot; | grep &quot;Nikto&quot; 
+
+#Vamos verificar quais requisições foram feitas por esse IP 
+cat access.log | grep &quot;177.133.28.7&quot; | cut -d '&quot;' -f2 | sort -u
+#Verificar as requisições com status code 200, apenas as que passaram
+cat access.log | grep &quot;177.132.28.7&quot; | cut -d &quot;]&quot; -f2 | grep &quot;200&quot;
+</code></pre>
+<h3>Convertendo HEX para Decimais</h3>
+<p>CONVERTENDO OS VALORES HEX PARA DECIMAIS NO TERMINAL DO LINUX</p>
+<pre><code>jayce@ADMND8960546570:~/docs/analyze/jwt_canal_consultor$ printf &quot;%d\n&quot; 0xc0
+192
+jayce@ADMND8960546570:~/docs/analyze/jwt_canal_consultor$ printf &quot;%d\n&quot; 0xa8
+168
+jayce@ADMND8960546570:~/docs/analyze/jwt_canal_consultor$ printf &quot;%d\n&quot; 0x00
+0
+jayce@ADMND8960546570:~/docs/analyze/jwt_canal_consultor$ printf &quot;%d\n&quot; 0xc8
+200
+jayce@ADMND8960546570:~/docs/analyze/jwt_canal_consultor$ printf &quot;%d.%d.%d.%d\n&quot; 0xc0 0xa8 0x00 0xc8
+192.168.0.200
+</code></pre>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="c.html">C</a></li><li><a href="python.html">Python</a></li><li><a href="shell-script.html">Shell Script</a></li><li><a href="commonly-ports.html">Commonly ports</a></li><li><a href="hacking-web-part01.html">Hacking Web - Part01</a></li><li><a href="passive-reconnaissance.html">Passive Reconnaissance</a></li><li><a href="setup.html">Setup</a></li><li><a href="relatorio-pentest.html">Relatório Pentest</a></li><li><a href="hping3.html">hping3</a></li><li><a href="pentest-profissional.html">Pentest profissional</a></li><li><a href="breach-detection-and-response.html">Breach Detection and Response</a></li><li><a href="intro-to-guardicore.html">Intro to Guardicore</a></li><li><a href="labeling.html">Labeling</a></li><li><a href="policy.html">Policy</a></li><li><a href="segmentation-policy.html">Segmentation Policy</a></li><li><a href="agents-linux.html">Agents - Linux</a></li><li><a href="agents-mac-and-unix.html">Agents - MAC and Unix</a></li><li><a href="architecture-deep-dive-saas.html">Architecture Deep-Dive (SaaS)</a></li><li><a href="basic-malware-analysis.html">Basic Malware Analysis</a></li><li><a href="api-attack.html">API Attack</a></li><li><a href="exploitation-basics.html">Exploitation Basics</a></li><li><a href="pratical-ethical-hacking.html">Pratical Ethical Hacking</a></li><li><a href="scanning-enumeration.html">Scanning &amp; enumeration</a></li><li><a href="audit.html">Audit</a></li><li><a href="bash-shell-scripting.html">Bash Shell Scripting</a></li><li><a href="cheatsheet-linux.html">CheatSheet Linux</a></li><li><a href="disc-usage-folder-sizes-cpu-info.html">Disc Usage - Folder Sizes - CPU Info</a></li><li><a href="linux-file-permissions.html">Linux file permissions</a></li><li><a href="linux-tools-to-hacking.html">Linux Tools to hacking</a></li><li><a href="tarring-files-and-compress.html">Tarring Files and Compress</a></li><li><a href="working-with-directories.html">Working with directories</a></li><li><a href="dig.html">Dig</a></li><li><a href="nmap.html">Nmap</a></li><li><a href="openssl-and-curl.html">Openssl and Curl</a></li><li><a href="tcpdump-ssldump.html">Tcpdump &amp; SSLdump</a></li><li><a href="vi-editor.html">Vi editor</a></li><li><a href="virtu.html">Virtu</a></li><li><a href="deep-web.html">Deep Web</a></li></ul></div>
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>
