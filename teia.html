@@ -8,7 +8,7 @@
 <meta name="description" content="Teia de conhecimento: minhas notas de segurança (Obsidian) e como os temas se conectam, em um grafo interativo.">
 <title>Teia · Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=1da9b6a9">
+<link rel="stylesheet" href="styles.css?v=c21636c0">
 </head>
 <body>
 <header class="site">
@@ -41,22 +41,26 @@
   <section class="sec-g">
     <p class="eyebrow">Segundo cérebro</p>
     <h1>Teia de conhecimento</h1>
-    <p class="sec-intro">Minhas anotações de segurança e como os temas se conectam — igual ao grafo do Obsidian. Cada ponto é uma nota; as linhas são as menções entre elas. Clique num ponto para abrir a nota; arraste para reorganizar.</p>
+    <p class="sec-intro">Minhas anotações de segurança e como os temas se conectam, igual ao grafo do Obsidian. Cada ponto é uma nota; as linhas são as menções entre elas. Clique num ponto para ver a nota, use o zoom para explorar.</p>
     <p class="wip" id="teiaExemplo" hidden><span class="wip-dot"></span><b>Notas de exemplo</b> — ainda não publiquei as minhas; estas servem para mostrar como a seção funciona.</p>
     <div class="teia-wrap">
       <canvas id="teia" class="teia-canvas" aria-label="Grafo de notas conectadas"></canvas>
+      <div class="teia-ctrl" id="teiaCtrl" role="group" aria-label="Zoom do grafo">
+        <button type="button" data-z="in" aria-label="Aproximar" title="Aproximar">+</button>
+        <button type="button" data-z="out" aria-label="Afastar" title="Afastar">&minus;</button>
+        <button type="button" data-z="fit" aria-label="Centralizar o grafo" title="Centralizar">&#x2922;</button>
+      </div>
+      <div class="teia-card" id="teiaCard" hidden aria-live="polite"></div>
       <p class="teia-empty" id="teiaEmpty" hidden>Ainda não há notas publicadas.</p>
     </div>
     <p class="mut small" id="teiaInfo"></p>
-    <noscript><p class="mut small">O grafo precisa de JavaScript. A lista de notas está logo abaixo.</p></noscript>
-    <p class="path-k">Todas as notas</p>
-    <div class="teia-list" id="teiaList"></div>
-    <p class="mut small">As notas vêm do meu vault do Obsidian (só as marcadas como públicas). Prefere buscar por tema? A página <a href="artigos.html">Notas</a> tem busca e filtros por pasta e assunto. Quer sugerir um tema? Use a página de <a href="sugestoes.html">Sugestões</a>.</p>
+    <noscript><p class="mut small">O grafo precisa de JavaScript. Todas as notas estão na página <a href="artigos.html">Notas</a>.</p></noscript>
+    <p class="mut small">As notas vêm do meu vault do Obsidian (só as marcadas como públicas). Prefere uma lista? A página <a href="artigos.html">Notas</a> tem todas, com busca e filtros por pasta e assunto. Quer sugerir um tema? Use a página de <a href="sugestoes.html">Sugestões</a>.</p>
   </section>
 </main>
 <script src="teia-data.js?v=1276e710"></script>
-<script src="teia-layout.js?v=97a2ae14"></script>
-<script src="teia.js?v=a68e0759"></script>
+<script src="teia-layout.js?v=305bea6e"></script>
+<script src="teia.js?v=1f951d8b"></script>
 <footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
 </body>
 </html>

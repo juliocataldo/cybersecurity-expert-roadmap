@@ -87,6 +87,16 @@ for (const [n, lig, W] of [[7, 18, 1030], [30, 40, 1030], [85, 95, 360], [300, 3
   const fixo = nodes[3]; const x0 = fixo.x, y0 = fixo.y; for (let i = 0; i < 40; i++) L.passo(fixo);
   ok(fixo.x === x0 && fixo.y === y0, 'o nó arrastado não pode se mover durante o passo');
 }
+// sem parede (a câmera enquadra): ninguém gruda na borda, nada vira NaN, assenta, e o grafo segue o formato do quadro
+for (const [W, H] of [[1030, 560], [343, 480]]) {
+  const { nodes, links } = grafo(85, 95); const lig = nodes.filter(n => n.deg > 0);
+  const L = TL.criar(lig, links, W * 2, H * 2, { semBorda: true, gravidade: 0.8 }); L.iniciar();
+  let p = 0; for (; p < 800 && !L.pronto(); p++) L.passo(null);
+  const xs = lig.map(n => n.x), ys = lig.map(n => n.y), bw = Math.max(...xs) - Math.min(...xs), bh = Math.max(...ys) - Math.min(...ys);
+  ok(lig.every(n => Number.isFinite(n.x) && Number.isFinite(n.y)), `semBorda ${W}px: posição inválida`);
+  ok(L.pronto(), `semBorda ${W}px: não assentou em 800 passos`);
+  ok((bw > bh) === (W > H), `semBorda ${W}px: o grafo deveria acompanhar o formato do quadro (${bw.toFixed(0)}x${bh.toFixed(0)})`);
+}
 
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }
 console.log('Teia: layout espalha 7, 30, 85 e 300 notas (também em 360 px), determinístico e sem NaN');

@@ -13,9 +13,10 @@
 
   /**
    * nodes: [{ id, deg }] (recebem x, y); links: [{ s, t }] com s e t sendo os próprios nós.
+   * opcoes (opcional): { semBorda, gravidade }. Sem opções, o comportamento é o de sempre (notas presas no quadro W x H).
    * Devolve { iniciar, passo, esquentar, pronto, faixa }.
    */
-  function criar(nodes, links, W, H) {
+  function criar(nodes, links, W, H, opcoes) {
     const margem = 18, espaco = 26;
     const ligados = nodes.filter(n => n.deg > 0);
     const soltos = nodes.filter(n => !(n.deg > 0)).sort((a, b) => String(a.title || a.id).localeCompare(String(b.title || b.id), "pt"));
@@ -27,7 +28,10 @@
     const N = ligados.length;
     const k = Math.sqrt((W * H1) / Math.max(N, 1)) * 0.72;      // distância ideal entre notas
     const k2 = k * k;
-    const gravidade = 0.045;                                    // puxa de leve para o centro (componentes soltos não fogem)
+    const livre = !!(opcoes && opcoes.semBorda);               // semBorda: a câmera enquadra o grafo, então a física não precisa de parede
+    const gravidade = (opcoes && opcoes.gravidade) || 0.045;  // puxa para o centro (componentes soltos não fogem)
+    // sem parede, a gravidade segue a proporção do quadro (celular em pé: puxa mais nas laterais), para o grafo caber no formato da tela
+    const gx = livre ? gravidade * Math.max(1, H / W) : gravidade, gy = livre ? gravidade * Math.max(1, W / H) : gravidade;
     let t = Math.min(W, H1) / 5;                                // "temperatura": deslocamento máximo por passo
     const resfria = 0.965, piso = 0.35;
 
@@ -68,10 +72,10 @@
       for (let i = 0; i < N; i++) {
         const n = ligados[i];
         if (n === fixo) continue;
-        dx[i] += (W / 2 - n.x) * gravidade; dy[i] += (H1 / 2 - n.y) * gravidade;
+        dx[i] += (W / 2 - n.x) * gx; dy[i] += (H1 / 2 - n.y) * gy;
         const len = Math.sqrt(dx[i] * dx[i] + dy[i] * dy[i]) || 0.01, m = Math.min(len, t);
-        n.x = Math.max(margem, Math.min(W - margem, n.x + dx[i] / len * m));
-        n.y = Math.max(margem, Math.min(H1 - margem, n.y + dy[i] / len * m));
+        n.x += dx[i] / len * m; n.y += dy[i] / len * m;
+        if (!livre) { n.x = Math.max(margem, Math.min(W - margem, n.x)); n.y = Math.max(margem, Math.min(H1 - margem, n.y)); }
       }
       t = Math.max(piso, t * resfria);
       return t > piso * 1.6;                                     // false = assentou

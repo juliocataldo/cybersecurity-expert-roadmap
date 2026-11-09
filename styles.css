@@ -455,13 +455,22 @@ dialog h2{padding-right:36px}
 
 /* ===== Teia (teia.html + notas/) ===== */
 .teia-wrap{position:relative;border:1px solid var(--line);border-radius:var(--r);background:#0d0d0d;overflow:hidden;margin-top:18px}
-.teia-canvas{display:block;width:100%;height:540px;cursor:grab;touch-action:none}
-@media(max-width:640px){.teia-canvas{height:420px}}
+.teia-canvas{display:block;width:100%;height:560px;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+@media(max-width:640px){.teia-canvas{height:min(72vh,480px)}}
+.teia-ctrl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px}
+.teia-ctrl[hidden]{display:none}
+.teia-ctrl button{width:36px;height:36px;border:1px solid var(--line2);border-radius:8px;background:rgba(18,18,18,.92);color:var(--tx);font:500 18px/1 var(--mono);cursor:pointer}
+.teia-ctrl button:hover,.teia-ctrl button:focus-visible{border-color:var(--acc);color:#fff;outline:none}
+.teia-card{position:absolute;left:10px;bottom:10px;max-width:min(360px,calc(100% - 20px));background:rgba(18,18,18,.96);border:1px solid var(--line2);border-radius:10px;padding:12px 36px 12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.teia-card .k{display:block;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+.teia-card b{display:block;color:var(--tx);font-size:15px;margin-bottom:4px}
+.teia-card p{margin:0 0 8px;color:var(--tx2);font-size:13px;line-height:1.45}
+.teia-card .go{font:600 13px var(--mono);color:var(--acc);text-decoration:none}
+.teia-card .go:hover{text-decoration:underline}
+.teia-x{position:absolute;top:6px;right:6px;width:28px;height:28px;border:0;background:none;color:var(--mut);font-size:20px;line-height:1;cursor:pointer}
+.teia-x:hover{color:var(--tx)}
 .teia-empty{position:absolute;inset:0;place-items:center;color:var(--mut);text-align:center;padding:20px}
 .teia-empty:not([hidden]){display:grid}
-.teia-list{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 20px}
-.teia-chip{font-size:13px;padding:6px 12px;border:1px solid var(--line2);border-radius:999px;color:var(--tx2);text-decoration:none}
-.teia-chip:hover{border-color:var(--acc);color:var(--tx)}
 /* wikilinks e metadados nas páginas de nota */
 .wl{color:var(--acc);text-decoration:none;border-bottom:1px solid #cf6a2455}
 .wl:hover{border-bottom-color:var(--acc)}

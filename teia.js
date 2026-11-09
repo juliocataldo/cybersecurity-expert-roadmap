@@ -1,143 +1,243 @@
 "use strict";
-/* Teia: grafo de notas em canvas. A física vem de teia-layout.js (escala com o número de notas). Sem dependências. */
+/* Teia: grafo de notas em canvas, com zoom e arraste. A física vem de teia-layout.js. Sem dependências.
+   Mundo x tela: a física roda num "mundo" maior que o quadro; a câmera (k = zoom, ox/oy = deslocamento) leva o mundo para a tela.
+   Mouse: passar por cima destaca; clicar seleciona (mostra o cartão); clicar de novo, ou duplo clique, abre a nota.
+   Toque: 1º toque seleciona, 2º abre. Um dedo rola a página (o quadro não prende a rolagem) até você dar zoom;
+   com zoom, um dedo move o mapa e a pinça aproxima/afasta. */
 (function () {
   const data = window.TEIA || { nodes: [], links: [] };
-  const listEl = document.getElementById("teiaList");
   const canvas = document.getElementById("teia");
   const emptyEl = document.getElementById("teiaEmpty");
   const exemploEl = document.getElementById("teiaExemplo");
   const infoEl = document.getElementById("teiaInfo");
+  const cardEl = document.getElementById("teiaCard");
+  const ctrlEl = document.getElementById("teiaCtrl");
   if (exemploEl) exemploEl.hidden = data.fonte !== "exemplo"; // aviso só quando as notas são as de tools/sample-vault
-
-  // lista de notas (acessível e funciona mesmo sem o grafo)
-  if (listEl) {
-    const sorted = [...data.nodes].sort((a, b) => a.title.localeCompare(b.title, "pt"));
-    listEl.replaceChildren(...sorted.map(n => {
-      const a = document.createElement("a");
-      a.href = n.url; a.className = "teia-chip"; a.textContent = n.title;
-      return a;
-    }));
-  }
   if (!canvas) return;
-  if (!data.nodes.length) { if (emptyEl) emptyEl.hidden = false; return; }
 
-  const ctx = canvas.getContext("2d");
-  const COL = { node: "#b85e18", nodeHi: "#ff7a1a", text: "#a8a8a8", textHi: "#f2f2f2", link: "#2b2b2b", linkHi: "#ff7a1a", pill: "rgba(13,13,13,.88)" };
-  const FONTE = "ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif";
-
-  const nodes = data.nodes.map(n => ({ ...n, deg: n.deg || 0, x: 0, y: 0, vx: 0, vy: 0 }));
+  // só as notas com ligações entram no grafo; as soltas estão na página Notas (com busca)
+  const todos = data.nodes.map(n => ({ ...n, deg: n.deg || 0, x: 0, y: 0, vx: 0, vy: 0 }));
+  const nodes = todos.filter(n => n.deg > 0);
   const nmap = new Map(nodes.map(n => [n.id, n]));
   const links = data.links.map(l => ({ s: nmap.get(l.s), t: nmap.get(l.t) })).filter(l => l.s && l.t);
+  if (!nodes.length) { if (emptyEl) emptyEl.hidden = false; if (ctrlEl) ctrlEl.hidden = true; return; }
+
+  const ctx = canvas.getContext("2d");
+  const COL = { node: "#b85e18", nodeHi: "#ff7a1a", text: "#a8a8a8", textHi: "#f2f2f2", link: "#333", linkHi: "#ff7a1a", pill: "rgba(13,13,13,.9)" };
+  const FONTE = "ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif";
   const neighbors = new Map(nodes.map(n => [n.id, new Set()]));
   links.forEach(l => { neighbors.get(l.s.id).add(l.t.id); neighbors.get(l.t.id).add(l.s.id); });
-  const muitos = nodes.length > 24;
-  const radius = n => (muitos ? 4 : 5) + Math.sqrt(n.deg + 1) * 2.4;
-  // rótulos por prioridade: as notas mais conectadas primeiro (desempate por título)
-  const ordem = [...nodes].sort((a, b) => b.deg - a.deg || a.title.localeCompare(b.title, "pt"));
-  if (infoEl) infoEl.textContent = `${nodes.length} notas e ${links.length} conexões. Passe o mouse num ponto para ver o título e as notas ligadas; clique para abrir.` + (muitos ? " Os nomes fixos são das notas mais conectadas." : "");
+  const raioMundo = n => 4 + Math.sqrt(n.deg + 1) * 2.4;
+  const ordem = [...nodes].sort((a, b) => b.deg - a.deg || a.title.localeCompare(b.title, "pt")); // rótulos: mais conectadas primeiro
+  const soltas = todos.length - nodes.length;
+  if (infoEl) infoEl.textContent = `${nodes.length} notas ligadas e ${links.length} conexões. Clique ou toque num ponto para ver a nota; de novo para abrir. `
+    + "Arraste o fundo para mover; use + e − (ou Ctrl + roda do mouse, ou a pinça no celular) para o zoom."
+    + (soltas ? ` As ${soltas} notas sem ligações estão na página Notas.` : "");
 
-  let W = 0, H = 0, dpr = 1, layout = null;
+  /* ---------- tamanhos: quadro (tela) e mundo (física) ---------- */
+  let W = 0, H = 0, dpr = 1;
   function medir() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.style.height = TeiaLayout.alturaIdeal(nodes.length, canvas.clientWidth) + "px"; // mais notas, quadro mais alto
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { w, h };
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
   }
-  {
-    const m = medir(); W = m.w; H = m.h;
-    layout = TeiaLayout.criar(nodes, links, W, H); layout.iniciar();
-  }
+  medir();
+  // mundo com a mesma proporção do quadro e área suficiente para as notas respirarem
+  const area = nodes.length * 120 * 120;
+  const WW = Math.max(W, Math.sqrt(area * W / H)), WH = WW * H / W;
+  const layout = TeiaLayout.criar(nodes, links, WW, WH, { semBorda: true, gravidade: 0.8 }); layout.iniciar(); // sem parede: a câmera enquadra
 
-  let hover = null, drag = null, downAt = null, sujo = true;
+  /* ---------- câmera ---------- */
+  let k = 1, ox = 0, oy = 0, kFit = 1, mexeu = false; // mexeu = a pessoa deu zoom/arrastou: paramos de reenquadrar sozinhos
+  const tela = n => ({ x: n.x * k + ox, y: n.y * k + oy });
+  const mundo = (sx, sy) => ({ x: (sx - ox) / k, y: (sy - oy) / k });
+  const raio = n => raioMundo(n) * Math.min(1.6, Math.max(0.75, Math.sqrt(k)));
+  function enquadrar() {
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    for (const n of nodes) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
+    const pad = 28, topo = 22; // folga para os nomes acima dos pontos
+    kFit = Math.min((W - 2 * pad) / Math.max(x1 - x0, 1), (H - 2 * pad - topo) / Math.max(y1 - y0, 1), 2.2);
+    k = kFit; ox = (W - (x1 - x0) * k) / 2 - x0 * k; oy = (H - (y1 - y0) * k) / 2 - y0 * k + topo / 2;
+    aplicarToque();
+  }
+  const kMin = () => kFit * 0.5, kMax = () => Math.max(kFit * 6, 3);
+  function zoomEm(sx, sy, f) {
+    const k2 = Math.min(kMax(), Math.max(kMin(), k * f));
+    ox = sx - (sx - ox) * (k2 / k); oy = sy - (sy - oy) * (k2 / k); k = k2;
+    mexeu = true; aplicarToque(); sujo = true;
+  }
+  // sem zoom, o dedo rola a página; com zoom, o dedo move o mapa
+  function aplicarToque() { canvas.style.touchAction = k > kFit * 1.05 ? "none" : "pan-y"; }
+
+  /* ---------- desenho ---------- */
+  let hover = null, sel = null, sujo = true;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const larguras = new Map();
   const larg = n => { let w = larguras.get(n.id); if (w === undefined) { ctx.font = `12px ${FONTE}`; w = ctx.measureText(n.title).width; larguras.set(n.id, w); } return w; };
 
-  function rotulosVisiveis(hiSet) {
+  function rotulos(foco, viz) {
     const escolhidos = new Set(), caixas = [];
-    const caixa = n => { const w = larg(n) + 8, r = radius(n); return { x: n.x - w / 2, y: n.y - r - 20, w, h: 15 }; };
-    const livre = c => caixas.every(o => c.x + c.w < o.x || o.x + o.w < c.x || c.y + c.h < o.y || o.y + o.h < c.y) && c.x > 0 && c.x + c.w < W;
-    if (hover) { // o nó em foco sempre tem nome; os vizinhos também, mas só os que não se sobrepõem (os mais conectados primeiro)
-      escolhidos.add(hover); caixas.push(caixa(hover));
-      for (const n of ordem) { if (!hiSet || !hiSet.has(n.id)) continue; const c = caixa(n); if (livre(c)) { escolhidos.add(n); caixas.push(c); } }
-    }
+    const caixa = n => { const p = tela(n), w = larg(n) + 10; return { x: p.x - w / 2, y: p.y - raio(n) - 20, w, h: 16 }; };
+    const livre = c => c.x > 2 && c.x + c.w < W - 2 && c.y > 2 && c.y + c.h < H - 2
+      && caixas.every(o => c.x + c.w < o.x || o.x + o.w < c.x || c.y + c.h < o.y || o.y + o.h < c.y);
+    if (foco) { escolhidos.add(foco); caixas.push(caixa(foco)); }
     for (const n of ordem) {
-      if (escolhidos.has(n)) continue;
-      if (!muitos) { escolhidos.add(n); continue; }
-      if (n.deg === 0) continue; // nota sem ligações: o nome só aparece ao passar o mouse
+      if (escolhidos.has(n) || (foco && !viz.has(n.id))) continue; // com foco, só ele e os vizinhos têm nome
       const c = caixa(n); if (livre(c)) { escolhidos.add(n); caixas.push(c); }
     }
     return escolhidos;
   }
 
   function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    const hiSet = hover ? neighbors.get(hover.id) : null;
-    links.forEach(l => {
-      const on = hover && (l.s === hover || l.t === hover);
-      ctx.strokeStyle = on ? COL.linkHi : COL.link; ctx.globalAlpha = hover && !on ? 0.25 : 1;
-      ctx.lineWidth = on ? 1.6 : 1;
-      ctx.beginPath(); ctx.moveTo(l.s.x, l.s.y); ctx.lineTo(l.t.x, l.t.y); ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
-    if (layout.faixa.soltos) { // faixa das notas sem ligações
-      ctx.strokeStyle = COL.link; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(14, layout.faixa.y + 0.5); ctx.lineTo(W - 14, layout.faixa.y + 0.5); ctx.stroke();
-      ctx.font = `11px ${FONTE}`; ctx.fillStyle = COL.text; ctx.textAlign = "left";
-      ctx.fillText(`Notas sem ligações (${layout.faixa.soltos}): passe o mouse para ver o título`, 18, layout.faixa.y + 16);
+    const foco = hover || sel;
+    const viz = foco ? neighbors.get(foco.id) : null;
+    for (const l of links) {
+      const on = foco && (l.s === foco || l.t === foco);
+      const a = tela(l.s), b = tela(l.t);
+      ctx.strokeStyle = on ? COL.linkHi : COL.link; ctx.globalAlpha = foco && !on ? 0.3 : 1; ctx.lineWidth = on ? 1.6 : 1;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     }
-    nodes.forEach(n => {
-      const on = !hover || n === hover || (hiSet && hiSet.has(n.id));
-      ctx.globalAlpha = on ? 1 : 0.3;
-      ctx.beginPath(); ctx.arc(n.x, n.y, radius(n), 0, Math.PI * 2);
-      ctx.fillStyle = (n === hover) ? COL.nodeHi : COL.node; ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    const mostrar = rotulosVisiveis(hiSet);
-    ctx.textAlign = "center";
-    mostrar.forEach(n => {
-      const destaque = hover && (n === hover || (hiSet && hiSet.has(n.id)));
-      if (hover && !destaque) return; // com um nó em foco, só o foco e os vizinhos têm nome
-      ctx.font = (n === hover ? "600 13px " : "12px ") + FONTE;
-      const y = n.y - radius(n) - 6;
-      if (destaque) { const w = ctx.measureText(n.title).width + 10; ctx.fillStyle = COL.pill; ctx.fillRect(n.x - w / 2, y - 12, w, 16); }
-      ctx.fillStyle = (n === hover) ? COL.textHi : (destaque ? "#d6d6d6" : COL.text);
-      ctx.fillText(n.title, n.x, y);
-    });
+    for (const n of nodes) {
+      const p = tela(n);
+      ctx.globalAlpha = !foco || n === foco || viz.has(n.id) ? 1 : 0.3;
+      ctx.beginPath(); ctx.arc(p.x, p.y, raio(n), 0, Math.PI * 2);
+      ctx.fillStyle = n === foco ? COL.nodeHi : COL.node; ctx.fill();
+      if (n === sel) { ctx.strokeStyle = COL.textHi; ctx.lineWidth = 2; ctx.stroke(); }
+    }
+    ctx.globalAlpha = 1; ctx.textAlign = "center";
+    for (const n of rotulos(foco, viz)) {
+      const p = tela(n), y = p.y - raio(n) - 6, destaque = !!foco;
+      ctx.font = (n === foco ? "600 13px " : "12px ") + FONTE;
+      if (destaque) { const w = ctx.measureText(n.title).width + 10; ctx.fillStyle = COL.pill; ctx.fillRect(p.x - w / 2, y - 12, w, 16); }
+      ctx.fillStyle = n === foco ? COL.textHi : destaque ? "#d6d6d6" : COL.text;
+      ctx.fillText(n.title, p.x, y);
+    }
   }
 
   function frame() {
-    const animando = !!drag || !layout.pronto();
-    if (animando) { layout.passo(drag); layout.passo(drag); sujo = true; }
+    if (arrasto && arrasto.no || !layout.pronto()) {
+      layout.passo(arrasto && arrasto.no); layout.passo(arrasto && arrasto.no);
+      if (!mexeu) enquadrar();
+      sujo = true;
+    }
     if (sujo) { draw(); sujo = false; }
     requestAnimationFrame(frame);
   }
-  if (reduce) { for (let i = 0; i < 320; i++) layout.passo(null); draw(); }
-  else requestAnimationFrame(frame);
+  if (reduce) for (let i = 0; i < 320; i++) layout.passo(null); // sem animação: já começa assentado
+  enquadrar();
+  requestAnimationFrame(frame);
 
-  function at(ev) {
-    const r = canvas.getBoundingClientRect();
-    const x = ev.clientX - r.left, y = ev.clientY - r.top;
-    let best = null, bd = 1e9;
-    nodes.forEach(n => { const d = Math.hypot(n.x - x, n.y - y); if (d < radius(n) + 8 && d < bd) { bd = d; best = n; } });
-    return { x, y, node: best };
+  /* ---------- cartão da nota selecionada ---------- */
+  function selecionar(n) {
+    sel = n; sujo = true;
+    if (!cardEl) return;
+    if (!n) { cardEl.hidden = true; return; }
+    const pasta = document.createElement("span"); pasta.className = "k"; pasta.textContent = n.pasta || "Nota";
+    const h = document.createElement("b"); h.textContent = n.title;
+    const p = document.createElement("p"); p.textContent = n.resumo || "";
+    const a = document.createElement("a"); a.href = n.url; a.className = "go"; a.textContent = "Abrir nota →";
+    const x = document.createElement("button"); x.type = "button"; x.className = "teia-x"; x.setAttribute("aria-label", "Fechar"); x.textContent = "×";
+    x.addEventListener("click", () => selecionar(null));
+    cardEl.replaceChildren(x, pasta, h, p, a);
+    cardEl.hidden = false;
   }
+  const abrir = n => { if (n && n.url) location.href = n.url; };
+
+  /* ---------- ponteiro: mouse, toque e caneta ---------- */
+  function at(ev) {
+    const r = canvas.getBoundingClientRect(), sx = ev.clientX - r.left, sy = ev.clientY - r.top;
+    let best = null, bd = 1e9;
+    for (const n of nodes) { const p = tela(n), d = Math.hypot(p.x - sx, p.y - sy); if (d < raio(n) + (ev.pointerType === "mouse" ? 6 : 14) && d < bd) { bd = d; best = n; } }
+    return { sx, sy, node: best };
+  }
+  const ponteiros = new Map(); // pointerId -> {sx, sy}
+  let arrasto = null;           // { no?, sx0, sy0, sx, sy, moveu }
+  let pinca = null;             // { d, mx, my }
+  let ativo = false;            // depois de clicar no quadro, a roda do mouse vira zoom (sem Ctrl)
+
+  canvas.addEventListener("pointerdown", ev => {
+    const h = at(ev);
+    ponteiros.set(ev.pointerId, { sx: h.sx, sy: h.sy });
+    try { canvas.setPointerCapture(ev.pointerId); } catch (e) { /* ponteiro já foi embora */ }
+    if (ev.pointerType === "mouse") ativo = true;
+    if (ponteiros.size === 2) { // pinça
+      const [a, b] = [...ponteiros.values()];
+      pinca = { d: Math.hypot(a.sx - b.sx, a.sy - b.sy) || 1, mx: (a.sx + b.sx) / 2, my: (a.sy + b.sy) / 2 };
+      arrasto = null; return;
+    }
+    // no toque, só arrasta ponto/mapa quando já tem zoom (senão o dedo é da rolagem da página)
+    const podeArrastar = ev.pointerType === "mouse" || k > kFit * 1.05;
+    arrasto = { no: podeArrastar ? h.node : null, alvo: h.node, mapa: podeArrastar && !h.node, sx0: h.sx, sy0: h.sy, sx: h.sx, sy: h.sy, moveu: false };
+  });
+
   canvas.addEventListener("pointermove", ev => {
     const h = at(ev);
-    if (drag) { drag.x = Math.max(16, Math.min(W - 16, h.x)); drag.y = Math.max(16, Math.min(H - 16, h.y)); layout.esquentar(Math.min(W, H) / 14); }
-    else { const prev = hover; hover = h.node; canvas.style.cursor = hover ? "pointer" : "grab"; if (hover !== prev) { sujo = true; if (reduce) draw(); } }
+    if (ponteiros.has(ev.pointerId)) ponteiros.set(ev.pointerId, { sx: h.sx, sy: h.sy });
+    if (pinca && ponteiros.size >= 2) {
+      const [a, b] = [...ponteiros.values()];
+      const d = Math.hypot(a.sx - b.sx, a.sy - b.sy) || 1, mx = (a.sx + b.sx) / 2, my = (a.sy + b.sy) / 2;
+      ox += mx - pinca.mx; oy += my - pinca.my;
+      zoomEm(mx, my, d / pinca.d);
+      pinca = { d, mx, my }; return;
+    }
+    if (arrasto) {
+      if (Math.hypot(h.sx - arrasto.sx0, h.sy - arrasto.sy0) > 5) arrasto.moveu = true;
+      if (arrasto.moveu && arrasto.no) {
+        const w = mundo(h.sx, h.sy);
+        arrasto.no.x = w.x; arrasto.no.y = w.y;
+        layout.esquentar(Math.min(WW, WH) / 14); mexeu = true;
+      } else if (arrasto.moveu && arrasto.mapa) {
+        ox += h.sx - arrasto.sx; oy += h.sy - arrasto.sy; mexeu = true; sujo = true;
+      }
+      arrasto.sx = h.sx; arrasto.sy = h.sy;
+      return;
+    }
+    if (ev.pointerType === "mouse") {
+      const prev = hover; hover = h.node; canvas.style.cursor = hover ? "pointer" : "grab";
+      if (hover !== prev) sujo = true;
+    }
   });
-  canvas.addEventListener("pointerleave", () => { if (hover && !drag) { hover = null; sujo = true; if (reduce) draw(); } });
-  canvas.addEventListener("pointerdown", ev => { const h = at(ev); if (h.node) { drag = h.node; downAt = { x: h.x, y: h.y }; canvas.setPointerCapture(ev.pointerId); } });
-  canvas.addEventListener("pointerup", ev => {
-    const h = at(ev);
-    if (drag && downAt && Math.hypot(h.x - downAt.x, h.y - downAt.y) < 5 && drag.url) { location.href = drag.url; }
-    drag = null; downAt = null; sujo = true;
+
+  function soltar(ev, cancelado) {
+    ponteiros.delete(ev.pointerId);
+    if (pinca) { if (ponteiros.size < 2) pinca = null; arrasto = null; return; }
+    const a = arrasto; arrasto = null;
+    if (!a || cancelado) return;
+    if (!a.moveu) { // foi um clique/toque
+      const n = a.alvo;
+      if (!n) selecionar(null);
+      else if (n === sel) abrir(n); // segundo clique/toque no mesmo ponto abre
+      else selecionar(n);
+    }
+    sujo = true;
+  }
+  canvas.addEventListener("pointerup", ev => soltar(ev, false));
+  canvas.addEventListener("pointercancel", ev => soltar(ev, true)); // o navegador assumiu a rolagem
+  canvas.addEventListener("pointerleave", ev => { if (ev.pointerType === "mouse") { ativo = false; if (hover) { hover = null; sujo = true; } } });
+  canvas.addEventListener("dblclick", ev => { const h = at(ev); if (h.node) abrir(h.node); });
+
+  // roda do mouse: com Ctrl (ou pinça do trackpad, que chega como Ctrl) sempre dá zoom; sem Ctrl, só depois de clicar no quadro
+  canvas.addEventListener("wheel", ev => {
+    if (!ev.ctrlKey && !ativo) return; // deixa a página rolar
+    ev.preventDefault();
+    const r = canvas.getBoundingClientRect();
+    zoomEm(ev.clientX - r.left, ev.clientY - r.top, Math.exp(-ev.deltaY * (ev.deltaMode === 1 ? 0.05 : 0.0018)));
+  }, { passive: false });
+
+  if (ctrlEl) ctrlEl.addEventListener("click", ev => {
+    const b = ev.target.closest("button[data-z]"); if (!b) return;
+    if (b.dataset.z === "in") zoomEm(W / 2, H / 2, 1.4);
+    else if (b.dataset.z === "out") zoomEm(W / 2, H / 2, 1 / 1.4);
+    else { mexeu = false; enquadrar(); sujo = true; }
   });
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape" && sel) selecionar(null); });
+
   window.addEventListener("resize", () => {
-    const m = medir(); W = m.w; H = m.h;
-    layout = TeiaLayout.criar(nodes, links, W, H); layout.iniciar(); // largura nova: refaz o desenho (a faixa das notas soltas depende dela)
-    sujo = true; if (reduce) { for (let i = 0; i < 320; i++) layout.passo(null); draw(); }
+    const w0 = W, h0 = H; medir();
+    if (W === w0 && H === h0) return; // celular: a barra do navegador some ao rolar e dispara resize sem mudar o quadro
+    if (!mexeu) enquadrar(); else { ox += (W - w0) / 2; oy += (H - h0) / 2; }
+    sujo = true;
   });
 })();
