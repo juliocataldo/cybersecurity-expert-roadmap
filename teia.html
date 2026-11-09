@@ -18,14 +18,13 @@
     <a href="guia.html">Guia</a>
     <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
-    <a href="artigos.html">Artigos</a>
+    <a href="artigos.html" aria-current="page">Artigos</a>
     <details class="nav-group">
-      <summary class="cur">Recursos</summary>
+      <summary>Recursos</summary>
       <div class="nav-menu">
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
         <a href="checklist.html">Checklist</a>
-        <a href="teia.html" aria-current="page">Teia</a>
         <a href="plataformas.html">Plataformas</a>
         <a href="eventos.html">Eventos</a>
         <a href="radar.html">Radar</a>
@@ -36,11 +35,12 @@
   </nav>
 </header>
 <main class="wrap">
+  <p class="crumb"><a href="artigos.html">&larr; Artigos</a></p>
   <section class="sec-g">
     <p class="eyebrow">Segundo cérebro</p>
     <h1>Teia de conhecimento</h1>
     <p class="sec-intro">Minhas anotações de segurança e como os temas se conectam — igual ao grafo do Obsidian. Cada ponto é uma nota; as linhas são as menções entre elas. Clique num ponto para abrir a nota; arraste para reorganizar.</p>
-    <p class="wip"><span class="wip-dot"></span><b>Seção em construção</b> — conteúdo de exemplo por enquanto.</p>
+    <p class="wip" id="teiaExemplo" hidden><span class="wip-dot"></span><b>Notas de exemplo</b> — ainda não publiquei as minhas; estas servem para mostrar como a seção funciona.</p>
     <div class="teia-wrap">
       <canvas id="teia" class="teia-canvas" aria-label="Grafo de notas conectadas"></canvas>
       <p class="teia-empty" id="teiaEmpty" hidden>Ainda não há notas publicadas.</p>

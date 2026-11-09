@@ -1,10 +1,11 @@
-name: Build Teia (notas do Obsidian)
+name: Build Teia e Artigos (notas do Obsidian)
 
 # Regenera a Teia a partir do repo de notas. Dispara:
 #  - quando o repo de notas avisa (repository_dispatch), veja o passo de setup no README;
 #  - manualmente (workflow_dispatch);
 #  - a cada 6h (fallback);
-#  - quando o gerador muda.
+#  - quando o gerador muda ou um artigo (artigos/*.md) é editado.
+# Também regenera artigos.html, que lista as notas da Teia ao lado dos artigos.
 on:
   repository_dispatch:
     types: [notas-update]
@@ -12,7 +13,12 @@ on:
   schedule:
     - cron: '0 */6 * * *'
   push:
-    paths: ['tools/build-notas.mjs']
+    paths:
+      - 'tools/build-notas.mjs'
+      - 'tools/build-artigos.mjs'
+      - 'tools/artigos-lib.mjs'
+      - 'tools/markdown-lib.mjs'
+      - 'artigos/**'
 
 permissions:
   contents: write
@@ -38,8 +44,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Testes (artigos, renderizador e páginas)
+        run: node tests/validar-artigos.mjs
       - name: Gerar Teia
         run: node tools/build-notas.mjs
+      - name: Gerar Artigos (e a lista de notas)
+        run: node tools/build-artigos.mjs
       - name: Commit se houver mudanças
         run: |
           git config user.name  "github-actions[bot]"
@@ -48,11 +58,11 @@ jobs:
           if ! ls notas/*.html >/dev/null 2>&1; then
             echo "Pasta notas/ vazia — nada a publicar, abortando."; exit 0
           fi
-          git add teia-data.js notas/
+          git add teia-data.js notas/ artigos.html artigo-*.html
           if git diff --staged --quiet; then
             echo "Sem mudanças na Teia."
           else
-            git commit -m "Atualiza Teia (notas do Obsidian)"
+            git commit -m "Atualiza Teia e Artigos (notas do Obsidian)"
             # dois Actions podem publicar no mesmo instante; se o push for recusado, integra e tenta de novo
             ok=0
             for i in 1 2 3 4; do

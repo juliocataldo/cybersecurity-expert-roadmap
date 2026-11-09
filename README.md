@@ -13,11 +13,11 @@ O site tem estas partes:
 | **HUB Sec** (`solucoes.html` → `solucoes-containers.html`, `solucoes-secrets.html`, `solucoes-ia.html`, `solucoes-pentest-ia.html`) | Ferramentas **open source** de segurança que se instala e opera, por tema e camada de defesa, cada tema com **labs para praticar** (diferente do Canivete, que é consulta rápida). Temas: **containers e Kubernetes** (Trivy, Kubescape, kube-bench, Falco, Tetragon, Tracee, Kubernetes Goat), **gestão de segredos** (OpenBao, WrongSecrets), **IA e segurança** (antes em `ia.html`, que redireciona) e **pentest com IA** (agentes e frameworks, com aviso de dual-use). |
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
 | **Trilhas** (`trilhas.html` → `trilha.html`) | Hub de caminhos: um **box destacado "Trilha gamificada"** (abre `trilha.html`: 12 fases, 65 missões, checkpoints, XP, níveis e conquistas, progresso no navegador) e as **trilhas por função** (SOC, Pentester, GRC, Cloud, DFIR) com tempo, certs, onde aprender e vídeos do YouTube. |
-| **Artigos** (`artigos.html` + `artigo-*.html`) | Estudos de caso de segurança escritos em português, do zero. Primeiro texto: *Como uma câmera IP barata vira porta de entrada* (IoT), inspirado no estudo de Zoltan Balazs, com crédito à fonte. |
+| **Artigos** (`artigos.html` + `artigo-*.html`, gerados por `tools/build-artigos.mjs` a partir de `artigos/*.md`) | Estudos de caso de segurança escritos em português, do zero (primeiro: *Como uma câmera IP barata vira porta de entrada*, IoT, inspirado no estudo de Zoltan Balazs, com crédito à fonte). A mesma página lista as **notas da Teia** (as do vault `notas-cyber`) e leva ao grafo. Veja "Artigos (Markdown → site)" abaixo. |
 | **Roadmaps** (`roadmap.html`) | O **fluxo de Ethical Hacking** (caixas e setas, estilo roadmap.sh): 12 estágios do fundamento ao pentester, cada um com seus temas. SVG inline (cores embutidas, à prova de cache) gerado por `gen_roadmap.py`; conteúdo próprio. (As trilhas por função ficam na aba **Trilhas**.) |
 | **Radar** (`radar.html`, gerado por `tools/build-radar-brasil.mjs`; segunda tela `radar-casos.html`, gerada por `tools/build-radar.mjs` via Vexday, com os casos citados e as KEV; `radar-brasil.html` só redireciona) | Primeira tela: **ransomware no mundo, com o Brasil em destaque**, **sem identificar vítimas**. **Mapa-múndi** de menções por país (globo com grade, sem filtros), ranking de países (com menções por milhão de habitantes), Brasil x mundo por setor, grupos mais ativos, **ferramentas e CVEs usados por grupos** (matrizes do BushidoUK), foco no Brasil (mês, setor, grupo, ano) e **mapa do Brasil** com comunicações à ANPD por estado. Fontes: [Ransomware.live](https://www.ransomware.live) (uso não comercial, com atribuição), Banco Mundial (população, CC BY 4.0), Natural Earth (domínio público), BushidoUK (CC BY 4.0), ANPD e IBGE. Código próprio e sem dependências; um GitHub Action diário (`radar-brasil.yml`) atualiza, e uma trava aborta a publicação se aparecer texto fora da lista autorizada, país ou recorte com menos de 3 casos. Dados de apoio versionados em `tools/data/` (`node tools/gen-mapa-mundo.mjs` e `node tools/referencias.mjs` regeneram o mapa e as referências; ANPD é transcrita à mão: veja `tools/ANPD-ATUALIZAR.md` e rode `node tools/anpd.mjs`). |
 | **Notícias** (`noticias.html`, gerada por `tools/build-noticias.mjs`) | Item próprio do menu Recursos, ao lado do Radar. **Destaques comentados** (`tools/data/noticias.json`): o que aconteceu, vetor, impacto de negócio, o que aprender e selo de status (confirmado, relatado pela empresa, alegado, em apuração), sempre com link para a fonte; primeiro destaque: o roubo da Binance (entrevista falsa e IA interna abusada). **Manchetes** do [The Hacker News](https://thehackernews.com), pelo RSS público, atualizadas **1x por dia** pelo Action `noticias.yml`: só título, link e data (nunca o texto da matéria), com histórico de 150 itens em `tools/data/noticias-historico.json`. A trava barra link fora de `thehackernews.com`, texto com marcação e feed cortado. Para adicionar um destaque, edite `noticias.json` (campos validados por `tests/validar-noticias.mjs`). |
-| **Teia** (`teia.html` + `teia.js` + `notas/`) | **Segundo cérebro**: grafo interativo das minhas notas (Obsidian) e páginas por nota com backlinks. Gerado por `tools/build-notas.mjs` a partir de um vault de markdown (`publish: true`). Veja "Teia" em *Para o professor*. |
+| **Teia**, dentro de Artigos (`teia.html` + `teia.js` + `notas/`) | **Segundo cérebro**: grafo interativo das minhas notas (Obsidian) e páginas por nota com backlinks. Gerado por `tools/build-notas.mjs` a partir de um vault de markdown (`publish: true`). Veja "Teia" em *Para o professor*. |
 | **Sugestões** (`sugestoes.html` + `sugestoes.js`) | Community board: formulário que gera uma **issue pré-preenchida no GitHub** (o site é estático, sem servidor), onde a comunidade comenta e vota. |
 
 > Atividade formativa, **sem nota**.
@@ -130,6 +130,36 @@ A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às págin
 6. **Repo de notas privado:** no `notas.yml`, descomente a linha `token: ${{ secrets.NOTAS_TOKEN }}` e crie o secret `NOTAS_TOKEN` (PAT com leitura do repo de notas).
 
 > Só as notas `publish: true` saem. O resto do vault (privado) nunca é publicado — o `vault/` fica no `.gitignore`.
+
+### Artigos (Markdown → site)
+Os artigos ficam em `artigos/<nome>.md` e viram `artigo-<nome>.html` mais um card em `artigos.html` (`node tools/build-artigos.mjs`). A mesma página lista as notas da Teia lendo o `teia-data.js`, então um Action (`notas.yml`) regenera tudo quando o vault ou os artigos mudam.
+
+**Escrever um artigo:** crie `artigos/meu-artigo.md` (nome em minúsculas, com hífens):
+```
+---
+title: Título do artigo
+publish: true
+date: 2026-11-09
+eyebrow: Artigo · estudo de caso
+categoria: Estudo de caso · Web
+resumo: Uma ou duas frases para o card (20 a 400 caracteres).
+meta: Leitura de ~5 min · tema: ... Pode ter [links](https://exemplo.com).
+credito: Opcional: crédito à fonte, no rodapé do artigo.
+pagina: Opcional: título curto da aba
+descricao: Opcional: descrição para buscadores (20 a 300 caracteres).
+---
+
+Parágrafo de abertura.
+
+# Seção (vira h2)
+
+- lista, **negrito**, *itálico*, `código`
+
+## Subseção (vira h3)
+```
+`# ` é uma seção (h2) e `## ` uma subseção (h3); o título (h1) vem do frontmatter. Links: `https://` abrem em nova aba; links internos só no formato `pagina.html#ancora`. HTML cru no texto vira texto. `publish: false` (ou apagar o arquivo) tira o artigo do ar. Depois de salvar, rode `node tools/build-artigos.mjs` e `node tests/validar-artigos.mjs`, ou só faça o commit: o Action gera as páginas.
+
+**Notas na página Artigos:** vêm do `teia-data.js`. Enquanto o vault `notas-cyber` estiver vazio, a Teia e a lista usam as notas de exemplo (`tools/sample-vault/`) e mostram o aviso "Notas de exemplo"; ao publicar a primeira nota real, as de exemplo saem e o aviso some.
 
 ### Publicação
 GitHub Pages servindo a branch `main`, pasta raiz. O arquivo `.nojekyll` desliga o processamento do Jekyll.

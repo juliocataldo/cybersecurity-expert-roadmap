@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Artigos e estudos de caso de segurança, escritos em português, com foco em aprender com exemplos reais.">
+<meta name="description" content="Estudos de caso de segurança escritos em português, e as notas do meu segundo cérebro, ligadas num grafo (a Teia).">
 <title>Artigos · Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css?v=e6e699ca">
@@ -25,7 +25,6 @@
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
         <a href="checklist.html">Checklist</a>
-        <a href="teia.html">Teia</a>
         <a href="plataformas.html">Plataformas</a>
         <a href="eventos.html">Eventos</a>
         <a href="radar.html">Radar</a>
@@ -39,11 +38,22 @@
   <section class="sec-g">
     <p class="eyebrow">Para ler</p>
     <h1>Artigos</h1>
-    <p class="sec-intro">Estudos de caso e textos de segurança, escritos em português e do zero. A ideia é aprender com exemplos reais — o que deu errado e, principalmente, como evitar — sem virar manual de ataque.</p>
-    <p class="wip"><span class="wip-dot"></span><b>Seção em construção</b> — conteúdo de exemplo por enquanto.</p>
+    <p class="sec-intro">Estudos de caso e textos de segurança, escritos em português e do zero. A ideia é aprender com exemplos reais — o que deu errado e, principalmente, como evitar — sem virar manual de ataque. Mais abaixo, as notas curtas do meu segundo cérebro.</p>
+    <nav class="ancoras" aria-label="Nesta página"><a href="#estudos">Estudos de caso</a><a href="#notas">Notas e a Teia</a></nav>
+
+    <h2 class="rm-h2" id="estudos">Estudos de caso e textos</h2>
     <div class="cards">
       <a class="card" href="artigo-camera-ip.html"><span class="k">Estudo de caso · IoT</span><h3>Como uma câmera IP barata vira porta de entrada</h3><p>Backdoor, command injection e credenciais em texto puro num dispositivo de prateleira — e as lições de segurança por design que ficam do caso.</p><span class="go">Ler →</span></a>
     </div>
+
+    <h2 class="rm-h2" id="notas">Notas e a Teia</h2>
+    <p class="sec-intro">Meu segundo cérebro: notas curtas sobre conceitos de segurança, ligadas entre si como no Obsidian. Elas vêm do meu vault e só entram as que marquei como públicas.</p>
+    <p class="wip"><span class="wip-dot"></span><b>Notas de exemplo</b> — ainda não publiquei as minhas; estas servem para mostrar como a seção funciona.</p>
+    <div class="cards cards-one">
+      <a class="card" href="teia.html"><span class="k">Grafo interativo</span><h3>Teia de conhecimento</h3><p>7 notas e 18 conexões. Veja como os temas se ligam e clique num ponto para abrir a nota.</p><span class="go">Abrir a Teia →</span></a>
+    </div>
+    <p class="path-k">Todas as notas</p>
+    <div class="teia-list"><a class="teia-chip" href="notas/autenticacao.html">Autenticação</a><a class="teia-chip" href="notas/jwt.html">JWT</a><a class="teia-chip" href="notas/owasp-top-10.html">OWASP Top 10</a><a class="teia-chip" href="notas/sql-injection.html">SQL Injection</a><a class="teia-chip" href="notas/threat-modeling.html">Threat Modeling</a><a class="teia-chip" href="notas/validacao-de-input.html">Validação de input</a><a class="teia-chip" href="notas/xss.html">XSS</a></div>
   </section>
 </main>
 <footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>

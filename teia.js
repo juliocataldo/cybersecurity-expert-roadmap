@@ -5,6 +5,8 @@
   const listEl = document.getElementById("teiaList");
   const canvas = document.getElementById("teia");
   const emptyEl = document.getElementById("teiaEmpty");
+  const exemploEl = document.getElementById("teiaExemplo");
+  if (exemploEl && data.fonte === "exemplo") exemploEl.hidden = false; // notas de tools/sample-vault: o vault real ainda está vazio
 
   // lista de notas (acessível e funciona mesmo sem o grafo)
   if (listEl) {
