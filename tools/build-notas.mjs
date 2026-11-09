@@ -77,14 +77,27 @@ ${NAV}
 // Senão cai para as notas de exemplo — assim um vault vazio NUNCA apaga as notas.
 const VDIR = join(ROOT, 'vault');
 const VAULT = (existsSync(VDIR) && walk(VDIR).length) ? VDIR : join(ROOT, 'tools', 'sample-vault');
-const files = walk(VAULT);
-const notes = [];
+const files = walk(VAULT).sort((a, b) => a.localeCompare(b, 'en')); // ordem estável (Windows e Linux listam em ordens diferentes)
+let notes = [];
+let semPublicar = 0;
 for (const f of files) {
   const { meta, body } = parseFront(readFileSync(f, 'utf8'));
   const pub = meta.publish === 'true' || meta.publish === true;
-  if (!pub) continue;
+  if (!pub) { semPublicar++; continue; }
   const title = (meta.title || basename(f, '.md')).trim();
   notes.push({ file: f, title, slug: slug(title), tags: Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []), body });
+}
+console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} com publish: true | ${semPublicar} privados (ficam fora do site)`);
+
+// uma nota que o renderizador não consegue processar é pulada com aviso, em vez de derrubar a Teia inteira
+notes = notes.filter((n, idx) => {
+  try { mdToHtml(n.body, n.title, () => null); return true; }
+  catch (e) { console.warn(`::warning title=Teia::A nota "${n.title}" não foi publicada: ${e.message}`); return false; }
+});
+// títulos que viram o mesmo endereço (ex.: "Cloud Architecture" em duas pastas) ganham sufixo, para uma não sobrescrever a outra
+{
+  const usados = new Set();
+  for (const n of notes) { const base = n.slug; let s = base, k = 2; while (usados.has(s)) s = `${base}-${k++}`; n.slug = s; usados.add(s); }
 }
 // índice de títulos -> slug (para resolver wikilinks)
 const byTitle = new Map(notes.map(n => [n.title.toLowerCase(), n]));

@@ -45,6 +45,12 @@ jobs:
       - name: Remove as credenciais do vault do disco
         # o checkout grava o token em vault/.git/config; o gerador só lê os .md, então o .git não faz falta
         run: rm -rf vault/.git
+      - name: Resumo do vault (só contagens, sem nomes de arquivo)
+        run: |
+          echo "arquivos .md: $(find vault -name '*.md' 2>/dev/null | wc -l)"
+          echo "outros arquivos: $(find vault -type f ! -name '*.md' 2>/dev/null | wc -l)"
+          echo "links simbólicos: $(find vault -type l 2>/dev/null | wc -l)"
+          echo "arquivos .md com CRLF: $(grep -rlI $'\r' vault --include='*.md' 2>/dev/null | wc -l)"
       - uses: actions/setup-node@v4
         with:
           node-version: '20'

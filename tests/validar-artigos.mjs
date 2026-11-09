@@ -21,6 +21,34 @@ ok(mdInline('**negrito** e `código` e [x](https://a.com)').startsWith('<b>negri
 ok(parseFront('---\ntitle: Oi: tudo\npublish: true\n---\ncorpo').meta.title === 'Oi: tudo', 'frontmatter com dois-pontos no valor');
 ok(esc('<>&"') === '&lt;&gt;&amp;&quot;', 'esc');
 
+// ---- robustez: entradas que travavam o renderizador (laço infinito e crash do Node) ----
+const tricky = ['```a``` texto depois', 'texto ```a``` texto', '```js\nx\n``` fim', '```js\nx\n```', '   ---', '> [!note] Título', '- item\n   - sub', '1. a\n2. b', '| a | b |\n|---|---|', '#semespaco', '```', '``````', '\u0000F0\u0000 texto', 'a\u0000b', '# \n- \n> \n1. '];
+for (const t of tricky) {
+  let r; try { r = mdToHtml(t, 't', () => null); } catch (e) { r = null; erros.push('renderizador falhou com ' + JSON.stringify(t) + ': ' + e.message); }
+  ok(r === null || typeof r === 'string', 'saída deve ser texto');
+}
+ok(/<code>a<\/code> texto depois/.test(mdToHtml('```a``` texto depois', 't', () => null)), 'bloco de código seguido de texto vira código em linha');
+// fuzz determinístico: combinações de peças difíceis nunca podem travar nem lançar
+{
+  const pecas = ['```', '`', '\n', '\n\n', '- ', '* ', '1. ', '> ', '# ', '## ', '---', '   ', 'texto', '[[Nota]]', '[x](https://a.com)', '[y](pagina.html#a)', '**b**', '_i_', '|', '\r\n', '\u0000', '<b>', '&', 'é☁️'];
+  let seed = 12345; const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
+  let falhas = 0;
+  for (let k = 0; k < 4000 && falhas < 3; k++) {
+    let txt = ''; const n = 1 + rnd(14); for (let j = 0; j < n; j++) txt += pecas[rnd(pecas.length)];
+    try { mdToHtml(txt, 't', t => (t === 'Nota' ? 'nota.html' : null)); } catch (e) { falhas++; erros.push('fuzz: renderizador falhou com ' + JSON.stringify(txt) + ': ' + e.message); }
+  }
+}
+// embeds do Obsidian: imagem some (sem texto quebrado) e incorporar nota vira link
+{
+  const img = mdToHtml('Antes ![[Pasted image 20240101.png]] depois ![[foto.JPG|300]] fim', 't', () => null);
+  ok(img === '<p>Antes  depois  fim</p>', 'embed de imagem deve ser omitido, achei: ' + img);
+  ok(!/wl-missing|Pasted/.test(img), 'nome do arquivo de imagem não pode aparecer no texto');
+  const emb = mdToHtml('Veja ![[Outra nota]]', 't', t => (t === 'Outra nota' ? 'outra-nota.html' : null));
+  ok(/<a href="outra-nota\.html" class="wl">Outra nota<\/a>/.test(emb) && !/!/.test(emb), 'incorporar nota deve virar link comum');
+}
+ok(parseFront('---\r\ntitle: Nota\r\npublish: true\r\n---\r\ncorpo').meta.publish === 'true', 'frontmatter com CRLF (arquivos do Windows)');
+ok(parseFront('\uFEFF---\ntitle: Nota\npublish: true\n---\ncorpo').meta.publish === 'true', 'frontmatter com BOM');
+
 // ---- validação de artigos ----
 const valido = { slug: 'meu-artigo', titulo: 'Um título razoável', date: '2026-11-09', eyebrow: 'Artigo · teste', categoria: 'Teste', resumo: 'Um resumo com mais de vinte caracteres.', meta: 'Linha de contexto.', credito: '', pagina: '', descricao: '', body: 'x'.repeat(250) };
 ok(validarArtigo(valido).length === 0, 'artigo válido deveria passar: ' + validarArtigo(valido).join('; '));

@@ -20,6 +20,7 @@ export function walk(dir) {
 
 /* ---- frontmatter YAML simples (publish/title/tags) ---- */
 export function parseFront(src) {
+  src = String(src).replace(/^﻿/, '').replace(/\r\n?/g, '\n'); // arquivos do Windows: BOM e CRLF não podem esconder o cabeçalho
   const m = src.match(/^---\n([\s\S]*?)\n---\n?/);
   const meta = {}; let body = src;
   if (m) {
@@ -37,6 +38,7 @@ export function parseFront(src) {
 
 /* ---- markdown -> html (mínimo, suficiente para notas) ---- */
 export function mdToHtml(md, noteTitle, resolve) {
+  md = String(md).replace(/\u0000/g, '').replace(/\r\n?/g, '\n'); // NUL é o marcador interno dos blocos de código; CRLF vem de arquivos do Windows
   // code fences primeiro (protege o conteúdo)
   const fences = [];
   md = md.replace(/```([\s\S]*?)```/g, (_, c) => { fences.push(c.replace(/^\w*\n/, '')); return `\u0000F${fences.length - 1}\u0000`; });
@@ -45,6 +47,9 @@ export function mdToHtml(md, noteTitle, resolve) {
   const inline = t => {
     t = esc(t);
     t = t.replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`);
+    // embeds de imagem do Obsidian (![[foto.png]]): ainda não publicamos imagens, então são omitidos (sem sobrar texto quebrado)
+    t = t.replace(/!\[\[[^\]]+?\.(?:png|jpe?g|gif|webp|svg|bmp|avif)(?:\|[^\]]*)?\]\]/gi, '');
+    t = t.replace(/!(\[\[[^\]]+\]\])/g, '$1'); // ![[Outra nota]] (incorporar nota): vira um link comum
     // wikilinks [[Nota]] ou [[Nota|texto]]
     t = t.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, target, alias) => {
       const r = resolve(target.trim());
@@ -57,9 +62,17 @@ export function mdToHtml(md, noteTitle, resolve) {
     t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
     t = t.replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<i>$2</i>');
     t = t.replace(/(^|[\s(])_([^_\n]+)_/g, '$1<i>$2</i>');
+    // bloco de código no meio de uma linha (ex.: "```x``` texto"): vira código em linha
+    t = t.replace(/\u0000F(\d+)\u0000/g, (_, n) => `<code>${esc(String(fences[+n] ?? '')).trim().replace(/\n+/g, ' ')}</code>`);
     return t;
   };
+  // início de bloco: precisa ser idêntico nos dois lugares que o usam (senão o parágrafo não consome a linha e o laço não avança)
+  const ehBloco = l => /^(#{1,6}\s|>\s?|\s*[-*]\s|\s*\d+\.\s|---+\s*$)/.test(l) || /^\u0000F\d+\u0000$/.test(l.trim());
+  let ultimo = -1;
   while (i < lines.length) {
+    if (i === ultimo) throw new Error(`Markdown: o renderizador não avançou na linha ${i + 1}`); // erro claro em vez de laço infinito
+    if (out.length > 100000) throw new Error('Markdown: saída grande demais');
+    ultimo = i;
     let line = lines[i];
     if (/^\u0000F\d+\u0000$/.test(line.trim())) { const idx = +line.trim().slice(2, -1); out.push(`<pre><code>${esc(fences[idx])}</code></pre>`); i++; continue; }
     if (!line.trim()) { i++; continue; }
@@ -68,7 +81,8 @@ export function mdToHtml(md, noteTitle, resolve) {
     if (/^\s*\d+\.\s/.test(line)) { const items = []; while (i < lines.length && /^\s*\d+\.\s/.test(lines[i])) { items.push(`<li>${inline(lines[i].replace(/^\s*\d+\.\s/, ''))}</li>`); i++; } out.push(`<ol>${items.join('')}</ol>`); continue; }
     if (/^>\s?/.test(line)) { const buf = []; while (i < lines.length && /^>\s?/.test(lines[i])) { buf.push(inline(lines[i].replace(/^>\s?/, ''))); i++; } out.push(`<blockquote>${buf.join('<br>')}</blockquote>`); continue; }
     if (/^---+\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
-    const buf = []; while (i < lines.length && lines[i].trim() && !/^(#{1,6}\s|>\s?|\s*[-*]\s|\s*\d+\.\s|---+\s*$|\u0000F\d+\u0000)/.test(lines[i])) { buf.push(inline(lines[i])); i++; }
+    const buf = [inline(line)]; i++; // a primeira linha é sempre consumida: o laço sempre avança
+    while (i < lines.length && lines[i].trim() && !ehBloco(lines[i])) { buf.push(inline(lines[i])); i++; }
     out.push(`<p>${buf.join('<br>')}</p>`);
   }
   return out.join('\n');
