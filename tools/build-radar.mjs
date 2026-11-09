@@ -75,7 +75,7 @@ const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
     <a href="trilhas.html">Trilhas</a>
-    <a href="artigos.html">Artigos</a>
+    <a href="artigos.html">Notas</a>
     <details class="nav-group">
       <summary class="cur">Recursos</summary>
       <div class="nav-menu">

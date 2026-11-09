@@ -19,7 +19,7 @@ const NAV = `  <nav aria-label="Seções">
     <a href="../">Home</a>
     <a href="../guia.html">Guia</a>
     <a href="../trilhas.html">Trilhas</a>
-    <a href="../artigos.html" aria-current="page">Artigos</a>
+    <a href="../artigos.html" aria-current="page">Notas</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">

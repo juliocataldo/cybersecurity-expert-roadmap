@@ -149,8 +149,8 @@ ok(notasParaLista(nomesMalucos).length === 1, 'notasParaLista deve descartar URL
 const paginas = [...readdirSync(raiz).filter(n => n.endsWith('.html')), ...readdirSync(new URL('notas/', raiz)).map(n => 'notas/' + n)];
 const comTeiaNoMenu = paginas.filter(p => /<a href="(\.\.\/)?teia\.html"[^>]*>Teia<\/a>/.test(ler(p)));
 ok(comTeiaNoMenu.length === 0, 'a Teia não deve estar no menu: ' + comTeiaNoMenu.join(', '));
-ok(/artigos\.html" aria-current="page">Artigos/.test(ler('teia.html')), 'na Teia o menu deve marcar Artigos como ativo');
-ok(/<a href="artigos\.html">&larr; Artigos<\/a>/.test(ler('teia.html')), 'a Teia deve voltar para Artigos');
+ok(/artigos\.html" aria-current="page">Notas/.test(ler('teia.html')), 'na Teia o menu deve marcar Notas como ativo');
+ok(/<a href="artigos\.html">&larr; Notas<\/a>/.test(ler('teia.html')), 'a Teia deve voltar para Notas');
 ok(/hidden/.test(ler('teia.html').match(/id="teiaExemplo"[^>]*>/)?.[0] || ''), 'o aviso de exemplo da Teia deve começar escondido (o teia.js mostra)');
 
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }

@@ -31,7 +31,7 @@ const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
     <a href="trilhas.html">Trilhas</a>
-    <a href="artigos.html" aria-current="page">Artigos</a>
+    <a href="artigos.html" aria-current="page">Notas</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">
@@ -75,7 +75,7 @@ const rodape = `${FOOT}
 
 /* ---------- uma página por artigo ---------- */
 const paginaArtigo = a => cabeca(a.pagina || a.titulo, a.descricao || a.resumo) + `<main class="wrap">
-  <p class="crumb"><a href="artigos.html">&larr; Artigos</a></p>
+  <p class="crumb"><a href="artigos.html">&larr; Notas</a></p>
   <article class="sec-g prose">
     <p class="eyebrow">${esc(a.eyebrow)}</p>
     <h1>${esc(a.titulo)}</h1>
@@ -107,19 +107,19 @@ ${cards}
 ` : '';
 const intro = listados.length
   ? 'Estudos de caso e textos de segurança, escritos em português e do zero. A ideia é aprender com exemplos reais — o que deu errado e, principalmente, como evitar — sem virar manual de ataque. Mais abaixo, as notas curtas do meu segundo cérebro.'
-  : 'Notas curtas de segurança do meu segundo cérebro (Obsidian), ligadas entre si num grafo. Use a busca e os filtros para achar um tema, ou abra a Teia para ver como tudo se conecta.';
+  : 'Notas curtas de segurança do meu segundo cérebro (Obsidian), ligadas entre si num grafo. Só entram as que marquei como públicas. Use a busca e os filtros para achar um tema, ou abra a Teia para ver como tudo se conecta.';
 const ancoras = listados.length ? '\n    <nav class="ancoras" aria-label="Nesta página"><a href="#estudos">Estudos de caso</a><a href="#notas">Notas e a Teia</a></nav>\n' : '';
 const descricao = listados.length
   ? 'Estudos de caso de segurança escritos em português, e as notas do meu segundo cérebro, ligadas num grafo (a Teia).'
   : 'Notas de segurança do meu segundo cérebro, com busca e filtros por pasta e assunto, ligadas num grafo (a Teia).';
 
-const PAGINA = cabeca('Artigos', descricao) + `<main class="wrap">
+const PAGINA = cabeca('Notas', descricao) + `<main class="wrap">
   <section class="sec-g">
-    <p class="eyebrow">Para ler</p>
-    <h1>Artigos</h1>
+    <p class="eyebrow">Segundo cérebro</p>
+    <h1>Notas</h1>
     <p class="sec-intro">${intro}</p>${ancoras}${secaoArtigos}
-    <h2 class="rm-h2" id="notas">Notas e a Teia</h2>
-    <p class="sec-intro">Meu segundo cérebro: notas curtas sobre conceitos de segurança, ligadas entre si como no Obsidian. Elas vêm do meu vault e só entram as que marquei como públicas.</p>${aviso}
+${listados.length ? `
+    <h2 class="rm-h2" id="notas">Notas e a Teia</h2>` : ''}${aviso}
     <div class="cards cards-one">
       <a class="card" href="teia.html"><span class="k">Grafo interativo</span><h3>Teia de conhecimento</h3><p>${notas.length} ${notas.length === 1 ? 'nota' : 'notas'} e ${teia.links.length} ${teia.links.length === 1 ? 'conexão' : 'conexões'}. Veja como os temas se ligam e clique num ponto para abrir a nota.</p><span class="go">Abrir a Teia →</span></a>
     </div>
