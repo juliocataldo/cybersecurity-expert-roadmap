@@ -90,6 +90,7 @@ const NAV = `  <nav aria-label="Seções">
         <a href="eventos.html">Eventos</a>
       </div>
     </details>
+    <a href="sobre.html">Sobre</a>
     <a href="sugestoes.html">Sugestões</a>
   </nav>`;
 
@@ -134,7 +135,7 @@ ${CRUMB}
 ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : placeholder}
   </section>
 </main>
-<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span> · <span class="foot-src">Threat intel por <a href="https://vexday.io/" target="_blank" rel="noopener noreferrer">Vexday</a>.</span></p></div></footer>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span> · <span class="foot-src">Threat intel por <a href="https://vexday.io/" target="_blank" rel="noopener noreferrer">Vexday</a>.</span></p></div></footer>
 </body>
 </html>
 `;

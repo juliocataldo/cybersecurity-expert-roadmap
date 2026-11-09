@@ -34,6 +34,7 @@ const NAV = `  <nav aria-label="Seções">
         <a href="../eventos.html">Eventos</a>
       </div>
     </details>
+    <a href="../sobre.html">Sobre</a>
     <a href="../sugestoes.html">Sugestões</a>
   </nav>`;
 
@@ -69,7 +70,7 @@ ${NAV}
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>
-<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
 </body>
 </html>
 `;

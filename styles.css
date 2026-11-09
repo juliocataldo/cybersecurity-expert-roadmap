@@ -651,3 +651,24 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .journey li span{display:block;font-size:13px;color:var(--mut)}
 a.path.path-map{text-decoration:none;color:var(--tx);border-color:var(--line2)}
 a.path.path-map:hover{border-color:var(--acc)}
+
+/* Sobre */
+.about{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:44px;align-items:center}
+@media(max-width:760px){.about{grid-template-columns:1fr;gap:24px}}
+.about-photo{margin:0}
+.about-photo img{display:block;width:100%;height:auto;border-radius:var(--r);border:1px solid var(--line2);box-shadow:0 12px 44px #0009}
+@media(max-width:760px){.about-photo img{max-width:280px}}
+.about-main h1{margin-bottom:6px}
+.about-role{color:var(--acc);font-size:13px;letter-spacing:.02em;margin:0 0 18px}
+.about-main .lead{margin:0 0 14px}
+.about-main .cta{margin-top:22px}
+.about-areas{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.about-areas .card{cursor:default}
+/* Home: quem escreve */
+.byline{display:inline-flex;align-items:center;gap:12px;margin:0 0 22px;text-decoration:none;color:var(--tx);max-width:100%}
+.byline>div{min-width:0}
+.byline img{flex:none}
+.byline img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid var(--line2)}
+.byline b{display:block;font-size:15px}
+.byline span{display:block;font-size:13px;color:var(--mut)}
+.byline:hover b{color:var(--acc)}

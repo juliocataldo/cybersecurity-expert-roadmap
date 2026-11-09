@@ -202,6 +202,7 @@ const NAV = `  <nav aria-label="Seções">
         <a href="eventos.html">Eventos</a>
       </div>
     </details>
+    <a href="sobre.html">Sobre</a>
     <a href="sugestoes.html">Sugestões</a>
   </nav>`;
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
