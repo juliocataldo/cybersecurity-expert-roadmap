@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node
 import { join, basename, relative, sep } from 'node:path';
 import { esc, slug, walk, parseFront, mdToHtml, resumoTexto } from './markdown-lib.mjs';
 import { acharSegredos } from './segredos-lib.mjs';
+import { versionar } from './bump-css.mjs';
 import { createHash } from 'node:crypto';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
@@ -147,5 +148,11 @@ const data = {
   links: edges.map(e => ({ s: e.s, t: e.t }))
 };
 writeFileSync(join(ROOT, 'teia-data.js'), `/* gerado por tools/build-notas.mjs */\nwindow.TEIA=${JSON.stringify(data)};\n`);
+
+// o navegador guarda o teia-data.js por horas: a versão no <script> da Teia muda junto com os dados
+{
+  const pagina = join(ROOT, 'teia.html');
+  if (existsSync(pagina)) { const h = readFileSync(pagina, 'utf8'); const n = versionar(h); if (n !== h) writeFileSync(pagina, n); }
+}
 
 console.log(`notas publicadas: ${notes.length} | links: ${edges.length} | fonte: ${VAULT}`);

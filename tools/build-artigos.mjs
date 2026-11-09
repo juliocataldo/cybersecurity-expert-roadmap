@@ -8,6 +8,7 @@ import { readFileSync, writeFileSync, readdirSync, unlinkSync, existsSync } from
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { esc, mdToHtml, mdInline } from './markdown-lib.mjs';
+import { hash } from './bump-css.mjs';
 import { lerArtigos, validarArtigo, lerTeia, notasParaLista, renderNotas } from './artigos-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
@@ -123,6 +124,6 @@ const PAGINA = cabeca('Artigos', descricao) + `<main class="wrap">
     ${notas.length ? renderNotas(notas) : '<p class="mut">Ainda não há notas publicadas.</p>'}
   </section>
 </main>
-` + rodape.replace('</body>', '<script src="guia.js"></script>\n</body>'); // guia.js traz o filtro de busca ([data-tf])
+` + rodape.replace('</body>', `<script src="guia.js?v=${hash(join(ROOT, 'guia.js'))}"></script>\n</body>`); // guia.js traz o filtro de busca ([data-tf])
 writeFileSync(join(ROOT, 'artigos.html'), PAGINA);
 console.log(`artigos.html gerado | ${listados.length} artigo(s) listado(s) de ${artigos.length} publicado(s) | ${notas.length} nota(s) (${teia.fonte})`);

@@ -630,3 +630,4 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .nota-conn{font:500 11px var(--mono);color:var(--mut)}
 .chip-n{font:600 11px var(--mono);opacity:.7;margin-left:2px}
 @media(prefers-reduced-motion:reduce){.card.tool.nota{transition:none}.card.tool.nota:hover{transform:none}}
+.wip[hidden]{display:none}

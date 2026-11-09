@@ -19,6 +19,8 @@ on:
       - 'tools/artigos-lib.mjs'
       - 'tools/markdown-lib.mjs'
       - 'artigos/**'
+      - 'teia.js'
+      - 'teia-layout.js'
 
 permissions:
   contents: write
@@ -62,6 +64,7 @@ jobs:
         run: |
           node tests/validar-artigos.mjs
           node tests/validar-segredos.mjs
+          node tests/validar-teia-layout.mjs
       - name: Commit se houver mudanças
         run: |
           git config user.name  "github-actions[bot]"
@@ -70,7 +73,7 @@ jobs:
           if ! ls notas/*.html >/dev/null 2>&1; then
             echo "Pasta notas/ vazia — nada a publicar, abortando."; exit 0
           fi
-          git add teia-data.js notas/ artigos.html artigo-*.html
+          git add teia-data.js teia.html notas/ artigos.html artigo-*.html
           if git diff --staged --quiet; then
             echo "Sem mudanças na Teia."
           else

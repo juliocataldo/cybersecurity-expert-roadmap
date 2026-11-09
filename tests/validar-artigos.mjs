@@ -107,14 +107,14 @@ ok(orfaos.length === 0, 'página de artigo sem .md publicado: ' + orfaos.join(',
 
 // ---- artigos.html: cards e lista de notas ----
 const pagina = ler('artigos.html');
-ok(!/<script(?![^>]*\ssrc="guia\.js"><\/script>)/i.test(pagina) && !/ style=/i.test(pagina), 'artigos.html não pode ter script inline (só o guia.js externo) nem estilo inline');
+ok(!/<script(?![^>]*\ssrc="guia\.js(\?v=[0-9a-f]+)?"><\/script>)/i.test(pagina) && !/ style=/i.test(pagina), 'artigos.html não pode ter script inline (só o guia.js externo) nem estilo inline');
 ok((pagina.match(/class="card" href="artigo-/g) || []).length === artigos.filter(a => a.listar).length, 'um card por artigo publicado e listado em artigos.html');
 ok(artigos.some(a => a.listar) || !/Estudos de caso e textos/.test(pagina), 'sem artigo listado, a seção "Estudos de caso e textos" não deve aparecer');
 const teia = lerTeia(ler('teia-data.js'));
 const notas = notasParaLista(teia);
 ok((pagina.match(/class="card tool nota"/g) || []).length === notas.length, 'artigos.html deve ter um cartão para cada nota da Teia');
 ok(/data-tf data-noun="notas"/.test(pagina) && /type="search"[^>]*aria-label="Buscar nas notas"/.test(pagina) && /class="mut small tf-count"/.test(pagina) && /class="mut small tf-empty" hidden/.test(pagina), 'filtro de busca (data-tf, campo, contador e mensagem vazia) ausente em artigos.html');
-ok(/<script src="guia\.js"><\/script>/.test(pagina), 'artigos.html precisa carregar o guia.js (é ele que faz o filtro)');
+ok(/<script src="guia\.js\?v=[0-9a-f]+"><\/script>/.test(pagina), 'artigos.html precisa carregar o guia.js versionado (é ele que faz o filtro)');
 ok(!(pagina.match(/<input[^>]*type="search"/g) || []).length || (pagina.match(/<input/g) || []).length === 1, 'só deve haver um campo de busca');
 { const cartoes = [...pagina.matchAll(/<a class="card tool nota" data-pasta="([^"]*)" data-tags="([^"]*)" href="([^"]+)">/g)]; ok(cartoes.length === notas.length, 'cada cartão de nota precisa de data-pasta, data-tags e href');
   const botoesPasta = [...pagina.matchAll(/data-attr="pasta">(.*?)<\/div>/g)][0]; if (botoesPasta) { const valores = new Set([...botoesPasta[1].matchAll(/data-f="([^"]*)"/g)].map(m => m[1]).filter(Boolean)); ok(cartoes.every(c => valores.has(c[1])), 'todo data-pasta de um cartão deve ter um botão de filtro correspondente'); const soma = [...botoesPasta[1].matchAll(/chip-n">(\d+)</g)].reduce((a, m) => a + +m[1], 0); ok(soma === notas.length, `a soma das contagens por pasta (${soma}) deve ser o total de notas (${notas.length})`); } }

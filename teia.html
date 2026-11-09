@@ -8,7 +8,7 @@
 <meta name="description" content="Teia de conhecimento: minhas notas de segurança (Obsidian) e como os temas se conectam, em um grafo interativo.">
 <title>Teia · Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=5dc44cc5">
+<link rel="stylesheet" href="styles.css?v=f2e04ea7">
 </head>
 <body>
 <header class="site">
@@ -45,14 +45,16 @@
       <canvas id="teia" class="teia-canvas" aria-label="Grafo de notas conectadas"></canvas>
       <p class="teia-empty" id="teiaEmpty" hidden>Ainda não há notas publicadas.</p>
     </div>
+    <p class="mut small" id="teiaInfo"></p>
     <noscript><p class="mut small">O grafo precisa de JavaScript. A lista de notas está logo abaixo.</p></noscript>
     <p class="path-k">Todas as notas</p>
     <div class="teia-list" id="teiaList"></div>
-    <p class="mut small">As notas vêm do meu vault do Obsidian (só as marcadas como públicas). Quer sugerir um tema? Use a página de <a href="sugestoes.html">Sugestões</a>.</p>
+    <p class="mut small">As notas vêm do meu vault do Obsidian (só as marcadas como públicas). Prefere buscar por tema? A página <a href="artigos.html#notas">Artigos</a> tem busca e filtros por pasta e assunto. Quer sugerir um tema? Use a página de <a href="sugestoes.html">Sugestões</a>.</p>
   </section>
 </main>
-<script src="teia-data.js"></script>
-<script src="teia.js"></script>
+<script src="teia-data.js?v=132f1502"></script>
+<script src="teia-layout.js?v=97a2ae14"></script>
+<script src="teia.js?v=a68e0759"></script>
 <footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
 </body>
 </html>
