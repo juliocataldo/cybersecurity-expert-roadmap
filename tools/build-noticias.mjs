@@ -91,7 +91,8 @@ const NAV = `  <nav aria-label="Seções">
         <a href="teia.html">Teia</a>
         <a href="plataformas.html">Plataformas</a>
         <a href="eventos.html">Eventos</a>
-        <a href="radar.html" aria-current="page">Radar</a>
+        <a href="radar.html">Radar</a>
+        <a href="noticias.html" aria-current="page">Notícias</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>
@@ -119,7 +120,7 @@ ${ICON}
 ${NAV}
 </header>
 <main class="wrap">
-  <p class="crumb"><a href="radar.html">← Radar</a></p>
+  <p class="crumb"><a href="./">← Guia</a></p>
   <section class="sec-g radar-pg">
     <p class="eyebrow">Threat intel · notícias</p>
     <h1>Notícias</h1>

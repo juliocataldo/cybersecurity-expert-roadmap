@@ -619,4 +619,3 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .feed a{color:var(--tx);text-decoration:none;flex:1 1 320px}
 .feed a:hover{color:var(--acc);text-decoration:underline}
 .feed .pill{flex:0 0 auto}
-.cards-duo{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:0 0 22px}

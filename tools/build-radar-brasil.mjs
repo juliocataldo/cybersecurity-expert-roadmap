@@ -199,6 +199,7 @@ const NAV = `  <nav aria-label="Seções">
         <a href="plataformas.html">Plataformas</a>
         <a href="eventos.html">Eventos</a>
         <a href="radar.html" aria-current="page">Radar</a>
+        <a href="noticias.html">Notícias</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>
@@ -335,9 +336,8 @@ ${anpd.anos.map(a => `        <li><span class="hb-l">${a.ano}</span><meter class
       </div>
     </div>
 
-    <div class="cards cards-duo">
+    <div class="cards cards-one">
     <a class="card" href="radar-casos.html"><span class="k">Segunda tela</span><h3>Casos e vulnerabilidades</h3><p>Quer ver os nomes das organizações citadas em sites de vazamento e as vulnerabilidades em exploração ativa (KEV)? Estão na segunda tela. Lembre: citada não quer dizer atacada de fato.</p><span class="go">Abrir →</span></a>
-    <a class="card" href="noticias.html"><span class="k">Notícias</span><h3>Destaques e manchetes</h3><p>Incidentes em pauta, comentados com vetor, impacto e o que aprender, e as manchetes de segurança do dia com link para a fonte.</p><span class="go">Abrir →</span></a>
     </div>
 
     <h2 class="rm-h2" id="observacoes">Observações</h2>
