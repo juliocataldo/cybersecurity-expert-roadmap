@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { esc, slug, walk, parseFront, mdToHtml } from './markdown-lib.mjs';
+import { acharSegredos } from './segredos-lib.mjs';
 import { createHash } from 'node:crypto';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
@@ -80,14 +81,23 @@ const VAULT = (existsSync(VDIR) && walk(VDIR).length) ? VDIR : join(ROOT, 'tools
 const files = walk(VAULT).sort((a, b) => a.localeCompare(b, 'en')); // ordem estável (Windows e Linux listam em ordens diferentes)
 let notes = [];
 let semPublicar = 0;
+const retidas = [];
 for (const f of files) {
-  const { meta, body } = parseFront(readFileSync(f, 'utf8'));
+  const bruto = readFileSync(f, 'utf8');
+  const { meta, body } = parseFront(bruto);
   const pub = meta.publish === 'true' || meta.publish === true;
   if (!pub) { semPublicar++; continue; }
   const title = (meta.title || basename(f, '.md')).trim();
+  // segunda barreira (a primeira é o push protection do GitHub): nota com possível segredo NÃO é publicada
+  const achados = acharSegredos(bruto);
+  if (achados.length) { retidas.push({ title, achados }); continue; }
   notes.push({ file: f, title, slug: slug(title), tags: Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []), body });
 }
-console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} com publish: true | ${semPublicar} privados (ficam fora do site)`);
+console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} publicáveis | ${semPublicar} privados (ficam fora do site) | ${retidas.length} retidos por possível segredo`);
+for (const r of retidas) {
+  const resumo = [...new Set(r.achados.map(a => `${a.tipo} (linha ${a.linha})`))].join('; ');
+  console.warn(`::warning title=Teia: nota retida::"${r.title}" não foi publicada: possível segredo no texto: ${resumo}. Remova ou oculte o valor (e revogue a credencial se for real) e envie de novo.`);
+}
 
 // uma nota que o renderizador não consegue processar é pulada com aviso, em vez de derrubar a Teia inteira
 notes = notes.filter((n, idx) => {

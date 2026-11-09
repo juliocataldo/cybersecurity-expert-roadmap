@@ -129,6 +129,12 @@ A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às págin
    ```
 6. **Repo de notas privado (recomendado):** o `notas.yml` já usa o secret `NOTAS_TOKEN`. Crie um token **fine-grained** só para o repo de notas, com *Contents: Read-only* e validade definida (renove antes de vencer), e guarde em Settings > Secrets and variables > Actions do site como `NOTAS_TOKEN`. Sem o secret, o Action usa o token padrão (basta o repo ser público).
 
+**Antes de publicar (importante):**
+- `publish: true` é o único filtro: **toda** nota com essa linha vai para o site público. Marque só o que você quer mesmo publicar (conteúdo de trabalho, de clientes ou de terceiros não deve sair).
+- **Segredos:** o gerador retém (não publica) a nota que contiver um formato conhecido de credencial (token do Google, chave da AWS, segredo do Azure AD, chave privada, JWT, token do GitHub, etc.) e avisa no log do Action o título, o tipo e a linha, **nunca o valor**. Isso é uma segunda barreira: a primeira é o push protection do GitHub, que também bloqueia o push do site se algo escapar. Se uma nota for retida, tire o valor do texto e, se a credencial for real, **revogue-a** (ela já está no histórico do repositório de notas).
+- Imagens (`![[foto.png]]`) ainda não são publicadas: o embed é omitido da página. Notas com o mesmo título em pastas diferentes ganham um sufixo no endereço (`-2`).
+- Arquivos do Windows (CRLF/BOM) e blocos de código no meio da linha são aceitos; uma nota que o renderizador não conseguir processar é pulada com aviso em vez de derrubar o build.
+
 > Só as notas `publish: true` saem. O resto do vault (privado) nunca é publicado — o `vault/` fica no `.gitignore`.
 
 ### Artigos (Markdown → site)
