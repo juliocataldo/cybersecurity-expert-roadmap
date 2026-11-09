@@ -142,7 +142,7 @@ const TRILHA = {
     missoes: [
       { id: 'F03-M1', tipo: 'estudo', titulo: 'Linux Journey',
         descricao: 'Siga o módulo inicial do Linux Journey: sistema de arquivos, comandos básicos, usuários e permissões.',
-        links: [['Linux Journey', 'https://linuxjourney.com/']] },
+        links: [['Linux Journey', 'https://labex.io/linuxjourney']] },
       { id: 'F03-M2', tipo: 'pratica', titulo: 'OverTheWire Bandit (níveis 0 a 10)',
         descricao: 'Wargame legal e feito para isso: cada nível ensina um comando. Anote no seu caderno o comando que resolveu cada nível.',
         links: [['OverTheWire - Bandit', 'https://overthewire.org/wargames/bandit/']] },
