@@ -672,3 +672,22 @@ a.path.path-map:hover{border-color:var(--acc)}
 .byline b{display:block;font-size:15px}
 .byline span{display:block;font-size:13px;color:var(--mut)}
 .byline:hover b{color:var(--acc)}
+/* ===== IA e segurança (solucoes-ia.html) ===== */
+.ia-hero{padding-bottom:40px}
+.ia-hero .toc{border-bottom:0;padding-bottom:4px}
+.ia-p{margin:0 0 12px;color:var(--tx2);font-size:15px}.ia-p:last-child{margin-bottom:0}
+.ia-p.small{font-size:13px;margin-top:10px}
+div.card{cursor:default}div.card:hover{border-color:var(--line)}
+.camadas div{border:1px solid var(--line2);border-radius:8px;padding:10px 12px 12px;margin-top:10px;background:#ffffff04}
+.camadas>div{margin-top:0}
+.camadas b{display:block;font-size:15px}
+.camadas span{display:block;font-size:13px;color:var(--tx2)}
+.camadas .in{border-color:var(--acc);background:var(--accbg)}
+.camadas .in b{color:var(--acc)}
+.term-x{color:#ff8a6b}
+.tree details{border-top:1px solid var(--line);padding:8px 0}
+.tree details:first-child{border-top:0}
+.tree summary{cursor:pointer;font-size:15px;font-weight:600;color:var(--tx)}
+.tree summary:hover{color:var(--acc)}
+.tree .v{margin:8px 0 2px;padding:8px 12px;border-radius:6px;font-size:14px;color:var(--tx2);border-left:3px solid var(--line2);background:var(--s1)}
+.tree .v.no{border-left-color:#e5534b}.tree .v.warn{border-left-color:var(--acc)}.tree .v.ok{border-left-color:#49c6a0}
