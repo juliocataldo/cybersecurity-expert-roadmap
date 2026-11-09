@@ -1,0 +1,28 @@
+[
+  {
+    "id": "binance-entrevista-falsa-2026-11",
+    "titulo": "Binance detalha o roubo de US$ 6,43 bilhões: entrevista de emprego falsa, instalador adulterado e IA interna abusada",
+    "data": "2026-11-03",
+    "status": "relatado",
+    "resumo": [
+      "Em junho de 2026, um engenheiro de DevOps da área de carteiras buscou uma ferramenta de IA num buscador e baixou um instalador do Homebrew adulterado. A Binance diz que detectou o caso e trocou as credenciais, mas informações sobre a equipe de infraestrutura de carteiras ficaram expostas ao atacante.",
+      "Em setembro, outro engenheiro foi abordado numa plataforma de vagas por um falso diretor de projetos. Houve uma entrevista com uma suposta pessoa de RH, outra com um suposto CEO de uma empresa que não existe, e um \"teste técnico\": um repositório com código malicioso que rodou durante a instalação, na máquina de trabalho.",
+      "Em 20 de outubro, o atacante usou esse computador para abusar de uma ferramenta interna de IA e chegar a outros engenheiros. Em 29 de outubro, com um token de implantação de containers que estava na máquina de um deles, subiu um container e disparou um script malicioso.",
+      "O passo final foi usar o acesso a um serviço interno de assinatura de carteiras para iniciar transações fora do fluxo normal de saques."
+    ],
+    "vetor": "Engenharia social com recrutamento falso e ataque à cadeia de suprimentos (instalador adulterado), seguidos de malware em ambiente de desenvolvimento, movimentação lateral por uma ferramenta interna de IA, uso de um token de deploy encontrado em estação de trabalho e abuso do serviço de assinatura de transações. Em termos de MITRE ATT&CK: T1195 (comprometimento da cadeia de suprimentos), T1566.003 (spearphishing por serviço), T1204 (execução pelo usuário) e T1552 (credenciais não protegidas).",
+    "impacto": "A empresa informa a perda de US$ 6,43 bilhões em ativos, o maior roubo do setor segundo o relato. Reconstruiu o sistema de carteiras e a ferramenta interna de IA em ambiente novo, trocou dispositivos, desativou credenciais e tokens, reforçou controles de risco e trabalha com autoridades e empresas de análise de blockchain para rastrear e congelar ativos.",
+    "aprender": [
+      "Trate o \"teste técnico\" de um recrutador como código não confiável: rode só em VM ou container descartável, nunca no equipamento corporativo.",
+      "Instale ferramentas de desenvolvimento pelo site oficial e confira checksum ou assinatura. Resultado de buscador, patrocinado ou não, não é fonte confiável de instalador.",
+      "Não deixe token de deploy no notebook do desenvolvedor. Prefira credenciais de curta duração, emitidas sob demanda, com o menor privilégio possível.",
+      "Ferramenta interna de IA é superfície de ataque: exija controle de acesso, registro de auditoria e limite do que ela pode alcançar. Veja mais em IA e segurança, no HUB Sec.",
+      "Serviço que assina transações precisa de controles independentes do acesso à máquina: limites, aprovação de mais de uma pessoa e detecção de comportamento anômalo (defesa em profundidade).",
+      "Estações de desenvolvimento merecem o mesmo cuidado que servidores: EDR, segmentação e monitoramento de comportamento."
+    ],
+    "nota": "O que está acima é a descrição feita pela própria Binance, relatada pelo The Hacker News; a investigação continua e os detalhes podem mudar. A empresa de análise Chainalysis liga esquemas parecidos de entrevistas falsas a atores norte-coreanos, mas o relato não deixa claro que essa atribuição vale para este caso específico, então não a tratamos como confirmada. Consultei uma única fonte; vale conferir o comunicado original da Binance.",
+    "fontes": [
+      { "nome": "The Hacker News: Binance Reveals How Fake Job Interviews and AI Tool Abuse Led to $6.43 Billion Theft", "url": "https://thehackernews.com/2026/11/binance-reveals-how-fake-job-interviews.html" }
+    ]
+  }
+]

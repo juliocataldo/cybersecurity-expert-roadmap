@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Notícias de segurança: destaques comentados, com vetor, impacto e o que aprender, e as manchetes mais recentes do The Hacker News, atualizadas uma vez por dia.">
+<title>Notícias · Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css?v=8ca7bf0d">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="trilhas.html">Trilhas</a>
+    <a href="artigos.html">Artigos</a>
+    <details class="nav-group">
+      <summary class="cur">Recursos</summary>
+      <div class="nav-menu">
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html">HUB Sec</a>
+        <a href="checklist.html">Checklist</a>
+        <a href="teia.html">Teia</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="radar.html" aria-current="page">Radar</a>
+      </div>
+    </details>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="radar.html">← Radar</a></p>
+  <section class="sec-g radar-pg">
+    <p class="eyebrow">Threat intel · notícias</p>
+    <h1>Notícias</h1>
+    <p class="sec-intro">Os incidentes que estão em pauta, em dois níveis: <b>destaques comentados</b>, com o que aconteceu, o vetor, o impacto de negócio e o que dá para aprender, e as <b>manchetes mais recentes</b> de segurança, com link para a fonte. Os destaques são escritos por mim; a lista de manchetes se atualiza uma vez por dia. Última atualização: 09/11/2026.</p>
+    <nav class="ancoras" aria-label="Nesta página"><a href="#destaques">Destaques</a><a href="#manchetes">Manchetes</a><a href="#fontes">Fontes</a></nav>
+
+    <h2 class="rm-h2" id="destaques">Destaques</h2>
+    <article class="ficha" id="binance-entrevista-falsa-2026-11">
+      <header>
+        <p class="ficha-meta"><time datetime="2026-11-03">03/11/2026</time><span class="pill a">Relatado pela empresa</span></p>
+        <h3>Binance detalha o roubo de US$ 6,43 bilhões: entrevista de emprego falsa, instalador adulterado e IA interna abusada</h3>
+      </header>
+      <h4>O que aconteceu</h4>
+      <ul><li>Em junho de 2026, um engenheiro de DevOps da área de carteiras buscou uma ferramenta de IA num buscador e baixou um instalador do Homebrew adulterado. A Binance diz que detectou o caso e trocou as credenciais, mas informações sobre a equipe de infraestrutura de carteiras ficaram expostas ao atacante.</li><li>Em setembro, outro engenheiro foi abordado numa plataforma de vagas por um falso diretor de projetos. Houve uma entrevista com uma suposta pessoa de RH, outra com um suposto CEO de uma empresa que não existe, e um &quot;teste técnico&quot;: um repositório com código malicioso que rodou durante a instalação, na máquina de trabalho.</li><li>Em 20 de outubro, o atacante usou esse computador para abusar de uma ferramenta interna de IA e chegar a outros engenheiros. Em 29 de outubro, com um token de implantação de containers que estava na máquina de um deles, subiu um container e disparou um script malicioso.</li><li>O passo final foi usar o acesso a um serviço interno de assinatura de carteiras para iniciar transações fora do fluxo normal de saques.</li></ul>
+      <h4>Vetor</h4>
+      <p>Engenharia social com recrutamento falso e ataque à cadeia de suprimentos (instalador adulterado), seguidos de malware em ambiente de desenvolvimento, movimentação lateral por uma ferramenta interna de IA, uso de um token de deploy encontrado em estação de trabalho e abuso do serviço de assinatura de transações. Em termos de MITRE ATT&amp;CK: T1195 (comprometimento da cadeia de suprimentos), T1566.003 (spearphishing por serviço), T1204 (execução pelo usuário) e T1552 (credenciais não protegidas).</p>
+      <h4>Impacto de negócio</h4>
+      <p>A empresa informa a perda de US$ 6,43 bilhões em ativos, o maior roubo do setor segundo o relato. Reconstruiu o sistema de carteiras e a ferramenta interna de IA em ambiente novo, trocou dispositivos, desativou credenciais e tokens, reforçou controles de risco e trabalha com autoridades e empresas de análise de blockchain para rastrear e congelar ativos.</p>
+      <h4>O que aprender</h4>
+      <ul><li>Trate o &quot;teste técnico&quot; de um recrutador como código não confiável: rode só em VM ou container descartável, nunca no equipamento corporativo.</li><li>Instale ferramentas de desenvolvimento pelo site oficial e confira checksum ou assinatura. Resultado de buscador, patrocinado ou não, não é fonte confiável de instalador.</li><li>Não deixe token de deploy no notebook do desenvolvedor. Prefira credenciais de curta duração, emitidas sob demanda, com o menor privilégio possível.</li><li>Ferramenta interna de IA é superfície de ataque: exija controle de acesso, registro de auditoria e limite do que ela pode alcançar. Veja mais em IA e segurança, no HUB Sec.</li><li>Serviço que assina transações precisa de controles independentes do acesso à máquina: limites, aprovação de mais de uma pessoa e detecção de comportamento anômalo (defesa em profundidade).</li><li>Estações de desenvolvimento merecem o mesmo cuidado que servidores: EDR, segmentação e monitoramento de comportamento.</li></ul>
+      <p class="note">O que está acima é a descrição feita pela própria Binance, relatada pelo The Hacker News; a investigação continua e os detalhes podem mudar. A empresa de análise Chainalysis liga esquemas parecidos de entrevistas falsas a atores norte-coreanos, mas o relato não deixa claro que essa atribuição vale para este caso específico, então não a tratamos como confirmada. Consultei uma única fonte; vale conferir o comunicado original da Binance.</p>
+      <p class="ficha-fontes"><b>Fonte:</b> <a href="https://thehackernews.com/2026/11/binance-reveals-how-fake-job-interviews.html" target="_blank" rel="noopener noreferrer">The Hacker News: Binance Reveals How Fake Job Interviews and AI Tool Abuse Led to $6.43 Billion Theft</a></p>
+    </article>
+
+    <h2 class="rm-h2" id="manchetes">Manchetes recentes</h2>
+    <p class="sec-intro">Do <a href="https://thehackernews.com" target="_blank" rel="noopener noreferrer">The Hacker News</a>, no idioma original. Os marcadores por assunto são classificação minha a partir do título. Clique para ler a matéria completa na fonte.</p>
+    <h3 class="rm-h3 dia">09/11/2026</h3>
+    <ul class="feed">
+      <li><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/bitter-hackers-deploy-new-paprat.html" target="_blank" rel="noopener noreferrer">Bitter Hackers Deploy New PapRAT Backdoor in Cyberespionage Campaign Targeting South Asia</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/weekly-recap-sshole-exploited-apt-root.html" target="_blank" rel="noopener noreferrer">⚡ Weekly Recap: SSHole Exploited, APT Root RCE, Robot Takeovers, 15K Hacked Sites, and More</a></li>
+      <li><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/default-adminadmin-server-password.html" target="_blank" rel="noopener noreferrer">Default 'admin:admin' Server Password Helps Researchers Hack Two Automakers, Unlock and Start Cars</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/web3auth-flaw-exploited-to-steal-keplr.html" target="_blank" rel="noopener noreferrer">Web3Auth Flaw Exploited to Steal Keplr Crypto, Provider Empties Other Wallets for Safety</a></li>
+      <li><a href="https://thehackernews.com/2026/11/lnbits-urges-all-operators-to-shut-down.html" target="_blank" rel="noopener noreferrer">LNbits Urges All Operators to Shut Down Their Bitcoin Lightning Wallet Servers Amid Attacks</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/taiwan-based-hacker-used-bossai-ai.html" target="_blank" rel="noopener noreferrer">Taiwan-Based Hacker Used BOSSAI AI Agents to Steal Taipei Emergency Dispatch Records</a></li>
+      <li><a href="https://thehackernews.com/2026/11/former-openai-engineer-pleads-not.html" target="_blank" rel="noopener noreferrer">Former OpenAI Engineer Pleads Not Guilty to Planting Covert Device in Executive Meeting Room</a></li>
+      <li><a href="https://thehackernews.com/2026/11/us-agencies-warn-refrigeration.html" target="_blank" rel="noopener noreferrer">U.S. Agencies Warn Refrigeration Controller Attacks Could Cause Fires and Inventory Losses</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/cisa-flags-sonicwall-sonicos-mfa-bypass.html" target="_blank" rel="noopener noreferrer">CISA Flags SonicWall SonicOS MFA Bypass Flaw Amid Reports of Possible Exploitation</a></li>
+    </ul>
+    <h3 class="rm-h3 dia">07/11/2026</h3>
+    <ul class="feed">
+      <li><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html" target="_blank" rel="noopener noreferrer">Claude Code's “Don't Ask Again” File Exposes Passwords and Keys in 1,122 Public Copies on GitHub</a></li>
+    </ul>
+    <h3 class="rm-h3 dia">06/11/2026</h3>
+    <ul class="feed">
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html" target="_blank" rel="noopener noreferrer">Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/hackers-exploited-openssh-sshole-flaw.html" target="_blank" rel="noopener noreferrer">Hackers Target OpenSSH SSHole Flaw Within Hours of Disclosure, Gain Root on Honeypot</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/openai-launches-gpt-6-cyber-after-ai.html" target="_blank" rel="noopener noreferrer">OpenAI Launches GPT-6 Cyber After AI Helps Find 81 Firefox Flaws, 948 Linux Exploits</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html" target="_blank" rel="noopener noreferrer">Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/malicious-browser-extensions-could-use.html" target="_blank" rel="noopener noreferrer">Malicious Browser Extensions Could Use Claude Dispatch to Run Code on Users' Computers</a></li>
+      <li><a href="https://thehackernews.com/2026/11/the-flood-is-coming-and-pipes-were.html" target="_blank" rel="noopener noreferrer">The Flood is Coming And The Pipes Were Already Full</a></li>
+      <li><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/chainalysis-breach-exposes-all-users.html" target="_blank" rel="noopener noreferrer">Chainalysis Breach Exposes All Users' Credentials, Forces Shutdown of Key Services</a></li>
+      <li><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/hackers-hide-linux-backdoor-in-control.html" target="_blank" rel="noopener noreferrer">Hackers Hide Linux Backdoor in Control Web Panel Server to Execute Commands Without Logs</a></li>
+      <li><a href="https://thehackernews.com/2026/11/experts-demonstrate-barracuda-email.html" target="_blank" rel="noopener noreferrer">Experts Demonstrate Barracuda Email Security Gateway Chain Enabling Root Access Without Login</a></li>
+    </ul>
+    <h3 class="rm-h3 dia">05/11/2026</h3>
+    <ul class="feed">
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/openssh-issues-emergency-fix-for-flaw.html" target="_blank" rel="noopener noreferrer">OpenSSH Issues Emergency Fix for Flaw Letting Long Passwords Bypass SSH Auth on Alpine Linux</a></li>
+      <li><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/researchers-bypass-chatgpt-lockdown.html" target="_blank" rel="noopener noreferrer">Researchers Bypass ChatGPT Lockdown Mode to Exfiltrate Chats Without User Interaction</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/threatsday-apache-ofbiz-rce-dreamhost.html" target="_blank" rel="noopener noreferrer">ThreatsDay: Apache OFBiz RCE, DreamHost Breach, DeFi Site Hijacks + 17 More Stories</a></li>
+      <li><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/is-your-exposure-management-platform.html" target="_blank" rel="noopener noreferrer">Is Your Exposure Management Platform Leaving You Exposed? Five Tests to Find Out</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/openai-ai-pipeline-generates-948-linux.html" target="_blank" rel="noopener noreferrer">OpenAI AI Pipeline Generates 948 Linux Root Escalation Exploits in 30-Hour Run</a></li>
+      <li><a href="https://thehackernews.com/2026/11/5-active-cyber-threats-that-put-us.html" target="_blank" rel="noopener noreferrer">5 Active Cyber Threats That Put US Enterprises at Risk in October 2026</a></li>
+      <li><a href="https://thehackernews.com/2026/11/apple-to-start-scanning-publicly-shared.html" target="_blank" rel="noopener noreferrer">Apple to Start Scanning Publicly Shared iCloud Photos and Files for Harmful Content</a></li>
+      <li><span class="pill">Malware</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/backdoored-docker-image-for-artex-ai.html" target="_blank" rel="noopener noreferrer">CERT-In Flags AI-Driven Attacks as Backdoored ARTEX Exposes 62 Consoles to Root Access</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/zyxel-gs1900-patch-fails-to-block-zero.html" target="_blank" rel="noopener noreferrer">Zyxel GS1900 Patch Fails to Block Zero-Day Exploit Allowing Root Command Execution</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/hackers-exploit-patched-apple-flaw-to.html" target="_blank" rel="noopener noreferrer">Hackers Exploit Patched Apple Flaw to Deliver Info-Stealing Malware, CISA Says</a></li>
+    </ul>
+    <h3 class="rm-h3 dia">04/11/2026</h3>
+    <ul class="feed">
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/debian-and-ubuntu-apt-flaw-lets-mitm.html" target="_blank" rel="noopener noreferrer">Debian and Ubuntu APT Flaw Lets MitM Attackers Swap Verified Packages and Run Code as Root</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/sonicwall-wont-patch-eol-gms-flaws-that.html" target="_blank" rel="noopener noreferrer">SonicWall Won't Patch EoL GMS Flaws That Could Expose Files, Alter Database Records</a></li>
+      <li><a href="https://thehackernews.com/2026/11/researchers-uncover-prompt-adware.html" target="_blank" rel="noopener noreferrer">Researchers Uncover Prompt Adware Hidden in OpenAI Codex Jailbreak Toolkit</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/apt29-linked-hackers-hijack-web.html" target="_blank" rel="noopener noreferrer">APT29-Linked Hackers Hijack Web Analytics Script to Deliver iOS and Android Exploits</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/critical-rails-flaw-lets-attackers.html" target="_blank" rel="noopener noreferrer">Critical Rails Flaw Lets Attackers Write Server Files via Crafted ImageMagick Uploads</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/xen-hypervisor-flaws-let-one-malicious.html" target="_blank" rel="noopener noreferrer">Xen Hypervisor Flaws Let One Malicious VM Read and Write Any Other VM's Memory</a></li>
+      <li><a href="https://thehackernews.com/2026/11/radio-with-no-radar-why-agent-runtime.html" target="_blank" rel="noopener noreferrer">Radio With No Radar: Why Agent Runtime Security Fails Without the Layers Beneath It</a></li>
+      <li><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/china-aligned-hackers-hijack-sogou.html" target="_blank" rel="noopener noreferrer">China-Aligned Hackers Hijack Sogou Input Method DNS Requests to Deploy DarkVigil Backdoor</a></li>
+      <li><a href="https://thehackernews.com/2026/11/russian-police-arrest-3-suspected.html" target="_blank" rel="noopener noreferrer">Russian Police Arrest 3 Suspected VasyGrek Hackers, Dismantle Criminal Infrastructure</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/google-patches-critical-android-flaw.html" target="_blank" rel="noopener noreferrer">Google Issues Patches for Critical Android Flaw That Could Allow RCE Without User Interaction</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/cisa-confirms-hackers-exploiting.html" target="_blank" rel="noopener noreferrer">CISA Confirms Hackers Exploiting WordPress Core Flaw During Software Upgrades</a></li>
+    </ul>
+    <h3 class="rm-h3 dia">03/11/2026</h3>
+    <ul class="feed">
+      <li><a href="https://thehackernews.com/2026/11/msecure-warns-users-to-change-passwords.html" target="_blank" rel="noopener noreferrer">mSecure Warns Users to Change Passwords, Reset 2FA and Passkeys After Suspicious Activity</a></li>
+      <li><span class="pill">Vazamento e roubo</span><a href="https://thehackernews.com/2026/11/chainstack-reports-production-systems.html" target="_blank" rel="noopener noreferrer">Chainstack Reports Production Systems Breach Exposing Customer Data and Password Hashes</a></li>
+      <li><span class="pill">Vazamento e roubo</span><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/binance-reveals-how-fake-job-interviews.html" target="_blank" rel="noopener noreferrer">Binance Reveals How Fake Job Interviews and AI Tool Abuse Led to $6.43 Billion Theft</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/barracuda-flaws-could-be-chained-to.html" target="_blank" rel="noopener noreferrer">Barracuda Flaws Could Be Chained to Bypass Authorization and Gain Root Access</a></li>
+      <li><span class="pill">IA</span><a href="https://thehackernews.com/2026/11/google-warns-llmjacking-attacks-are.html" target="_blank" rel="noopener noreferrer">Google Warns LLMjacking Attacks Are Costing Some Enterprises Up to $1 Million in Cloud Charges</a></li>
+      <li><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/cpguard-update-channel-hijacked-to.html" target="_blank" rel="noopener noreferrer">cPGuard Update Channel Hijacked to Backdoor Linux Servers and Collect Password Hashes</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/red-hat-patches-98-rated-linux-tcp-rce.html" target="_blank" rel="noopener noreferrer">Red Hat Patches 9.8-Rated Linux TCP RCE Flaw While Ubuntu Releases Fixes for Testing</a></li>
+      <li><a href="https://thehackernews.com/2026/11/the-4-elements-of-exposure.html" target="_blank" rel="noopener noreferrer">The 4 Elements of Exposure Prioritization and How to Operationalize Them</a></li>
+      <li><span class="pill">Vulnerabilidade</span><span class="pill">Malware</span><a href="https://thehackernews.com/2026/11/russia-aligned-gorbag-hackers-exploit.html" target="_blank" rel="noopener noreferrer">Russia-Aligned Gorbag Hackers Exploit WinRAR Flaw to Deploy Data-Stealing Malware</a></li>
+      <li><span class="pill">Vulnerabilidade</span><a href="https://thehackernews.com/2026/11/hackers-exploit-btcpay-server-flaw-to.html" target="_blank" rel="noopener noreferrer">Hackers Exploit BTCPay Server Flaw to Steal Bitcoin and Litecoin From Hot Wallets</a></li>
+    </ul>
+    <p class="note">Manchete não é fato confirmado: no primeiro dia de um incidente, boa parte ainda é alegação ou análise preliminar. Confira a fonte e, quando existir, o comunicado da empresa envolvida.</p>
+
+    <h2 class="rm-h2" id="fontes">Fontes e método</h2>
+    <ul class="train srcs">
+      <li><b>Manchetes:</b> <a href="https://thehackernews.com" target="_blank" rel="noopener noreferrer">The Hacker News</a>, pelo feed RSS público. A página guarda só título, link e data, e leva você à matéria original. Fonte: The Hacker News.</li>
+      <li><b>Destaques:</b> escritos por mim a partir de matérias e comunicados, sempre com link para a fonte e um selo de status (<i>confirmado</i>, <i>relatado pela empresa</i>, <i>alegado</i> ou <i>em apuração</i>).</li>
+      <li><b>Processo:</b> um GitHub Action diário baixa o feed e publica só links https da própria fonte, com o texto limpo de HTML. Uma trava barra a publicação se aparecer link ou texto fora do padrão, ou se o feed vier cortado; nesse caso a página fica com a versão anterior.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

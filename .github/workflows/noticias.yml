@@ -1,0 +1,44 @@
+name: Notícias (The Hacker News)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 9 * * *'   # 1x por dia (06:00 em Brasília)
+  push:
+    paths:
+      - 'tools/build-noticias.mjs'
+      - 'tools/noticias-lib.mjs'
+      - 'tools/data/noticias.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Testes (feed, trava e destaques)
+        run: node tests/validar-noticias.mjs
+      - name: Gerar Notícias
+        # Baixa o RSS público do The Hacker News (sem chave). Se a trava ou a fonte falharem, o job falha e a página anterior continua no ar.
+        run: node tools/build-noticias.mjs
+      - name: Commit se houver mudanças
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add noticias.html tools/data/noticias-historico.json
+          if git diff --staged --quiet; then
+            echo "Sem mudanças nas Notícias."
+          else
+            git commit -m "Atualiza Notícias (The Hacker News)"
+            git pull --rebase origin main
+            git push
+          fi

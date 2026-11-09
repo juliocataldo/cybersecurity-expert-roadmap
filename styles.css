@@ -604,3 +604,19 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .leg i.p1{opacity:.2}.leg i.p2{opacity:.38}.leg i.p3{opacity:.58}.leg i.p4{opacity:.8}.leg i.p5{opacity:1}
 .leg i.nd{background:var(--tx);opacity:.12}
 .leg i.brsw{background:transparent;border:2px solid var(--tx)}
+
+/* ===== Notícias (noticias.html) ===== */
+.ficha{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:var(--r);background:var(--s2);padding:20px 24px 14px;margin:0 0 20px}
+.ficha h3{margin:4px 0 12px;font-size:22px;line-height:1.25}
+.ficha h4{margin:18px 0 6px;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.ficha p{margin:0 0 8px;color:var(--tx2)}
+.ficha ul{margin:0;padding-left:20px;color:var(--tx2)}.ficha li{margin:6px 0}
+.ficha-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0;font:500 13px var(--mono);color:var(--mut)}
+.ficha-fontes{margin-top:14px;font-size:14px}
+.rm-h3.dia{font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:26px 0 6px}
+.feed{list-style:none;margin:0;padding:0}
+.feed li{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.feed a{color:var(--tx);text-decoration:none;flex:1 1 320px}
+.feed a:hover{color:var(--acc);text-decoration:underline}
+.feed .pill{flex:0 0 auto}
+.cards-duo{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:0 0 22px}

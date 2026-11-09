@@ -13,9 +13,9 @@ for (const u of paginas()) {
   if (/unsafe-(inline|eval)/.test(m[1])) erros.push(`${nome}: CSP com unsafe-inline/unsafe-eval`);
   if (m[1] !== ESPERADA) erros.push(`${nome}: CSP diferente da esperada`);
 }
-for (const g of ['tools/build-notas.mjs', 'tools/build-radar.mjs', 'tools/build-radar-brasil.mjs']) {
+for (const g of ['tools/build-notas.mjs', 'tools/build-radar.mjs', 'tools/build-radar-brasil.mjs', 'tools/build-noticias.mjs']) {
   if (!readFileSync(new URL('../' + g, import.meta.url), 'utf8').includes(ESPERADA)) erros.push(`${g}: gerador com CSP diferente (as páginas geradas perderiam a liberação)`);
 }
 if (erros.length) { console.error('FALHOU:\n- ' + [...new Set(erros)].slice(0, 12).join('\n- ')); process.exit(1); }
-console.log(`${n} páginas e 3 geradores com a mesma CSP, sem unsafe-*`);
+console.log(`${n} páginas e 4 geradores com a mesma CSP, sem unsafe-*`);
 console.log('OK');
