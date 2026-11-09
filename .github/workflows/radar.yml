@@ -2,10 +2,11 @@ name: Radar (Vexday)
 
 on:
   workflow_dispatch: {}
+  # Cota do plano gratuito da Vexday: 50 requisições por DIA e 10 por minuto, somando todas as chaves da conta.
+  # Cada execução usa no máximo 14 (tools/vexday-lib.mjs); 2 execuções por dia = no máximo 28.
+  # Por isso NÃO há gatilho por push: cada push no gerador gastaria cota. Para atualizar à mão: Actions > Radar (Vexday) > Run workflow.
   schedule:
-    - cron: '0 */6 * * *'
-  push:
-    paths: ['tools/build-radar.mjs']
+    - cron: '30 0,12 * * *'
 
 permissions:
   contents: write
@@ -13,6 +14,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

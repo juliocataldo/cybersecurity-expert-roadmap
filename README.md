@@ -24,6 +24,8 @@ O site tem estas partes:
 
 **Manutenção do CSS:** os links apontam para `styles.css?v=<hash>` para o navegador não usar um CSS antigo em cache (o servidor guarda por horas). Depois de mexer em `styles.css`, rode `node tools/bump-css.mjs`; `node tests/validar-css-versao.mjs` avisa se esquecer. Os geradores (`build-radar*.mjs`, `build-notas.mjs`) calculam a versão sozinhos.
 
+**Cota da Vexday (segunda tela do Radar):** o plano gratuito dá **50 requisições por dia e 10 por minuto, somando todas as chaves da conta**. O cliente (`tools/vexday-lib.mjs`) usa no máximo 14 por execução, 1 chamada a cada 7 s e para de chamar ao primeiro sinal de limite; o Action `radar.yml` roda 2x por dia (no máximo 28 de 50) e **não tem gatilho por push**. Se a API não devolver dados suficientes, a página anterior é mantida. Para atualizar à mão: Actions > Radar (Vexday) > Run workflow (gasta até 14 da cota do dia). `node tests/validar-vexday.mjs` falha se o consumo deixar de caber na cota.
+
 **CSP:** todas as páginas usam a mesma política (`script-src 'self'` mais o host do Cloudflare Web Analytics, e `connect-src` só para o destino dele), sem `unsafe-inline`. `node tests/validar-csp.mjs` falha se alguma página ou gerador divergir. O script inline que o Cloudflare injeta para detecção de bots (JavaScript Detections) continua bloqueado de propósito: ele muda a cada requisição e só liberaria com `unsafe-inline`.
 
 ## Como usar a trilha

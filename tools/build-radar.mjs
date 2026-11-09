@@ -6,6 +6,7 @@
 import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
+import { criarCliente, LIMITE_REQ_PADRAO, MAX_DETALHES } from './vexday-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const KEY = process.env.CHAVE_VEXDAY || process.env.VEXDAY_API_KEY || '';
@@ -15,27 +16,8 @@ const asDate = v => { if (!v) return ''; const d = new Date(v); return isNaN(+d)
 const pick = (o, ks) => { for (const k of ks) { const v = o && o[k]; if (v != null && v !== '') return v; } return ''; };
 const list = j => Array.isArray(j) ? j : ((j && (j.data || j.results || j.items || j.victims || j.incidents || j.kev || j.cves || j.list)) || []);
 
-const dormir = ms => new Promise(r => setTimeout(r, ms));
-let orcamentoEspera = 240000; // no máximo 4 min esperando por limite de requisições em todo o run
-
-async function api(path, tentativas = 3) {
-  if (!KEY) return null;
-  for (let t = 1; t <= tentativas; t++) {
-    try {
-      const res = await fetch(BASE + path, { headers: { Authorization: 'Bearer ' + KEY, Accept: 'application/json' } });
-      if (res.status === 429 || res.status >= 500) {
-        const ra = Number(res.headers.get('retry-after'));
-        const espera = Math.min(90000, (Number.isFinite(ra) && ra > 0 ? ra * 1000 : t * 20000));
-        console.error('Vexday', path, '->', res.status, t < tentativas && orcamentoEspera >= espera ? `(tentativa ${t}; esperando ${espera / 1000}s)` : '(desistindo)');
-        if (t < tentativas && orcamentoEspera >= espera) { orcamentoEspera -= espera; await dormir(espera); continue; }
-        return null;
-      }
-      if (!res.ok) { console.error('Vexday', path, '->', res.status); return null; }
-      return await res.json();
-    } catch (e) { console.error('Vexday erro', path, e.message); return null; }
-  }
-  return null;
-}
+const cliente = criarCliente({ key: KEY, base: BASE, limite: Number(process.env.VEXDAY_MAX_REQ) || LIMITE_REQ_PADRAO });
+const api = cliente.api; // respeita a cota da conta (50/dia e 10/min): ver tools/vexday-lib.mjs
 
 const BIG = ['microsoft', 'cisco', 'fortinet', 'fortiguard', 'vmware', 'ivanti', 'citrix', 'palo alto', 'paloalto', 'apache',
   'oracle', 'google', 'adobe', 'atlassian', 'sonicwall', 'zoho', 'manageengine', 'progress', 'moveit', 'f5', 'juniper',
@@ -64,26 +46,25 @@ function kevCard(c) {
   return `      <a class="card" href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(id)}" target="_blank" rel="noopener noreferrer"><span class="k">KEV${vp ? ' · ' + esc(vp) : ''}</span><h3>${id}${sev ? ` <span class="pill sev-${sevCls}">${sev}</span>` : ''}</h3><p>Em exploração ativa.${score ? ` CVSS ${score}.` : ''}</p></a>`;
 }
 
-/* ---- coleta ---- */
+/* ---- coleta: 1 (vítimas) + 1 (lista KEV) + até MAX_DETALHES (10) detalhes. A cota é da conta: 50/dia e 10/min. ---- */
 let victims = list(await api('/api/v1/victims?country=BR&page_size=30')).slice(0, 24).map(victimCard);
 let kevList = list(await api('/api/v1/cve?in_kev=true&page_size=24'));
-if (!kevList.length) kevList = list(await api('/api/v1/kev?page_size=24')); // fallback
+if (!kevList.length) kevList = list(await api('/api/v1/kev?page_size=24')); // fallback: só se a 1ª lista vier vazia
 const kevIds = kevList.map(c => pick(c, ['cve_id', 'cve', 'id', 'cveID'])).filter(Boolean);
-// enriquece com /cve/{id} (traz affected[].vendor/product), sequencial p/ respeitar rate limit
+// enriquece com /cve/{id} (traz affected[].vendor/product); sequencial, e para sozinho se a cota acabar
 const details = [];
-for (const id of kevIds.slice(0, 16)) {
-  const d = await api('/api/v1/cve/' + encodeURIComponent(id), 2);
+for (const id of kevIds.slice(0, MAX_DETALHES)) {
+  const d = await api('/api/v1/cve/' + encodeURIComponent(id));
   if (d) details.push(d.cve || d.data || d.item || d);
-  await dormir(400); // espaça as chamadas para não estourar o limite
 }
-let src = details.length ? details : kevList;
-let cveBig = src.filter(c => BIG.some(b => vendorHay(c).includes(b)));
-if (cveBig.length < 5) cveBig = src; // sem vendor reconhecido? mostra o topo por risco
+{ const e = cliente.estado(); console.log(`Vexday: ${e.usadas}/${e.limite} requisições neste run${e.bloqueado ? ' (limite atingido)' : ''}`); }
+let cveBig = details.filter(c => BIG.some(bg => vendorHay(c).includes(bg)));
+if (cveBig.length < 5) cveBig = details; // sem vendor reconhecido? mostra o topo por risco
 const kev = cveBig.slice(0, 14).map(kevCard);
 
 // Com chave, mas dados incompletos (ex.: HTTP 429): mantém a página anterior em vez de publicar uma versão pela metade.
-if (KEY && (!victims.length || kev.length < 5)) {
-  console.warn(`::warning title=Radar (Vexday)::A API não devolveu dados suficientes (vítimas: ${victims.length}, KEV: ${kev.length}), provavelmente limite de requisições (HTTP 429). A página anterior foi mantida.`);
+if (KEY && (!victims.length || details.length < 5)) {
+  console.warn(`::warning title=Radar (Vexday)::A API não devolveu dados suficientes (vítimas: ${victims.length}, CVEs detalhados: ${details.length}), provavelmente limite de requisições (HTTP 429; cota da conta: 50/dia e 10/min). A página anterior foi mantida.`);
   process.exit(0);
 }
 const temDados = KEY && victims.length && kev.length;
