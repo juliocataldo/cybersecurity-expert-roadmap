@@ -1,7 +1,8 @@
 // Gera a segunda tela do Radar (radar-casos.html: casos citados e KEV) a partir da API Vexday (threat intel).
 // Foco v1: Brasil (vítimas de ransomware) + grandes fornecedores (KEV).
 // Uso no GitHub Action: CHAVE_VEXDAY=<secret> node tools/build-radar.mjs
-// Sem chave ou com erro de rede, gera um placeholder (nunca quebra o build).
+// Sem chave: gera um aviso de "sendo configurado". Com chave, mas API sem dados (limite de requisições, HTTP 429, ou erro):
+// NÃO escreve nada e mantém a página anterior (o aviso só vale para quem ainda não configurou a chave).
 import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -14,13 +15,26 @@ const asDate = v => { if (!v) return ''; const d = new Date(v); return isNaN(+d)
 const pick = (o, ks) => { for (const k of ks) { const v = o && o[k]; if (v != null && v !== '') return v; } return ''; };
 const list = j => Array.isArray(j) ? j : ((j && (j.data || j.results || j.items || j.victims || j.incidents || j.kev || j.cves || j.list)) || []);
 
-async function api(path) {
+const dormir = ms => new Promise(r => setTimeout(r, ms));
+let orcamentoEspera = 240000; // no máximo 4 min esperando por limite de requisições em todo o run
+
+async function api(path, tentativas = 3) {
   if (!KEY) return null;
-  try {
-    const res = await fetch(BASE + path, { headers: { Authorization: 'Bearer ' + KEY, Accept: 'application/json' } });
-    if (!res.ok) { console.error('Vexday', path, '->', res.status); return null; }
-    return await res.json();
-  } catch (e) { console.error('Vexday erro', path, e.message); return null; }
+  for (let t = 1; t <= tentativas; t++) {
+    try {
+      const res = await fetch(BASE + path, { headers: { Authorization: 'Bearer ' + KEY, Accept: 'application/json' } });
+      if (res.status === 429 || res.status >= 500) {
+        const ra = Number(res.headers.get('retry-after'));
+        const espera = Math.min(90000, (Number.isFinite(ra) && ra > 0 ? ra * 1000 : t * 20000));
+        console.error('Vexday', path, '->', res.status, t < tentativas && orcamentoEspera >= espera ? `(tentativa ${t}; esperando ${espera / 1000}s)` : '(desistindo)');
+        if (t < tentativas && orcamentoEspera >= espera) { orcamentoEspera -= espera; await dormir(espera); continue; }
+        return null;
+      }
+      if (!res.ok) { console.error('Vexday', path, '->', res.status); return null; }
+      return await res.json();
+    } catch (e) { console.error('Vexday erro', path, e.message); return null; }
+  }
+  return null;
 }
 
 const BIG = ['microsoft', 'cisco', 'fortinet', 'fortiguard', 'vmware', 'ivanti', 'citrix', 'palo alto', 'paloalto', 'apache',
@@ -58,15 +72,21 @@ const kevIds = kevList.map(c => pick(c, ['cve_id', 'cve', 'id', 'cveID'])).filte
 // enriquece com /cve/{id} (traz affected[].vendor/product), sequencial p/ respeitar rate limit
 const details = [];
 for (const id of kevIds.slice(0, 16)) {
-  const d = await api('/api/v1/cve/' + encodeURIComponent(id));
+  const d = await api('/api/v1/cve/' + encodeURIComponent(id), 2);
   if (d) details.push(d.cve || d.data || d.item || d);
+  await dormir(400); // espaça as chamadas para não estourar o limite
 }
 let src = details.length ? details : kevList;
 let cveBig = src.filter(c => BIG.some(b => vendorHay(c).includes(b)));
 if (cveBig.length < 5) cveBig = src; // sem vendor reconhecido? mostra o topo por risco
 const kev = cveBig.slice(0, 14).map(kevCard);
 
-const temDados = KEY && (victims.length || kev.length);
+// Com chave, mas dados incompletos (ex.: HTTP 429): mantém a página anterior em vez de publicar uma versão pela metade.
+if (KEY && (!victims.length || kev.length < 5)) {
+  console.warn(`::warning title=Radar (Vexday)::A API não devolveu dados suficientes (vítimas: ${victims.length}, KEV: ${kev.length}), provavelmente limite de requisições (HTTP 429). A página anterior foi mantida.`);
+  process.exit(0);
+}
+const temDados = KEY && victims.length && kev.length;
 const hoje = new Date().toISOString().slice(0, 10);
 
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
