@@ -540,7 +540,7 @@ table.plat td:first-child{font-weight:600;color:var(--tx);white-space:nowrap}
 .nav-menu a[aria-current=page]{color:var(--tx);background:var(--s2)}
 @media(max-width:640px){.nav-menu{right:auto;left:0}}
 
-/* ===== Soluções de Sec ===== */
+/* ===== HUB Sec ===== */
 .k.sub-36,.k.sub-28{display:block}
 .k.sub-36{margin-top:36px}
 .k.sub-28{margin-top:28px}
