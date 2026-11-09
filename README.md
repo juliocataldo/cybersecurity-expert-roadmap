@@ -127,7 +127,7 @@ A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às págin
                https://api.github.com/repos/juliocataldo/cybersecurity-expert-roadmap/dispatches \
                -d '{"event_type":"notas-update"}'
    ```
-6. **Repo de notas privado:** no `notas.yml`, descomente a linha `token: ${{ secrets.NOTAS_TOKEN }}` e crie o secret `NOTAS_TOKEN` (PAT com leitura do repo de notas).
+6. **Repo de notas privado (recomendado):** o `notas.yml` já usa o secret `NOTAS_TOKEN`. Crie um token **fine-grained** só para o repo de notas, com *Contents: Read-only* e validade definida (renove antes de vencer), e guarde em Settings > Secrets and variables > Actions do site como `NOTAS_TOKEN`. Sem o secret, o Action usa o token padrão (basta o repo ser público).
 
 > Só as notas `publish: true` saem. O resto do vault (privado) nunca é publicado — o `vault/` fica no `.gitignore`.
 
