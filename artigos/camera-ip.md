@@ -5,6 +5,7 @@ date: 2026-10-20
 eyebrow: Artigo · estudo de caso
 categoria: Estudo de caso · IoT
 resumo: Backdoor, command injection e credenciais em texto puro num dispositivo de prateleira — e as lições de segurança por design que ficam do caso.
+listar: false
 pagina: Câmera IP: porta de entrada
 descricao: Estudo de caso: como uma câmera IP barata vira porta de entrada. Vulnerabilidades de IoT (backdoor, command injection, texto puro) e as lições de segurança por design.
 meta: Leitura de ~6 min · tema: segurança em IoT, por design. Inspirado no estudo de [Zoltan Balazs (2015)](https://jumpespjump.blogspot.com/2015/09/how-i-hacked-my-ip-camera-and-found.html); texto escrito do zero, com foco nas lições de defesa.

@@ -4,8 +4,8 @@
 //   Só publica notas com frontmatter "publish: true".
 //   Saída: teia-data.js, notas/<slug>.html (no estilo do site), e a lista para teia.html.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
-import { join, basename } from 'node:path';
-import { esc, slug, walk, parseFront, mdToHtml } from './markdown-lib.mjs';
+import { join, basename, relative, sep } from 'node:path';
+import { esc, slug, walk, parseFront, mdToHtml, resumoTexto } from './markdown-lib.mjs';
 import { acharSegredos } from './segredos-lib.mjs';
 import { createHash } from 'node:crypto';
 
@@ -79,6 +79,7 @@ ${NAV}
 const VDIR = join(ROOT, 'vault');
 const VAULT = (existsSync(VDIR) && walk(VDIR).length) ? VDIR : join(ROOT, 'tools', 'sample-vault');
 const files = walk(VAULT).sort((a, b) => a.localeCompare(b, 'en')); // ordem estável (Windows e Linux listam em ordens diferentes)
+const pastaDe = f => { const partes = relative(VAULT, f).split(sep); return partes.length > 1 ? partes[0].normalize('NFC').replace(/^[^\p{L}\p{N}]+/u, '').trim() || 'Geral' : 'Geral'; }; // tira emoji/símbolos do começo do nome
 let notes = [];
 let semPublicar = 0;
 const retidas = [];
@@ -138,7 +139,11 @@ for (const e of edges) { deg.set(e.s, deg.get(e.s) + 1); deg.set(e.t, deg.get(e.
 
 const data = {
   fonte: VAULT === VDIR ? 'vault' : 'exemplo', // 'exemplo' = notas de tools/sample-vault (o vault real está vazio)
-  nodes: notes.map(n => ({ id: n.slug, title: n.title, url: `notas/${n.slug}.html`, tags: n.tags, deg: deg.get(n.slug) })),
+  nodes: notes.map(n => ({
+    id: n.slug, title: n.title, url: `notas/${n.slug}.html`, tags: n.tags, deg: deg.get(n.slug),
+    pasta: pastaDe(n.file),      // pasta de 1º nível do vault (ex.: "Offsec"); notas na raiz = "Geral"
+    resumo: resumoTexto(n.body), // texto puro, para o cartão da nota em artigos.html
+  })),
   links: edges.map(e => ({ s: e.s, t: e.t }))
 };
 writeFileSync(join(ROOT, 'teia-data.js'), `/* gerado por tools/build-notas.mjs */\nwindow.TEIA=${JSON.stringify(data)};\n`);

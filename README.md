@@ -153,6 +153,7 @@ meta: Leitura de ~5 min · tema: ... Pode ter [links](https://exemplo.com).
 credito: Opcional: crédito à fonte, no rodapé do artigo.
 pagina: Opcional: título curto da aba
 descricao: Opcional: descrição para buscadores (20 a 300 caracteres).
+listar: false   # opcional: o artigo fica no ar, mas não aparece na lista de artigos.html
 ---
 
 Parágrafo de abertura.
@@ -165,7 +166,7 @@ Parágrafo de abertura.
 ```
 `# ` é uma seção (h2) e `## ` uma subseção (h3); o título (h1) vem do frontmatter. Links: `https://` abrem em nova aba; links internos só no formato `pagina.html#ancora`. HTML cru no texto vira texto. `publish: false` (ou apagar o arquivo) tira o artigo do ar. Depois de salvar, rode `node tools/build-artigos.mjs` e `node tests/validar-artigos.mjs`, ou só faça o commit: o Action gera as páginas.
 
-**Notas na página Artigos:** vêm do `teia-data.js`. Enquanto o vault `notas-cyber` estiver vazio, a Teia e a lista usam as notas de exemplo (`tools/sample-vault/`) e mostram o aviso "Notas de exemplo"; ao publicar a primeira nota real, as de exemplo saem e o aviso some.
+**Notas na página Artigos:** vêm do `teia-data.js` e aparecem como **cartões com busca e filtros** (o mesmo filtro da página Plataformas, via `guia.js`): campo de busca sem acento e sem diferenciar maiúsculas, botões por **pasta** (a pasta de 1º nível do vault; notas na raiz ficam em "Geral"), botões por **assunto** (as tags mais usadas, a partir de 2 notas) e contador. Cada cartão mostra pasta, título, um resumo em texto puro (primeiras linhas da nota, sem metadados como `Type:`/`Skills:`), tags e o número de conexões. As tags podem estar no formato do Obsidian (lista em linhas), `[a, b]` ou separadas por vírgula. Sem JavaScript, os controles ficam ocultos e todas as notas aparecem. A seção "Estudos de caso e textos" só aparece quando há algum artigo com `listar` diferente de `false`. Enquanto o vault `notas-cyber` estiver vazio, a Teia e a lista usam as notas de exemplo (`tools/sample-vault/`) e mostram o aviso "Notas de exemplo"; ao publicar a primeira nota real, as de exemplo saem e o aviso some.
 
 ### Publicação
 GitHub Pages servindo a branch `main`, pasta raiz. O arquivo `.nojekyll` desliga o processamento do Jekyll.

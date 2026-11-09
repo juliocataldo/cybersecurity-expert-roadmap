@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, readdirSync, unlinkSync, existsSync } from
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { esc, mdToHtml, mdInline } from './markdown-lib.mjs';
-import { lerArtigos, validarArtigo, lerTeia, notasParaLista } from './artigos-lib.mjs';
+import { lerArtigos, validarArtigo, lerTeia, notasParaLista, renderNotas } from './artigos-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
@@ -90,29 +90,39 @@ for (const f of readdirSync(ROOT).filter(n => /^artigo-.+\.html$/.test(n) && !at
 for (const a of artigos) writeFileSync(join(ROOT, `artigo-${a.slug}.html`), paginaArtigo(a));
 
 /* ---------- artigos.html: estudos de caso + notas da Teia ---------- */
-const cards = artigos.map(a => `      <a class="card" href="artigo-${esc(a.slug)}.html"><span class="k">${esc(a.categoria)}</span><h3>${esc(a.titulo)}</h3><p>${esc(a.resumo)}</p><span class="go">Ler →</span></a>`).join('\n');
+// artigo com "listar: false" continua publicado (a página existe), mas não entra na lista; sem nenhum listado, a seção some
+const listados = artigos.filter(a => a.listar);
+const cards = listados.map(a => `      <a class="card" href="artigo-${esc(a.slug)}.html"><span class="k">${esc(a.categoria)}</span><h3>${esc(a.titulo)}</h3><p>${esc(a.resumo)}</p><span class="go">Ler →</span></a>`).join('\n');
 const aviso = teia.fonte === 'exemplo'
   ? `\n    <p class="wip"><span class="wip-dot"></span><b>Notas de exemplo</b> — ainda não publiquei as minhas; estas servem para mostrar como a seção funciona.</p>` : '';
-const chips = notas.map(n => `<a class="teia-chip" href="${esc(n.url)}">${esc(n.titulo)}</a>`).join('');
 
-const PAGINA = cabeca('Artigos', 'Estudos de caso de segurança escritos em português, e as notas do meu segundo cérebro, ligadas num grafo (a Teia).') + `<main class="wrap">
+const secaoArtigos = listados.length ? `
+    <h2 class="rm-h2" id="estudos">Estudos de caso e textos</h2>
+    <div class="cards">
+${cards}
+    </div>
+` : '';
+const intro = listados.length
+  ? 'Estudos de caso e textos de segurança, escritos em português e do zero. A ideia é aprender com exemplos reais — o que deu errado e, principalmente, como evitar — sem virar manual de ataque. Mais abaixo, as notas curtas do meu segundo cérebro.'
+  : 'Notas curtas de segurança do meu segundo cérebro (Obsidian), ligadas entre si num grafo. Use a busca e os filtros para achar um tema, ou abra a Teia para ver como tudo se conecta.';
+const ancoras = listados.length ? '\n    <nav class="ancoras" aria-label="Nesta página"><a href="#estudos">Estudos de caso</a><a href="#notas">Notas e a Teia</a></nav>\n' : '';
+const descricao = listados.length
+  ? 'Estudos de caso de segurança escritos em português, e as notas do meu segundo cérebro, ligadas num grafo (a Teia).'
+  : 'Notas de segurança do meu segundo cérebro, com busca e filtros por pasta e assunto, ligadas num grafo (a Teia).';
+
+const PAGINA = cabeca('Artigos', descricao) + `<main class="wrap">
   <section class="sec-g">
     <p class="eyebrow">Para ler</p>
     <h1>Artigos</h1>
-    <p class="sec-intro">Estudos de caso e textos de segurança, escritos em português e do zero. A ideia é aprender com exemplos reais — o que deu errado e, principalmente, como evitar — sem virar manual de ataque. Mais abaixo, as notas curtas do meu segundo cérebro.</p>
-    <nav class="ancoras" aria-label="Nesta página"><a href="#estudos">Estudos de caso</a><a href="#notas">Notas e a Teia</a></nav>
-
-    <h2 class="rm-h2" id="estudos">Estudos de caso e textos</h2>
-${cards ? `    <div class="cards">\n${cards}\n    </div>` : '    <p class="mut">Ainda não há artigos publicados.</p>'}
-
+    <p class="sec-intro">${intro}</p>${ancoras}${secaoArtigos}
     <h2 class="rm-h2" id="notas">Notas e a Teia</h2>
     <p class="sec-intro">Meu segundo cérebro: notas curtas sobre conceitos de segurança, ligadas entre si como no Obsidian. Elas vêm do meu vault e só entram as que marquei como públicas.</p>${aviso}
     <div class="cards cards-one">
       <a class="card" href="teia.html"><span class="k">Grafo interativo</span><h3>Teia de conhecimento</h3><p>${notas.length} ${notas.length === 1 ? 'nota' : 'notas'} e ${teia.links.length} ${teia.links.length === 1 ? 'conexão' : 'conexões'}. Veja como os temas se ligam e clique num ponto para abrir a nota.</p><span class="go">Abrir a Teia →</span></a>
     </div>
-${chips ? `    <p class="path-k">Todas as notas</p>\n    <div class="teia-list">${chips}</div>` : '    <p class="mut">Ainda não há notas publicadas.</p>'}
+    ${notas.length ? renderNotas(notas) : '<p class="mut">Ainda não há notas publicadas.</p>'}
   </section>
 </main>
-` + rodape;
+` + rodape.replace('</body>', '<script src="guia.js"></script>\n</body>'); // guia.js traz o filtro de busca ([data-tf])
 writeFileSync(join(ROOT, 'artigos.html'), PAGINA);
-console.log(`artigos.html gerado | ${artigos.length} artigo(s) | ${notas.length} nota(s) (${teia.fonte})`);
+console.log(`artigos.html gerado | ${listados.length} artigo(s) listado(s) de ${artigos.length} publicado(s) | ${notas.length} nota(s) (${teia.fonte})`);

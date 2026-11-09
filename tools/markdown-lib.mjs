@@ -25,12 +25,23 @@ export function parseFront(src) {
   const meta = {}; let body = src;
   if (m) {
     body = src.slice(m[0].length);
-    for (const line of m[1].split('\n')) {
-      const mm = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/); if (!mm) continue;
+    const linhas = m[1].split('\n');
+    const aspas = s => s.trim().replace(/^["']|["']$/g, '');
+    for (let idx = 0; idx < linhas.length; idx++) {
+      const mm = linhas[idx].match(/^([A-Za-z0-9_-]+):\s*(.*)$/); if (!mm) continue;
       let [, k, v] = mm; v = v.trim();
-      if (/^\[.*\]$/.test(v)) v = v.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
-      else v = v.replace(/^["']|["']$/g, '');
-      meta[k.toLowerCase()] = v;
+      k = k.toLowerCase();
+      if (v === '') { // lista em linhas (o padrão do Obsidian):  tags:\n  - api\n  - api-security
+        const itens = [];
+        while (idx + 1 < linhas.length && /^\s*-\s+\S/.test(linhas[idx + 1])) itens.push(aspas(linhas[++idx].replace(/^\s*-\s+/, '')));
+        if (itens.length) { meta[k] = itens.filter(Boolean); }
+        else meta[k] = '';
+      } else if (/^\[.*\]$/.test(v)) meta[k] = v.slice(1, -1).split(',').map(aspas).filter(Boolean);
+      else meta[k] = aspas(v);
+      if (k === 'tags') { // aceita "#web", "web, xss" e listas; devolve sempre um array de nomes sem "#"
+        const lista = Array.isArray(meta[k]) ? meta[k] : (meta[k] ? String(meta[k]).split(',') : []);
+        meta[k] = lista.map(t => String(t).trim().replace(/^#/, '')).filter(Boolean);
+      }
     }
   }
   return { meta, body };
@@ -90,3 +101,31 @@ export function mdToHtml(md, noteTitle, resolve) {
 
 /** Uma linha de Markdown em HTML inline (sem o <p>): para campos curtos como a linha de crédito de um artigo. */
 export const mdInline = texto => mdToHtml(String(texto), '', () => null).replace(/^<p>/, '').replace(/<\/p>$/, '');
+
+/** Resumo em texto puro (para o cartão da nota): sem títulos, código, imagens, links nem marcação. Corta em palavra inteira. */
+export function resumoTexto(md, max = 170) {
+  const linhas = String(md).replace(/\u0000/g, '').replace(/\r\n?/g, '\n')
+    .replace(/```[\s\S]*?```/g, '\n')                        // blocos de código
+    .replace(/!\[\[[^\]]*\]\]|!\[[^\]]*\]\([^)]*\)/g, ' ')  // imagens e embeds
+    .split('\n');
+  const partes = [];
+  let total = 0;
+  for (let l of linhas) {
+    l = l.trim();
+    if (!l || /^#{1,6}\s/.test(l) || /^\|/.test(l) || /^---+$/.test(l) || /^<!--/.test(l)) continue; // títulos, tabelas, linhas, comentários
+    // metadado no começo da nota (ex.: "Type: Cyber", "Skills: Network"): não é o texto da nota
+    if (!partes.length && /^(type|tipo|skills?|tags?|status|source|fonte|created|criado|date|data|author|autor|related|relacionad[oa]s?|links?|aliases?|category|categoria)(\/\w+)?\s*::?\s*/i.test(l)
+        && /^\S+?\s*::?/.test(l)) continue; // exige o ":" (aceita "Type:Hacking" e "Type/Skills: Net"); texto comum como "Types of..." não é pulado
+    l = l.replace(/^>\s*(\[![^\]]*\]\s*)?/, '').replace(/^([-*]|\d+\.)\s+/, '')                         // citação, callout, marcador de lista
+      .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2').replace(/\[\[([^\]]+)\]\]/g, '$1')                 // [[wikilinks]]
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')                                                          // [links](url)
+      .replace(/<[^>]*>/g, ' ').replace(/==+/g, '').replace(/[*_`~]+/g, '').replace(/\s+/g, ' ').trim(); // == é o destaque do Obsidian
+    if (!l) continue;
+    partes.push(l); total += l.length + 1;
+    if (total >= max) break;
+  }
+  const t = partes.join(' ');
+  if (t.length <= max) return t;
+  const corte = t.slice(0, max); const sp = corte.lastIndexOf(' ');
+  return (sp > max * 0.6 ? corte.slice(0, sp) : corte).replace(/[\s,;:.-]+$/, '') + '…';
+}

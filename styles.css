@@ -619,3 +619,14 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .feed a{color:var(--tx);text-decoration:none;flex:1 1 320px}
 .feed a:hover{color:var(--acc);text-decoration:underline}
 .feed .pill{flex:0 0 auto}
+
+/* ===== Notas (artigos.html): cartões com busca e filtros ===== */
+.cards.tools.notas{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card.tool.nota{gap:8px;padding:16px 18px;border-top:2px solid var(--line2);transition:border-color .15s,transform .15s}
+.card.tool.nota:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card.tool.nota h3{font-size:17px;line-height:1.25}
+.card.tool.nota p{margin:0;font-size:14px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card.tool.nota .pills{margin-top:auto;padding-top:6px}
+.nota-conn{font:500 11px var(--mono);color:var(--mut)}
+.chip-n{font:600 11px var(--mono);opacity:.7;margin-left:2px}
+@media(prefers-reduced-motion:reduce){.card.tool.nota{transition:none}.card.tool.nota:hover{transform:none}}

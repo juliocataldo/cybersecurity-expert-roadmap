@@ -54,14 +54,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Testes (artigos, renderizador, páginas e detector de segredos)
-        run: |
-          node tests/validar-artigos.mjs
-          node tests/validar-segredos.mjs
       - name: Gerar Teia
         run: node tools/build-notas.mjs
       - name: Gerar Artigos (e a lista de notas)
         run: node tools/build-artigos.mjs
+      - name: Testes das páginas geradas (se falhar, nada é publicado)
+        run: |
+          node tests/validar-artigos.mjs
+          node tests/validar-segredos.mjs
       - name: Commit se houver mudanças
         run: |
           git config user.name  "github-actions[bot]"
