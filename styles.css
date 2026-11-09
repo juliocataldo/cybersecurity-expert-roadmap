@@ -498,7 +498,7 @@ a.path.path-feat:hover{border-color:#e2904c}
 /* ===== Toque "cyber" leve (preto/laranja, sem brilho exagerado) ===== */
 .hero-tech{position:relative}
 .hero-tech>*{position:relative;z-index:1}
-.hero-tech::before{content:"";position:absolute;inset:-60px -40px -10px;z-index:0;pointer-events:none;
+.hero-tech::before{content:"";position:absolute;inset:-60px 0 -10px;z-index:0;pointer-events:none;
   background:
     radial-gradient(560px 300px at 86% 4%, #cf6a240d, transparent 70%),
     linear-gradient(#ffffff05 1px, transparent 1px) 0 0/100% 38px,
@@ -631,3 +631,23 @@ use.pais:hover{stroke:var(--tx);stroke-width:1}
 .chip-n{font:600 11px var(--mono);opacity:.7;margin-left:2px}
 @media(prefers-reduced-motion:reduce){.card.tool.nota{transition:none}.card.tool.nota:hover{transform:none}}
 .wip[hidden]{display:none}
+
+/* Menu Recursos com grupos rotulados */
+.nav-sub{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding:8px 12px 3px}
+.nav-sub~.nav-sub{border-top:1px solid var(--line);margin-top:4px;padding-top:10px}
+
+/* Home: caminhos por intenção */
+.journeys{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.journeys{grid-template-columns:1fr}}
+.journey{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--s1);display:flex;flex-direction:column;gap:10px}
+.journey .j-step{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.journey h3{margin:0;font-size:20px}
+.journey>p{margin:0;color:var(--mut);font-size:14px}
+.journey ol{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:j}
+.journey li a{display:flex;gap:10px;align-items:baseline;padding:9px 11px;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--tx);background:var(--bg);transition:border-color .15s}
+.journey li a:hover{border-color:var(--acc)}
+.journey li a::before{counter-increment:j;content:counter(j,decimal-leading-zero);font:600 11px var(--mono);color:var(--acc)}
+.journey li b{font-size:15px;font-weight:600}
+.journey li span{display:block;font-size:13px;color:var(--mut)}
+a.path.path-map{text-decoration:none;color:var(--tx);border-color:var(--line2)}
+a.path.path-map:hover{border-color:var(--acc)}

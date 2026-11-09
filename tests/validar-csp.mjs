@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { paginas } from '../tools/bump-css.mjs';
 
-const ESPERADA = "default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'";
+const ESPERADA = "default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'";
 const erros = []; let n = 0;
 for (const u of paginas()) {
   const nome = u.pathname.split('/').slice(-2).join('/');

@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node
 import { join, basename, relative, sep } from 'node:path';
 import { esc, slug, walk, parseFront, mdToHtml, resumoTexto } from './markdown-lib.mjs';
 import { acharSegredos } from './segredos-lib.mjs';
+import { motivoRascunho } from './rascunho-lib.mjs';
 import { versionar } from './bump-css.mjs';
 import { createHash } from 'node:crypto';
 
@@ -17,20 +18,20 @@ const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'u
 const NAV = `  <nav aria-label="Seções">
     <a href="../">Home</a>
     <a href="../guia.html">Guia</a>
-    <a href="../roadmap.html">Roadmaps</a>
     <a href="../trilhas.html">Trilhas</a>
     <a href="../artigos.html" aria-current="page">Artigos</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
         <a href="../canivete.html">Canivete suíço</a>
         <a href="../solucoes.html">HUB Sec</a>
-        <a href="../checklist.html">Checklist</a>
         <a href="../plataformas.html">Plataformas</a>
-
-        <a href="../eventos.html">Eventos</a>
+        <a href="../checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
         <a href="../radar.html">Radar</a>
         <a href="../noticias.html">Notícias</a>
+        <a href="../eventos.html">Eventos</a>
       </div>
     </details>
     <a href="../sugestoes.html">Sugestões</a>
@@ -46,7 +47,7 @@ function notePage(note, backlinks) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="${esc(note.title)} — nota do Cyber Expert Guide.">
 <title>${esc(note.title)} · Teia</title>
@@ -84,6 +85,7 @@ const pastaDe = f => { const partes = relative(VAULT, f).split(sep); return part
 let notes = [];
 let semPublicar = 0;
 const retidas = [];
+const rascunhos = [];
 for (const f of files) {
   const bruto = readFileSync(f, 'utf8');
   const { meta, body } = parseFront(bruto);
@@ -93,9 +95,13 @@ for (const f of files) {
   // segunda barreira (a primeira é o push protection do GitHub): nota com possível segredo NÃO é publicada
   const achados = acharSegredos(bruto);
   if (achados.length) { retidas.push({ title, achados }); continue; }
+  // rascunho: sem título de verdade ou com quase nada além de links -> fica fora do site (vitrine pública)
+  const motivo = motivoRascunho(title, body);
+  if (motivo) { rascunhos.push({ title, motivo }); continue; }
   notes.push({ file: f, title, slug: slug(title), tags: Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []), body });
 }
-console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} publicáveis | ${semPublicar} privados (ficam fora do site) | ${retidas.length} retidos por possível segredo`);
+console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} publicáveis | ${semPublicar} privados (ficam fora do site) | ${retidas.length} retidos por possível segredo | ${rascunhos.length} rascunhos`);
+for (const r of rascunhos) console.warn(`::notice title=Teia: rascunho fora do site::"${r.title}" não foi publicada (${r.motivo}). Complete a nota ou dê um título e ela entra no próximo build.`);
 for (const r of retidas) {
   const resumo = [...new Set(r.achados.map(a => `${a.tipo} (linha ${a.linha})`))].join('; ');
   console.warn(`::warning title=Teia: nota retida::"${r.title}" não foi publicada: possível segredo no texto: ${resumo}. Remova ou oculte o valor (e revogue a credencial se for real) e envie de novo.`);

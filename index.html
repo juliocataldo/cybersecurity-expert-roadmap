@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Portfólio de Cyber Security de Julio Cataldo: guia, roadmaps, trilhas, ferramentas, checklist de privacidade, artigos e um radar de ameaças ao vivo.">
 <title>Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=f2e04ea7">
+<link rel="stylesheet" href="styles.css?v=233623ba">
 </head>
 <body>
 <header class="site">
@@ -16,19 +16,20 @@
   <nav aria-label="Seções">
     <a href="./" aria-current="page">Home</a>
     <a href="guia.html">Guia</a>
-    <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
     <a href="artigos.html">Artigos</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
-        <a href="checklist.html">Checklist</a>
         <a href="plataformas.html">Plataformas</a>
-        <a href="eventos.html">Eventos</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
         <a href="radar.html">Radar</a>
         <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>
@@ -40,13 +41,13 @@
     <div class="hero-main">
       <p class="eyebrow mono">// cyber-expert-guide</p>
       <h1>Pare de adivinhar.<br>Monte seu caminho em segurança.</h1>
-      <p class="lead">Um guia de estudos que virou portfólio: roadmaps por função, uma trilha gamificada, um canivete com 113 ferramentas, um checklist de privacidade e artigos — tudo em português, escrito do zero e sem rastreamento.</p>
+      <p class="lead">Um guia de estudos que virou portfólio: trilhas por função, uma trilha gamificada, ferramentas para praticar, um radar de ameaças e artigos — tudo em português e escrito do zero.</p>
       <div class="cta">
-        <a class="btn" href="roadmap.html">Ver os roadmaps</a>
+        <a class="btn" href="guia.html">Começar pelo guia</a>
         <a class="btn sec" href="trilhas.html">Ver as trilhas</a>
       </div>
       <div class="stats">
-        <div class="stat"><b>6</b><span>roadmaps e trilhas</span></div>
+        <div class="stat"><b>5</b><span>trilhas por função</span></div>
         <div class="stat"><b>113</b><span>ferramentas</span></div>
         <div class="stat"><b>65</b><span>missões</span></div>
         <div class="stat"><b>233</b><span>hábitos</span></div>
@@ -56,7 +57,7 @@
       <div class="term-bar"><span></span><span></span><span></span></div>
       <pre class="term-body"><span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ ls ./guia
 <span class="term-o">area/  comece/  praticar/  laboratorio/</span>
-<span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ open roadmaps
+<span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ open trilhas
 <span class="term-o">[ok] SOC · Pentest · GRC · Cloud · DFIR</span>
 <span class="term-p">guest@cyber</span>:<span class="term-d">~</span>$ start trilha
 <span class="term-o">XP 0 -&gt; Lenda da Cyber</span>
@@ -64,18 +65,40 @@
     </aside>
   </section>
   <section class="sec-g" id="explore">
-    <div class="sec-h"><h2>Explore</h2></div>
-    <div class="cards">
-      <a class="card" href="guia.html"><span class="k">Para ler</span><h3>Guia</h3><p>Entenda a área, por onde começar, onde praticar, laboratório, cursos e certificações.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="roadmap.html"><span class="k">Mapa</span><h3>Roadmaps</h3><p>O fluxo de ethical hacking, do fundamento ao pentester.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="trilhas.html"><span class="k">Caminhos</span><h3>Trilhas</h3><p>A trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR).</p><span class="go">Abrir →</span></a>
-      <a class="card" href="canivete.html"><span class="k">Ferramentas</span><h3>Canivete suíço</h3><p>Coletâneas de consulta: análise, OSINT e ransomware.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="solucoes.html"><span class="k">Open source</span><h3>HUB Sec</h3><p>Ferramentas open source por tema e por camada, com labs para praticar: containers, segredos, IA e pentest com IA.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="checklist.html"><span class="k">Autoavaliação</span><h3>Checklist de Privacidade</h3><p>233 hábitos em 18 temas, com progresso salvo no navegador.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="radar.html"><span class="k">Threat intel</span><h3>Radar</h3><p>Ransomware no mundo e no Brasil em números, com mapas, e, na segunda tela, casos e vulnerabilidades em exploração ativa.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="artigos.html"><span class="k">Escrita</span><h3>Artigos</h3><p>Estudos de caso e a Teia, o grafo das minhas notas de segurança.</p><span class="go">Abrir →</span></a>
-      <a class="card" href="plataformas.html"><span class="k">Onde praticar</span><h3>Plataformas</h3><p>Labs e CTFs para treinar na prática (TryHackMe, HTB e afins).</p><span class="go">Abrir →</span></a>
-      <a class="card" href="eventos.html"><span class="k">Comunidade</span><h3>Eventos</h3><p>Conferências de cyber no Brasil e no mundo, para público técnico ou executivo.</p><span class="go">Abrir →</span></a>
+    <div class="sec-h"><h2>Por onde você quer ir?</h2></div>
+    <p class="sec-intro">Três caminhos, conforme o momento: começar do zero, colocar a mão na massa ou acompanhar o que está acontecendo.</p>
+    <div class="journeys">
+      <div class="journey">
+        <span class="j-step">Começar</span>
+        <h3>Estou começando</h3>
+        <p>Entenda a área e escolha um caminho antes de sair juntando ferramentas.</p>
+        <ol>
+          <li><a href="guia.html"><div><b>Guia</b><span>As áreas de cyber, por onde começar, laboratório, cursos e certificações.</span></div></a></li>
+          <li><a href="trilhas.html"><div><b>Trilhas</b><span>A trilha gamificada (65 missões), as trilhas por função e o roadmap de ethical hacking.</span></div></a></li>
+        </ol>
+      </div>
+      <div class="journey">
+        <span class="j-step">Praticar</span>
+        <h3>Quero pôr a mão na massa</h3>
+        <p>Onde treinar com segurança e o que usar no dia a dia.</p>
+        <ol>
+          <li><a href="plataformas.html"><div><b>Plataformas</b><span>Labs e CTFs, com foco, preço e para quem serve cada um.</span></div></a></li>
+          <li><a href="solucoes.html"><div><b>HUB Sec</b><span>Ferramentas open source para instalar e operar, com labs.</span></div></a></li>
+          <li><a href="canivete.html"><div><b>Canivete suíço</b><span>113 ferramentas online de consulta rápida: IOCs, OSINT, DNS e mais.</span></div></a></li>
+          <li><a href="checklist.html"><div><b>Checklist de Privacidade</b><span>233 hábitos em 18 temas, para começar por você.</span></div></a></li>
+        </ol>
+      </div>
+      <div class="journey">
+        <span class="j-step">Me atualizar</span>
+        <h3>Quero acompanhar o cenário</h3>
+        <p>Ameaças, notícias comentadas e o que eu ando estudando.</p>
+        <ol>
+          <li><a href="radar.html"><div><b>Radar</b><span>Ransomware no mundo e no Brasil em números, atualizado todo dia.</span></div></a></li>
+          <li><a href="noticias.html"><div><b>Notícias</b><span>Destaques comentados: vetor, impacto e o que aprender.</span></div></a></li>
+          <li><a href="artigos.html"><div><b>Artigos e Teia</b><span>Estudos de caso e o grafo das minhas notas de estudo.</span></div></a></li>
+          <li><a href="eventos.html"><div><b>Eventos</b><span>Conferências de cyber no Brasil e no mundo.</span></div></a></li>
+        </ol>
+      </div>
     </div>
   </section>
 </main>
@@ -84,7 +107,7 @@
   Guia de estudos de Cyber Security. A estrutura de fases da trilha foi inspirada em
   <a href="https://github.com/Hamed233/Cybersecurity-Mastery-Roadmap" target="_blank" rel="noopener noreferrer">Cybersecurity Mastery Roadmap</a> e
   <a href="https://jansen-moreira.notion.site/CyberSecurity-RoadMap-1123f61008cd806e9ae8d6c57bc5d2d9" target="_blank" rel="noopener noreferrer">CyberSecurity RoadMap (Jansen Moreira)</a>.
-  Este site não usa cookies nem rastreamento.
+  Este site não usa cookies; só métricas agregadas e anônimas de visitas (Cloudflare Web Analytics).
 </p></div>
 <footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
 </body>

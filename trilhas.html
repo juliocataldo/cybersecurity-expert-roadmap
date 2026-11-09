@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Trilhas de cibersegurança: a trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR) com onde aprender e vídeos.">
 <title>Trilhas &middot; Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=f2e04ea7">
+<link rel="stylesheet" href="styles.css?v=233623ba">
 </head>
 <body>
 <header class="site">
@@ -16,19 +16,20 @@
   <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
-    <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html" aria-current="page">Trilhas</a>
     <a href="artigos.html">Artigos</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
-        <a href="checklist.html">Checklist</a>
         <a href="plataformas.html">Plataformas</a>
-        <a href="eventos.html">Eventos</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
         <a href="radar.html">Radar</a>
         <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>
@@ -38,13 +39,19 @@
   <section class="sec-g">
     <p class="eyebrow">Caminhos</p>
     <h1>Trilhas</h1>
-    <p class="sec-intro">Comece pela <b>trilha gamificada</b> (um caminho único, do zero à carreira, com progresso) ou vá direto para uma <b>trilha por função</b>, se já sabe aonde quer chegar. Para a visão geral em fluxo, veja o <a href="roadmap.html">Roadmap</a>.</p>
+    <p class="sec-intro">Comece pela <b>trilha gamificada</b> (um caminho único, do zero à carreira, com progresso) ou vá direto para uma <b>trilha por função</b>, se já sabe aonde quer chegar. Para a visão geral em fluxo, abra o <b>roadmap de Ethical Hacking</b>.</p>
     <div class="paths">
       <a class="path path-feat" href="trilha.html">
         <div class="path-h"><span class="path-team feat">Trilha gamificada</span><h3>Jornada completa, com XP e progresso</h3></div>
         <p class="path-desc">12 fases do fundamento à carreira, com missões, checkpoints, níveis, dias seguidos e conquistas. O progresso fica salvo no seu navegador.</p>
         <dl class="path-meta"><div><dt>Fases</dt><dd>12</dd></div><div><dt>Missões</dt><dd>65</dd></div><div><dt>Questões</dt><dd>36</dd></div></dl>
         <p class="path-k feat-cta">Abrir a trilha &rarr;</p>
+      </a>
+      <a class="path path-map" href="roadmap.html">
+        <div class="path-h"><span class="path-team feat">Roadmap</span><h3>Ethical Hacking em fluxo</h3></div>
+        <p class="path-desc">A visão geral em caixas e setas: 12 estágios do fundamento ao pentester, cada um com os temas que você estuda ali. Bom para enxergar o todo antes de escolher.</p>
+        <dl class="path-meta"><div><dt>Estágios</dt><dd>12</dd></div><div><dt>Formato</dt><dd>Diagrama</dd></div></dl>
+        <p class="path-k feat-cta">Ver o roadmap &rarr;</p>
       </a>
       <article class="path">
         <div class="path-h"><span class="path-team t-blue">Blue Team</span><h3>SOC Analyst</h3></div>

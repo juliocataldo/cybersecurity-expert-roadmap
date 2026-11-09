@@ -4,7 +4,7 @@ Guia de estudos e trilha gamificada para quem está começando em Cyber Security
 
 **Acesse:** https://juliocataldo.github.io/cybersecurity-expert-roadmap/
 
-O site tem estas partes:
+O site tem estas partes. A home organiza tudo em três caminhos (**Começar**, **Praticar** e **Me atualizar**), e o menu *Recursos* separa **Ferramentas** (Canivete, HUB Sec, Plataformas, Checklist) de **Atualização** (Radar, Notícias, Eventos).
 
 | Página | Para quê |
 |---|---|
@@ -14,7 +14,7 @@ O site tem estas partes:
 | **Checklist** (`checklist.html` + `checklist.js`) | **Checklist de Privacidade** interativo: 18 temas, 233 hábitos em 3 níveis (Essencial/Opcional/Avançado), progresso salvo no navegador e export em PDF. Adaptação PT-BR do projeto open source de Alicia Sykes ([personal-security-checklist](https://github.com/Lissy93/personal-security-checklist)), conteúdo sob **CC BY-NC-SA 4.0**. |
 | **Trilhas** (`trilhas.html` → `trilha.html`) | Hub de caminhos: um **box destacado "Trilha gamificada"** (abre `trilha.html`: 12 fases, 65 missões, checkpoints, XP, níveis e conquistas, progresso no navegador) e as **trilhas por função** (SOC, Pentester, GRC, Cloud, DFIR) com tempo, certs, onde aprender e vídeos do YouTube. |
 | **Artigos** (`artigos.html` + `artigo-*.html`, gerados por `tools/build-artigos.mjs` a partir de `artigos/*.md`) | Estudos de caso de segurança escritos em português, do zero (primeiro: *Como uma câmera IP barata vira porta de entrada*, IoT, inspirado no estudo de Zoltan Balazs, com crédito à fonte). A mesma página lista as **notas da Teia** (as do vault `notas-cyber`) e leva ao grafo. Veja "Artigos (Markdown → site)" abaixo. |
-| **Roadmaps** (`roadmap.html`) | O **fluxo de Ethical Hacking** (caixas e setas, estilo roadmap.sh): 12 estágios do fundamento ao pentester, cada um com seus temas. SVG inline (cores embutidas, à prova de cache) gerado por `gen_roadmap.py`; conteúdo próprio. (As trilhas por função ficam na aba **Trilhas**.) |
+| **Roadmaps** (`roadmap.html`) | O **fluxo de Ethical Hacking** (caixas e setas, estilo roadmap.sh): 12 estágios do fundamento ao pentester, cada um com seus temas. SVG inline (cores embutidas, à prova de cache) gerado por `gen_roadmap.py`; conteúdo próprio. Saiu do menu: entra pelo cartão **Roadmap** em *Trilhas* (e pela home), para não competir com as trilhas por função. |
 | **Radar** (`radar.html`, gerado por `tools/build-radar-brasil.mjs`; segunda tela `radar-casos.html`, gerada por `tools/build-radar.mjs` via Vexday, com os casos citados e as KEV; `radar-brasil.html` só redireciona) | Primeira tela: **ransomware no mundo, com o Brasil em destaque**, **sem identificar vítimas**. **Mapa-múndi** de menções por país (globo com grade, sem filtros), ranking de países (com menções por milhão de habitantes), Brasil x mundo por setor, grupos mais ativos, **ferramentas e CVEs usados por grupos** (matrizes do BushidoUK), foco no Brasil (mês, setor, grupo, ano) e **mapa do Brasil** com comunicações à ANPD por estado. Fontes: [Ransomware.live](https://www.ransomware.live) (uso não comercial, com atribuição), Banco Mundial (população, CC BY 4.0), Natural Earth (domínio público), BushidoUK (CC BY 4.0), ANPD e IBGE. Código próprio e sem dependências; um GitHub Action diário (`radar-brasil.yml`) atualiza, e uma trava aborta a publicação se aparecer texto fora da lista autorizada, país ou recorte com menos de 3 casos. Dados de apoio versionados em `tools/data/` (`node tools/gen-mapa-mundo.mjs` e `node tools/referencias.mjs` regeneram o mapa e as referências; ANPD é transcrita à mão: veja `tools/ANPD-ATUALIZAR.md` e rode `node tools/anpd.mjs`). |
 | **Notícias** (`noticias.html`, gerada por `tools/build-noticias.mjs`) | Item próprio do menu Recursos, ao lado do Radar. **Destaques comentados** (`tools/data/noticias.json`): o que aconteceu, vetor, impacto de negócio, o que aprender e selo de status (confirmado, relatado pela empresa, alegado, em apuração), sempre com link para a fonte; primeiro destaque: o roubo da Binance (entrevista falsa e IA interna abusada). **Manchetes** do [The Hacker News](https://thehackernews.com), pelo RSS público, atualizadas **1x por dia** pelo Action `noticias.yml`: só título, link e data (nunca o texto da matéria), com histórico de 150 itens em `tools/data/noticias-historico.json`. A trava barra link fora de `thehackernews.com`, texto com marcação e feed cortado. Para adicionar um destaque, edite `noticias.json` (campos validados por `tests/validar-noticias.mjs`). |
 | **Teia**, dentro de Artigos (`teia.html` + `teia.js` + `notas/`) | **Segundo cérebro**: grafo interativo das minhas notas (Obsidian) e páginas por nota com backlinks. Gerado por `tools/build-notas.mjs` a partir de um vault de markdown (`publish: true`). Veja "Teia" em *Para o professor*. |
@@ -28,7 +28,7 @@ O site tem estas partes:
 
 **Cota da Vexday (segunda tela do Radar):** o plano gratuito dá **50 requisições por dia e 10 por minuto, somando todas as chaves da conta**. O cliente (`tools/vexday-lib.mjs`) usa no máximo 14 por execução, 1 chamada a cada 7 s e para de chamar ao primeiro sinal de limite; o Action `radar.yml` roda 2x por dia (no máximo 28 de 50) e **não tem gatilho por push**. Se a API não devolver dados suficientes, a página anterior é mantida. Para atualizar à mão: Actions > Radar (Vexday) > Run workflow (gasta até 14 da cota do dia). `node tests/validar-vexday.mjs` falha se o consumo deixar de caber na cota.
 
-**CSP:** todas as páginas usam a mesma política (`script-src 'self'` mais o host do Cloudflare Web Analytics, e `connect-src` só para o destino dele), sem `unsafe-inline`. `node tests/validar-csp.mjs` falha se alguma página ou gerador divergir. O script inline que o Cloudflare injeta para detecção de bots (JavaScript Detections) continua bloqueado de propósito: ele muda a cada requisição e só liberaria com `unsafe-inline`.
+**CSP:** todas as páginas usam a mesma política (`script-src 'self'` mais o host do Cloudflare Web Analytics, e `connect-src` só para o próprio site — o beacon envia para `/cdn-cgi/rum` no mesmo domínio — e o destino dele), sem `unsafe-inline`. `node tests/validar-csp.mjs` falha se alguma página ou gerador divergir. O script inline que o Cloudflare injeta para detecção de bots (JavaScript Detections) continua bloqueado de propósito: ele muda a cada requisição e só liberaria com `unsafe-inline`.
 
 ## Como usar a trilha
 1. Abra a **Trilha** e comece pela fase **00. Base de lançamento**.
@@ -68,7 +68,7 @@ Pratique **só** no que é seu ou em plataformas feitas para isso: VMs, labs, CT
 Invadir dispositivo alheio sem autorização é crime no Brasil (Lei 12.737/2012, art. 154-A do Código Penal).
 
 ## Privacidade
-O site é estático: não tem servidor, login, cookies nem rastreamento. O progresso fica no `localStorage` do navegador. O nome é opcional e só vai no arquivo que a própria pessoa exportar.
+O site é estático: não tem servidor, login nem cookies; usa só o Cloudflare Web Analytics (métricas agregadas, sem cookies). O progresso fica no `localStorage` do navegador. O nome é opcional e só vai no arquivo que a própria pessoa exportar.
 
 ---
 
@@ -134,6 +134,7 @@ A página **Teia** (`teia.html`) é um grafo das minhas notas, ligado às págin
 **Antes de publicar (importante):**
 - `publish: true` é o único filtro: **toda** nota com essa linha vai para o site público. Marque só o que você quer mesmo publicar (conteúdo de trabalho, de clientes ou de terceiros não deve sair).
 - **Segredos:** o gerador retém (não publica) a nota que contiver um formato conhecido de credencial (token do Google, chave da AWS, segredo do Azure AD, chave privada, JWT, token do GitHub, etc.) e avisa no log do Action o título, o tipo e a linha, **nunca o valor**. Isso é uma segunda barreira: a primeira é o push protection do GitHub, que também bloqueia o push do site se algo escapar. Se uma nota for retida, tire o valor do texto e, se a credencial for real, **revogue-a** (ela já está no histórico do repositório de notas).
+- **Rascunhos ficam fora:** nota sem título (`Untitled`, `Sem título`) ou com menos de 120 caracteres de texto (sem contar links, URLs e campos `Type:`/`Skills:`) não é publicada, e o log do Action lista o título com um aviso. Regra em `tools/rascunho-lib.mjs`, testada por `node tests/validar-rascunho.mjs`.
 - Imagens (`![[foto.png]]`) ainda não são publicadas: o embed é omitido da página. Notas com o mesmo título em pastas diferentes ganham um sufixo no endereço (`-2`).
 - Arquivos do Windows (CRLF/BOM) e blocos de código no meio da linha são aceitos; uma nota que o renderizador não conseguir processar é pulada com aviso em vez de derrubar o build.
 

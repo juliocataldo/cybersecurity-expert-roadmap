@@ -16,7 +16,7 @@ const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'u
 const base = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/);
 const ICON = base[9];
 const FOOT = base.find(l => l.startsWith('<footer'));
-const CSP = "default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'";
+const CSP = "default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'";
 
 const artigos = lerArtigos(join(ROOT, 'artigos'));
 const erros = artigos.flatMap(validarArtigo);
@@ -30,19 +30,20 @@ const notas = notasParaLista(teia);
 const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
-    <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
     <a href="artigos.html" aria-current="page">Artigos</a>
     <details class="nav-group">
       <summary>Recursos</summary>
       <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
-        <a href="checklist.html">Checklist</a>
         <a href="plataformas.html">Plataformas</a>
-        <a href="eventos.html">Eventos</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
         <a href="radar.html">Radar</a>
         <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>

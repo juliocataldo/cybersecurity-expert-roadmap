@@ -74,20 +74,20 @@ const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'u
 const NAV = `  <nav aria-label="Seções">
     <a href="./">Home</a>
     <a href="guia.html">Guia</a>
-    <a href="roadmap.html">Roadmaps</a>
     <a href="trilhas.html">Trilhas</a>
     <a href="artigos.html">Artigos</a>
     <details class="nav-group">
       <summary class="cur">Recursos</summary>
       <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
         <a href="canivete.html">Canivete suíço</a>
         <a href="solucoes.html">HUB Sec</a>
-        <a href="checklist.html">Checklist</a>
         <a href="plataformas.html">Plataformas</a>
-
-        <a href="eventos.html">Eventos</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
         <a href="radar.html" aria-current="page">Radar</a>
         <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
       </div>
     </details>
     <a href="sugestoes.html">Sugestões</a>
@@ -113,7 +113,7 @@ const PAGE = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Casos de ransomware citados em sites de vazamento no Brasil e vulnerabilidades em exploração ativa (KEV) de grandes fornecedores, via API Vexday.">
 <title>Casos e vulnerabilidades · Radar · Cyber Expert Guide</title>
