@@ -1,7 +1,7 @@
 // Valida o núcleo do Radar Brasil: anonimização (K), trava de publicação, ANPD e mapa.
 // Uso: node tests/validar-radar-brasil.mjs
 import { readFileSync } from 'node:fs';
-import { K, agregar, normalizar, travaSaida, validarAnpd, validarFonte } from '../tools/radar-brasil-lib.mjs';
+import { K, MIN_TAXA, agregar, normalizar, normalizarMundo, agregarPaises, travaPaises, taxa, limitesQuintis, faixaDe, lerMatrizFerramentas, lerMatrizCves, topMatriz, travaMatriz, contarSemPais, travaSaida, validarAnpd, validarFonte } from '../tools/radar-brasil-lib.mjs';
 
 const erros = [];
 const ok = (c, m) => { if (!c) erros.push(m); };
@@ -50,11 +50,62 @@ const mapa = JSON.parse(readFileSync(new URL('../tools/data/mapa-uf.json', impor
 ok(Object.keys(mapa.ufs).length === 27, 'mapa deve ter 27 UFs');
 ok(anpd.estados.every(s => mapa.ufs[s.uf]), 'toda UF da ANPD deve existir no mapa');
 
+// ---- Mundo ----
+const mundoBase = [
+  ...base,
+  ...Array.from({ length: 4 }, () => ({ country: 'US', group_name: 'akira', activity: 'Technology', discovered: '2026-10-20T00:00:00+00:00', post_title: 'VITIMA-US' })),
+  { country: 'FR', group_name: 'akira', activity: 'Technology', discovered: '2026-10-21T00:00:00+00:00', post_title: 'VITIMA-FR' }, // 1 caso: não pode aparecer
+  { country: '', group_name: 'akira', activity: 'Technology', discovered: '2026-10-21T00:00:00+00:00', post_title: 'SEM-PAIS' },  // sem país
+  ...Array.from({ length: 3 }, () => ({ country: 'ZZ', group_name: 'akira', activity: 'Technology', discovered: '2026-10-22T00:00:00+00:00', post_title: 'x' })), // código fora da lista
+];
+const rm = normalizarMundo(mundoBase, GRUPOS);
+ok(rm.every(r => Object.keys(r).sort().join() === 'ano,grupo,mes,pais,setor'), 'registro do mundo só pode ter ano, grupo, mes, pais e setor');
+ok(!JSON.stringify(rm).includes('VITIMA') && !JSON.stringify(rm).includes('secreta'), 'nome/site de vítima vazou no registro do mundo');
+ok(contarSemPais(mundoBase) === 1, 'contarSemPais');
+const paisesOk = new Set(['BR', 'US', 'FR']);
+const ap = agregarPaises(rm, { hoje: new Date('2026-11-09T00:00:00Z'), paisesPermitidos: paisesOk });
+ok(ap.paises.every(p => p.todos >= K), 'país com menos de K casos na saída');
+ok(!ap.paises.some(p => p.pais === 'FR' || p.pais === 'ZZ'), 'país com 1 caso ou fora da lista não pode ser publicado');
+ok(ap.outrosCasos === 4 && ap.outrosPaises === 2, 'outros países: esperado 4 casos em 2 países, achei ' + ap.outrosCasos + ' em ' + ap.outrosPaises);
+ok(ap.paises[0].pais === 'BR' && ap.paises[0].todos === 11, 'ranking deve estar em ordem decrescente');
+travaPaises(ap, { paisesPermitidos: paisesOk });
+lanca(() => travaPaises({ ...ap, paises: [...ap.paises, { pais: 'ZZ', todos: 9, m12: null }] }, { paisesPermitidos: paisesOk }), 'país fora da lista');
+lanca(() => travaPaises({ ...ap, paises: [{ pais: 'BR', todos: 2, m12: null }] }, { paisesPermitidos: paisesOk }), 'país com 2 casos');
+lanca(() => travaPaises({ ...ap, paises: [{ pais: 'Brasil', todos: 9, m12: null }] }, { paisesPermitidos: paisesOk }), 'país com texto em vez de código');
+
+// taxas só com MIN_TAXA casos; quintis e faixas
+ok(taxa(MIN_TAXA - 1, 1e6, 1e6) === null, 'taxa com poucos casos deve ser null');
+ok(taxa(10, 0, 1e6) === null && taxa(10, undefined, 1e6) === null, 'taxa sem base deve ser null');
+ok(Math.abs(taxa(100, 50e6, 1e6) - 2) < 1e-9, 'taxa por milhão');
+const lim = limitesQuintis([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+ok(lim.length === 4 && faixaDe(0.5, lim) === 1 && faixaDe(1e9, lim) === 5, 'quintis e faixas');
+ok(limitesQuintis([1, 2]).length === 0, 'poucos valores não geram faixas');
+
+// matrizes BushidoUK
+const fer = lerMatrizFerramentas('| Tool Name | Threat Group Usage |\n|---|---|\n| AZCopy | Interlock, Storm-0501* |\n| FileZilla | Akira, LockBit, Scattered Spider* |\n| Catbox[.]moe | *Br0k3r |');
+ok(fer.length === 3 && fer[1].grupos.length === 3 && fer[0].grupos.includes('Storm-0501'), 'leitura da matriz de ferramentas');
+const cv = lerMatrizCves('| Product | CVE(s) | Ransomware Group(s) | Source(s) |\n|---|---|---|---|\n| Ivanti Connect Secure | CVE-2024-21887 | Pioneer Kitten+, DragonForce | [x](http://x) |\n| Ivanti Connect Secure | CVE-2024-21887 | Akira | [x](http://x) |');
+const topCv = topMatriz(cv, 'cve');
+ok(topCv.length === 1 && topCv[0].n === 3, 'CVE repetido deve somar grupos distintos, achei ' + JSON.stringify(topCv));
+travaMatriz(topMatriz(fer, 'nome'), topCv);
+lanca(() => travaMatriz([{ nome: '<script>x</script>', n: 5 }], []), 'ferramenta com HTML');
+lanca(() => travaMatriz([], [{ nome: 'Hospital X', produto: 'x', n: 5 }]), 'CVE fora do formato');
+
+// dados de apoio do mapa-múndi
+const mm = JSON.parse(readFileSync(new URL('../tools/data/mapa-mundo.json', import.meta.url), 'utf8'));
+const rf = JSON.parse(readFileSync(new URL('../tools/data/referencias.json', import.meta.url), 'utf8'));
+ok(Object.keys(mm.paises).length >= 150 && mm.paises.BR && mm.paises.US, 'mapa-múndi com poucos países ou sem BR/US');
+ok(Object.keys(mm.paises).every(c => rf.paises[c]), 'todo país do mapa deve existir em referencias.json');
+ok(rf.populacao.BR.v > 2e8 && rf.pib.BR.v > 1e12, 'população/PIB do Brasil fora do esperado');
+
 // a página gerada não pode ter script nem estilo inline (CSP do site)
 const html = readFileSync(new URL('../radar.html', import.meta.url), 'utf8');
 ok(!/<script/i.test(html), 'radar.html não deve ter <script>');
 ok(!/ style=/i.test(html), 'radar.html não deve ter style inline (a CSP bloqueia)');
 ok(/Fonte: Ransomware\.live/.test(html), 'atribuição ao Ransomware.live obrigatória');
+ok(/Banco Mundial/.test(html) && /Natural Earth/.test(html), 'atribuição ao Banco Mundial e ao Natural Earth obrigatória');
+ok(!/Panthera/i.test(html), 'a página não deve citar o Panthera Census');
+ok((html.match(/class="mw mw-/g) || []).length === 6, 'devem existir 6 mapas-múndi (3 medidas x 2 períodos)');
 
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }
 console.log(`Radar Brasil: ${reg.length} registros de teste, K=${K}, ANPD ${anpd.total}, ${Object.keys(mapa.ufs).length} UFs`);

@@ -10,6 +10,8 @@ on:
       - 'tools/radar-brasil-lib.mjs'
       - 'tools/data/anpd.json'
       - 'tools/data/mapa-uf.json'
+      - 'tools/data/mapa-mundo.json'
+      - 'tools/data/referencias.json'
 
 permissions:
   contents: write

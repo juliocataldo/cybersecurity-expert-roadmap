@@ -138,3 +138,112 @@ export function validarAnpd(a) {
   const ufs = new Set(); for (const e of a.estados) { if (ufs.has(e.uf)) erros.push('UF repetida: ' + e.uf); ufs.add(e.uf); if (e.ransomware > e.total) erros.push(`${e.uf}: ransomware maior que o total`); }
   return erros;
 }
+
+/* ======================= Mundo ======================= */
+export const MIN_TAXA = 10; // taxa por habitante/PIB só com 10+ casos (país pequeno com 3 casos distorce)
+
+/** Como normalizar(), mas para todos os países: {pais, mes, ano, setor, grupo}. */
+export function normalizarMundo(victims, gruposConhecidos) {
+  const canon = new Map(gruposConhecidos.map(n => [String(n).toLowerCase(), n]));
+  const out = [];
+  for (const v of victims) {
+    const pais = String((v && v.country) || '').toUpperCase();
+    if (!/^[A-Z]{2}$/.test(pais)) continue;
+    const data = String(v.discovered || v.published || '').slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) continue;
+    out.push({
+      pais, mes: data.slice(0, 7), ano: data.slice(0, 4),
+      setor: SETORES[v.activity] || OUTROS_SETOR,
+      grupo: canon.get(String(v.group_name || '').toLowerCase()) || null,
+    });
+  }
+  return out;
+}
+
+/** Contagem por país (total e últimos 12 meses). País com menos de K casos é somado em "outros". */
+export function agregarPaises(regs, { hoje = new Date(), k = K, paisesPermitidos = null } = {}) {
+  const d = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth() - 11, 1));
+  const corte = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+  const todos = new Map(), m12 = new Map();
+  for (const r of regs) { todos.set(r.pais, (todos.get(r.pais) || 0) + 1); if (r.mes >= corte) m12.set(r.pais, (m12.get(r.pais) || 0) + 1); }
+  const paises = []; let outrosPaises = 0, outrosCasos = 0;
+  for (const [pais, n] of todos) {
+    if (paisesPermitidos && !paisesPermitidos.has(pais)) { outrosPaises++; outrosCasos += n; continue; } // território fora da lista: não é publicado
+    if (n >= k) paises.push({ pais, todos: n, m12: (m12.get(pais) || 0) >= k ? m12.get(pais) : null });
+    else { outrosPaises++; outrosCasos += n; }
+  }
+  paises.sort((a, b) => b.todos - a.todos || a.pais.localeCompare(b.pais));
+  return { paises, outrosPaises, outrosCasos, total: regs.length };
+}
+
+export function travaPaises(ap, { paisesPermitidos, k = K }) {
+  const ok = paisesPermitidos instanceof Set ? paisesPermitidos : new Set(paisesPermitidos);
+  const erros = [];
+  for (const p of ap.paises) {
+    if (!/^[A-Z]{2}$/.test(p.pais) || !ok.has(p.pais)) erros.push('país desconhecido na saída');
+    if (p.todos < k) erros.push('país com menos de K casos');
+    if (p.m12 !== null && p.m12 < k) erros.push('país (12 meses) com menos de K casos');
+  }
+  const soma = ap.paises.reduce((a, p) => a + p.todos, 0) + ap.outrosCasos;
+  if (soma !== ap.total) erros.push('soma dos países não fecha com o total');
+  if (erros.length) throw new Error('Publicação barrada pela trava (países):\n- ' + [...new Set(erros)].join('\n- '));
+}
+
+/** Taxa por base (habitantes/PIB). null quando faltam dados ou há menos de MIN_TAXA casos. */
+export function taxa(casos, base, fator = 1) {
+  if (!casos || casos < MIN_TAXA || !base || base <= 0) return null;
+  return casos / base * fator;
+}
+
+/** Limites dos 5 intervalos do mapa (quintis dos valores positivos), arredondados. */
+export function limitesQuintis(valores) {
+  const v = valores.filter(x => x > 0).sort((a, b) => a - b);
+  if (v.length < 5) return [];
+  const q = p => v[Math.min(v.length - 1, Math.floor(p * v.length))];
+  const arred = x => { const e = Math.pow(10, Math.floor(Math.log10(x)) - 1); return Math.round(x / e) * e; };
+  const lim = [q(.2), q(.4), q(.6), q(.8)].map(arred);
+  return [...new Set(lim)].sort((a, b) => a - b);
+}
+export const faixaDe = (valor, limites) => { let i = 0; while (i < limites.length && valor >= limites[i]) i++; return i + 1; }; // 1..limites.length+1
+
+/* ---------- Matrizes BushidoUK (CC BY 4.0): ferramentas e CVEs usados por grupos ---------- */
+const limpaGrupo = g => g.replace(/[*+]/g, '').replace(/\[\.\]/g, '.').trim();
+const celulas = l => l.split('|').slice(1, -1).map(c => c.trim());
+export function lerMatrizFerramentas(md) {
+  const out = [];
+  for (const l of md.split('\n')) {
+    if (!l.startsWith('|')) continue;
+    const c = celulas(l); if (c.length < 2 || /^-+$/.test(c[0]) || /^Tool Name$/i.test(c[0])) continue;
+    const grupos = [...new Set(c[1].split(/[,/]/).map(limpaGrupo).filter(Boolean))];
+    out.push({ nome: c[0].replace(/\[\.\]/g, '.').replace(/[*`]/g, '').trim(), grupos });
+  }
+  return out;
+}
+export function lerMatrizCves(md) {
+  const out = [];
+  for (const l of md.split('\n')) {
+    if (!l.startsWith('|')) continue;
+    const c = celulas(l); if (c.length < 3 || /^-+$/.test(c[0]) || /^Product$/i.test(c[0])) continue;
+    const cves = c[1].match(/CVE-\d{4}-\d{4,7}/g) || [];
+    const grupos = [...new Set(c[2].split(/[,/]/).map(limpaGrupo).filter(Boolean))];
+    for (const cve of cves) out.push({ cve, produto: c[0].replace(/[*`]/g, '').trim(), grupos });
+  }
+  return out;
+}
+/** Ranking por número de grupos distintos que usam o item (itens repetidos entre arquivos são unidos). */
+export function topMatriz(itens, chave, n = 12) {
+  const m = new Map();
+  for (const it of itens) { const k = it[chave]; const e = m.get(k) || { nome: k, produto: it.produto, grupos: new Set() }; it.grupos.forEach(g => e.grupos.add(g.toLowerCase())); m.set(k, e); }
+  return [...m.values()].map(e => ({ nome: e.nome, produto: e.produto, n: e.grupos.size })).filter(e => e.n >= 2)
+    .sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome)).slice(0, n);
+}
+const TEXTO_OK = /^[\p{L}\p{N} .\-_/()&+@:#,']{1,60}$/u;
+export function travaMatriz(ferramentas, cves) {
+  const erros = [];
+  for (const f of ferramentas) { if (!TEXTO_OK.test(f.nome)) erros.push('nome de ferramenta fora do padrão'); if (!(f.n >= 2)) erros.push('ferramenta com menos de 2 grupos'); }
+  for (const c of cves) { if (!/^CVE-\d{4}-\d{4,7}$/.test(c.nome)) erros.push('CVE fora do formato'); if (c.produto && !TEXTO_OK.test(c.produto)) erros.push('produto fora do padrão'); }
+  if (erros.length) throw new Error('Publicação barrada pela trava (matrizes):\n- ' + [...new Set(erros)].join('\n- '));
+}
+
+/** Quantas alegações vêm sem país informado (ficam fora dos mapas e rankings). */
+export const contarSemPais = victims => victims.reduce((a, v) => a + (/^[A-Za-z]{2}$/.test(String((v && v.country) || '')) ? 0 : 1), 0);
