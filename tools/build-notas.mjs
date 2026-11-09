@@ -88,6 +88,7 @@ const NAV = `  <nav aria-label="Seções">
       <summary class="cur">Recursos</summary>
       <div class="nav-menu">
         <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">Soluções de Sec</a>
         <a href="../checklist.html">Checklist</a>
         <a href="../teia.html" aria-current="page">Teia</a>
         <a href="../plataformas.html">Plataformas</a>

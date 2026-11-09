@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Segurança de containers e Kubernetes com ferramentas open source: Trivy, Kubescape, kube-bench, Falco, Tetragon e Tracee, organizadas por camada.">
+<title>Segurança de containers · Soluções de Sec</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="trilhas.html">Trilhas</a>
+    <a href="artigos.html">Artigos</a>
+    <details class="nav-group">
+      <summary class="cur">Recursos</summary>
+      <div class="nav-menu">
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html" aria-current="page">Soluções de Sec</a>
+        <a href="checklist.html">Checklist</a>
+        <a href="teia.html">Teia</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="radar.html">Radar</a>
+      </div>
+    </details>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="solucoes.html">← Soluções de Sec</a></p>
+  <section class="sec-g">
+    <p class="eyebrow">Soluções de Sec · open source</p>
+    <h1>Segurança de containers</h1>
+    <p class="sec-intro">Container não é máquina virtual, isolamento não é sinônimo de segurança e uma imagem sem CVE conhecida não significa que a aplicação está protegida. Muita gente concentra o esforço no momento do deploy e esquece que existe uma vida inteira acontecendo depois dele.</p>
+
+    <div class="warn-box">
+      <b>O que ainda pode dar errado com a imagem atualizada</b>
+      <ul>
+        <li>Executar um processo suspeito, como um shell dentro de um container que nunca deveria ter um.</li>
+        <li>Ler arquivos sensíveis, como tokens de ServiceAccount e segredos montados.</li>
+        <li>Abrir conexões inesperadas, por exemplo para um servidor de comando e controle.</li>
+        <li>Rodar com permissões demais: privileged, hostPath, capabilities além do necessário.</li>
+      </ul>
+    </div>
+
+    <p class="k mono small">Quem cobre qual camada</p>
+    <p class="sec-intro">Nenhuma ferramenta resolve tudo. A pergunta certa não é "qual instalar", e sim "qual camada eu ainda não enxergo".</p>
+    <div class="table-scroll">
+      <table class="cert">
+        <thead><tr><th>Camada</th><th>Pergunta que responde</th><th>Ferramentas</th></tr></thead>
+        <tbody>
+          <tr><td>Build e artefato</td><td>O que estou empacotando e entregando? Há CVE, segredo ou configuração insegura na imagem?</td><td>Trivy</td></tr>
+          <tr><td>Postura e configuração</td><td>O cluster e as cargas de trabalho seguem boas práticas e benchmarks?</td><td>Kubescape, kube-bench</td></tr>
+          <tr><td>Runtime: observar e bloquear</td><td>O que cada processo está fazendo no kernel agora? Dá para impedir?</td><td>Tetragon, Tracee</td></tr>
+          <tr><td>Runtime: detectar e alertar</td><td>Esse comportamento é anormal? Quem precisa saber?</td><td>Falco</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="k mono small sub-36">Build e artefato</p>
+    <div class="cards">
+      <a class="card" href="https://github.com/aquasecurity/trivy" target="_blank" rel="noopener noreferrer"><span class="k">Build · CI/CD</span><h3>Trivy</h3><p>Analisa imagens de containers, dependências, arquivos de infraestrutura como código, segredos expostos e gera SBOM. Encaixa bem como etapa do pipeline.</p><div class="pills"><span class="pill">Apache-2.0</span></div><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <p class="k mono small sub-28">Postura e configuração</p>
+    <div class="cards">
+      <a class="card" href="https://github.com/kubescape/kubescape" target="_blank" rel="noopener noreferrer"><span class="k">Postura do cluster</span><h3>Kubescape</h3><p>Avalia a postura de segurança do Kubernetes: configurações inseguras, vulnerabilidades e desvios de boas práticas, antes e durante a operação.</p><div class="pills"><span class="pill">Apache-2.0</span></div><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/aquasecurity/kube-bench" target="_blank" rel="noopener noreferrer"><span class="k">Hardening · CIS</span><h3>kube-bench</h3><p>Verifica os componentes do cluster contra as recomendações do CIS Kubernetes Benchmark e aponta o que está fora do hardening esperado.</p><div class="pills"><span class="pill">Apache-2.0</span></div><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <p class="k mono small sub-28">Runtime</p>
+    <div class="cards">
+      <a class="card" href="https://github.com/falcosecurity/falco" target="_blank" rel="noopener noreferrer"><span class="k">Detecção por regras</span><h3>Falco</h3><p>Detecta comportamento anormal em tempo de execução por meio de regras: shell inesperado em container, alteração de arquivo sensível, conexão fora do padrão. Gera alertas.</p><div class="pills"><span class="pill">Apache-2.0</span><span class="pill">eBPF</span></div><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/cilium/tetragon" target="_blank" rel="noopener noreferrer"><span class="k">Observar e aplicar política</span><h3>Tetragon</h3><p>Usa eBPF para observar processos, acessos a arquivos e rede em tempo de execução. Também aplica políticas, inclusive com ação de bloqueio direto no kernel.</p><div class="pills"><span class="pill">Apache-2.0</span><span class="pill">eBPF</span></div><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/aquasecurity/tracee" target="_blank" rel="noopener noreferrer"><span class="k">Forense · syscalls</span><h3>Tracee</h3><p>Usa eBPF para monitorar chamadas de sistema, operações em arquivos e atividade de rede. Forte para investigar comportamento suspeito e para análise forense em Linux.</p><div class="pills"><span class="pill">Apache-2.0</span><span class="pill">eBPF</span></div><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <p class="k mono small sub-36">Onde elas se sobrepõem</p>
+    <p class="sec-intro">A sobreposição existe e é normal em segurança. O que importa é saber de onde vem cada sinal para não duplicar esforço nem alerta.</p>
+    <div class="table-scroll">
+      <table class="cert">
+        <thead><tr><th>Ferramenta</th><th>Foco principal</th><th>Também toca em</th></tr></thead>
+        <tbody>
+          <tr><td>Trivy</td><td>Artefatos: imagens, dependências, segredos, IaC, SBOM</td><td>Configuração de manifests e do cluster</td></tr>
+          <tr><td>Kubescape</td><td>Postura do cluster e das cargas de trabalho</td><td>Vulnerabilidades de imagem, benchmarks como o CIS</td></tr>
+          <tr><td>kube-bench</td><td>CIS Benchmark dos componentes do cluster</td><td>Hardening, que o Kubescape também cobre em parte</td></tr>
+          <tr><td>Falco</td><td>Detecção e alerta por regras</td><td>Visibilidade de syscalls, como Tracee e Tetragon</td></tr>
+          <tr><td>Tetragon</td><td>Observação e enforcement com eBPF</td><td>Detecção, que se sobrepõe ao Falco</td></tr>
+          <tr><td>Tracee</td><td>Telemetria de syscalls e forense</td><td>Detecção por assinaturas, que se sobrepõe ao Falco</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Detectar e bloquear são coisas diferentes. O Falco, por padrão, alerta; reagir automaticamente exige integração à parte. O Tetragon consegue agir no próprio kernel, o que dá resposta mais rápida e mais risco de derrubar uma carga legítima.</p>
+
+    <p class="k mono small sub-36">Para praticar</p>
+    <div class="cards">
+      <a class="card" href="https://github.com/madhuakula/kubernetes-goat" target="_blank" rel="noopener noreferrer"><span class="k">Lab · cluster vulnerável</span><h3>Kubernetes Goat</h3><p>Cluster vulnerável de propósito, com cenários para aprender e praticar segurança de Kubernetes. Bom para testar, no mesmo ambiente, o que as ferramentas acima enxergam.</p><div class="pills"><span class="pill">MIT</span><span class="pill">Rode só em laboratório</span></div><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <p class="k mono small sub-36">Por onde eu começaria</p>
+    <div class="osint-top">
+      <div class="osint-box">
+        <span class="k mono small">Ordem sugerida</span>
+        <ul class="train">
+          <li><b>1. Trivy no pipeline</b><span>Barato de adotar e já impede o pior: imagem com CVE crítica ou segredo dentro do build.</span></li>
+          <li><b>2. Kubescape ou kube-bench no cluster</b><span>Mostra o que está mal configurado hoje, com uma lista objetiva do que corrigir.</span></li>
+          <li><b>3. Falco para ter alerta de runtime</b><span>Primeiro sinal de que algo estranho está acontecendo depois do deploy.</span></li>
+          <li><b>4. Tetragon ou Tracee quando precisar de profundidade</b><span>Para bloquear comportamentos conhecidos ou investigar um incidente com detalhe de kernel.</span></li>
+        </ul>
+      </div>
+      <div class="osint-box">
+        <span class="k mono small">Cuidados ao adotar</span>
+        <ul class="train">
+          <li><b>Ferramentas de runtime são privilegiadas</b><span>Agentes eBPF rodam com acesso amplo ao nó. Trate o próprio agente como alvo: restrinja RBAC e mantenha atualizado.</span></li>
+          <li><b>Fixe a versão</b><span>No pipeline e no cluster, use versão ou digest fixo em vez de <code>latest</code>, para um scanner comprometido ou uma atualização quebrada não entrar sem revisão.</span></li>
+          <li><b>Comece em modo observação</b><span>Rode em audit, ajuste as regras e só então ative bloqueio. Regra mal calibrada em produção vira incidente.</span></li>
+          <li><b>Alerta sem dono vira ruído</b><span>Defina quem recebe e o que fazer com cada alerta antes de ligar.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>

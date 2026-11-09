@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Soluções de Sec: ferramentas open source de segurança que você instala e opera, organizadas por tema e por camada de defesa.">
+<title>Soluções de Sec · Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="roadmap.html">Roadmaps</a>
+    <a href="trilhas.html">Trilhas</a>
+    <a href="artigos.html">Artigos</a>
+    <details class="nav-group">
+      <summary class="cur">Recursos</summary>
+      <div class="nav-menu">
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html" aria-current="page">Soluções de Sec</a>
+        <a href="checklist.html">Checklist</a>
+        <a href="teia.html">Teia</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="radar.html">Radar</a>
+      </div>
+    </details>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="./">← Guia</a></p>
+  <section class="sec-g">
+    <p class="eyebrow">Open source</p>
+    <h1>Soluções de Sec</h1>
+    <p class="sec-intro">Ferramentas de segurança que você instala, opera e integra ao seu ambiente. Diferente do <a href="canivete.html">Canivete suíço</a>, que reúne coletâneas de consulta rápida, aqui o foco é entender onde cada solução entra e como combinar as que fazem sentido, em vez de empilhar produtos. Cada tema traz também labs para praticar.</p>
+    <div class="cards">
+      <a class="card" href="solucoes-ia.html"><span class="k">IA</span><h3>IA e segurança</h3><p>Como sistemas com LLM são atacados, como usar IA sem vazar dados, labs (Gandalf, AI Goat) e scanners de LLM.</p><span class="go">Abrir →</span></a>
+      <a class="card" href="solucoes-pentest-ia.html"><span class="k">Ofensivo · avançado</span><h3>Pentest com IA</h3><p>Agentes e frameworks open source que fazem pentest com IA, com aviso de uso autorizado e curadoria por tipo.</p><span class="go">Abrir →</span></a>
+      <a class="card" href="solucoes-secrets.html"><span class="k">2 projetos</span><h3>Gestão de segredos</h3><p>OpenBao para guardar e distribuir segredos e OWASP WrongSecrets para praticar os erros mais comuns.</p><span class="go">Abrir →</span></a>
+      <a class="card" href="solucoes-containers.html"><span class="k">6 ferramentas</span><h3>Segurança de containers</h3><p>O que acontece dentro de containers e de Kubernetes, do build ao runtime: Trivy, Kubescape, kube-bench, Falco, Tetragon e Tracee.</p><span class="go">Abrir →</span></a>
+    </div>
+    <p class="note">Mais temas entram aos poucos. Todas as ferramentas listadas aqui são open source, com link para o repositório oficial.</p>
+  </section>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicated to safeguarding digital frontiers, navigating the cyber realms with resilience, and championing cybersecurity as a cornerstone of our digital future.&rdquo;</span></p></div></footer>
+</body>
+</html>
