@@ -238,7 +238,7 @@ const PAGE = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Radar: ransomware no mundo, com o Brasil em destaque. Mapa-múndi de menções em sites de vazamento, setores, grupos, comunicações de incidente à ANPD por estado e ferramentas e CVEs usados por grupos.">
 <title>Radar · Cyber Expert Guide</title>

@@ -23,6 +23,8 @@ O site tem estas partes:
 
 **Manutenção do CSS:** os links apontam para `styles.css?v=<hash>` para o navegador não usar um CSS antigo em cache (o servidor guarda por horas). Depois de mexer em `styles.css`, rode `node tools/bump-css.mjs`; `node tests/validar-css-versao.mjs` avisa se esquecer. Os geradores (`build-radar*.mjs`, `build-notas.mjs`) calculam a versão sozinhos.
 
+**CSP:** todas as páginas usam a mesma política (`script-src 'self'` mais o host do Cloudflare Web Analytics, e `connect-src` só para o destino dele), sem `unsafe-inline`. `node tests/validar-csp.mjs` falha se alguma página ou gerador divergir. O script inline que o Cloudflare injeta para detecção de bots (JavaScript Detections) continua bloqueado de propósito: ele muda a cada requisição e só liberaria com `unsafe-inline`.
+
 ## Como usar a trilha
 1. Abra a **Trilha** e comece pela fase **00. Base de lançamento**.
 2. Cada fase tem **missões** (estudo, prática e chefões, que são os labs da disciplina) e um **checkpoint** de 3 questões.
