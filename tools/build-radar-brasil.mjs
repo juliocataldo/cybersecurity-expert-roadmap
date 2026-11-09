@@ -1,4 +1,4 @@
-// Gera radar-brasil.html: panorama estatístico do ransomware no Brasil + comunicações da ANPD por estado.
+// Gera radar.html (primeira tela do Radar): panorama estatístico do ransomware no Brasil + comunicações da ANPD por estado.
 // Uso: node tools/build-radar-brasil.mjs        (baixa as fontes, agrega, aplica a trava e grava a página)
 //      node tools/build-radar-brasil.mjs --local <victims.json> <groups.json>   (teste offline)
 //
@@ -148,11 +148,10 @@ ${ICON}
 ${NAV}
 </header>
 <main class="wrap">
-  <p class="crumb"><a href="radar.html">← Radar</a></p>
   <section class="sec-g">
     <p class="eyebrow">Threat intel · estatística</p>
     <h1>Radar Brasil</h1>
-    <p class="sec-intro">O ransomware no Brasil em números agregados: quantas alegações aparecem em sites de vazamento, em que setores e por quais grupos, e quantas comunicações de incidente chegam à ANPD por estado. Desenho inspirado no <a href="https://marianabsctba.github.io/Panthera_Census/" target="_blank" rel="noopener noreferrer">Panthera Census</a>, com código próprio. Atualizado em ${dataBR(hojeISO)}.</p>
+    <p class="sec-intro">O ransomware no Brasil em números agregados: quantas alegações aparecem em sites de vazamento, em que setores e por quais grupos, e quantas comunicações de incidente chegam à ANPD por estado. Atualizado em ${dataBR(hojeISO)}.</p>
 
     <div class="warn-box">
       <b>Como ler estes números</b>
@@ -162,6 +161,10 @@ ${NAV}
         <li><b>Esta página não identifica vítimas.</b> Só números agregados; recortes com menos de ${K} casos são somados em "Outros".</li>
         <li><b>ANPD é outra coisa:</b> são comunicações oficiais feitas por organizações. Nunca são somadas às alegações.</li>
       </ul>
+    </div>
+
+    <div class="cards cards-one">
+    <a class="card" href="radar-casos.html"><span class="k">Segunda tela</span><h3>Casos e vulnerabilidades</h3><p>Quer ver os nomes das organizações citadas em sites de vazamento e as vulnerabilidades em exploração ativa (KEV)? Estão na segunda tela. Lembre: citada não quer dizer atacada de fato.</p><span class="go">Abrir →</span></a>
     </div>
 
     <div class="kpis">
@@ -228,9 +231,9 @@ ${FOOT}
 </html>
 `;
 
-writeFileSync(join(ROOT, 'radar-brasil.html'), PAGE);
+writeFileSync(join(ROOT, 'radar.html'), PAGE);
 // histórico: só o total do dia (sem nenhum dado de caso)
 if (!existsSync(HISTORICO)) writeFileSync(HISTORICO, 'data,total_br\n');
 const linhas = readFileSync(HISTORICO, 'utf8').trim().split('\n');
 if (!linhas.at(-1).startsWith(hojeISO)) appendFileSync(HISTORICO, `${hojeISO},${ag.total}\n`);
-console.log(`radar-brasil.html gerado | BR: ${ag.total} (12m: ${ag.ultimos12}) | grupos≥${K}: ${ag.gruposDistintos} | ANPD: ${anpd.total}`);
+console.log(`radar.html gerado | BR: ${ag.total} (12m: ${ag.ultimos12}) | grupos≥${K}: ${ag.gruposDistintos} | ANPD: ${anpd.total}`);

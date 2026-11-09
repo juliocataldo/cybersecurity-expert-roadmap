@@ -40,7 +40,7 @@ Sugestão de cadência: uma vez por mês, ou quando quiser ver os números novos
    node tests/validar-radar-brasil.mjs
    ```
 
-8. Faça commit de `tools/data/anpd.json` e `radar-brasil.html`.
+8. Faça commit de `tools/data/anpd.json` e `radar.html`.
 
 ## Cuidados
 

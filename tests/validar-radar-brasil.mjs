@@ -51,9 +51,9 @@ ok(Object.keys(mapa.ufs).length === 27, 'mapa deve ter 27 UFs');
 ok(anpd.estados.every(s => mapa.ufs[s.uf]), 'toda UF da ANPD deve existir no mapa');
 
 // a página gerada não pode ter script nem estilo inline (CSP do site)
-const html = readFileSync(new URL('../radar-brasil.html', import.meta.url), 'utf8');
-ok(!/<script/i.test(html), 'radar-brasil.html não deve ter <script>');
-ok(!/ style=/i.test(html), 'radar-brasil.html não deve ter style inline (a CSP bloqueia)');
+const html = readFileSync(new URL('../radar.html', import.meta.url), 'utf8');
+ok(!/<script/i.test(html), 'radar.html não deve ter <script>');
+ok(!/ style=/i.test(html), 'radar.html não deve ter style inline (a CSP bloqueia)');
 ok(/Fonte: Ransomware\.live/.test(html), 'atribuição ao Ransomware.live obrigatória');
 
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }

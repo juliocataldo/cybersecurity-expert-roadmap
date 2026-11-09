@@ -1,4 +1,4 @@
-// Gera o "Radar de ameaças" a partir da API Vexday (threat intel).
+// Gera a segunda tela do Radar (radar-casos.html: casos citados e KEV) a partir da API Vexday (threat intel).
 // Foco v1: Brasil (vítimas de ransomware) + grandes fornecedores (KEV).
 // Uso no GitHub Action: CHAVE_VEXDAY=<secret> node tools/build-radar.mjs
 // Sem chave ou com erro de rede, gera um placeholder (nunca quebra o build).
@@ -103,7 +103,7 @@ const painelKev = kev.length
 const placeholder = `    <p class="wip"><span class="wip-dot"></span><b>Radar sendo configurado</b> — adicione o secret <code>CHAVE_VEXDAY</code> no repositório e rode o workflow "Radar".</p>
     <p class="sec-intro">Quando a chave estiver no lugar, esta página passa a mostrar, atualizada automaticamente: <b>ransomware no Brasil</b> e <b>vulnerabilidades em exploração ativa</b> de grandes fornecedores.</p>`;
 
-const LINK_BR = `    <p class="note">Quer os números agregados? Veja o <a href="radar-brasil.html">Radar Brasil</a>: alegações por mês, setor e grupo, e comunicações da ANPD por estado, sem identificar vítimas.</p>`;
+const CRUMB = `  <p class="crumb"><a href="radar.html">← Radar</a></p>`;
 
 const PAGE = `<!doctype html>
 <html lang="pt-BR">
@@ -112,8 +112,8 @@ const PAGE = `<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Radar de ameaças: ransomware no Brasil e vulnerabilidades em exploração ativa (KEV) de grandes fornecedores, via API Vexday.">
-<title>Radar · Cyber Expert Guide</title>
+<meta name="description" content="Casos de ransomware citados em sites de vazamento no Brasil e vulnerabilidades em exploração ativa (KEV) de grandes fornecedores, via API Vexday.">
+<title>Casos e vulnerabilidades · Radar · Cyber Expert Guide</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -123,11 +123,11 @@ const PAGE = `<!doctype html>
 ${NAV}
 </header>
 <main class="wrap">
+${CRUMB}
   <section class="sec-g">
-    <p class="eyebrow">Threat intel</p>
-    <h1>Radar de ameaças</h1>
+    <p class="eyebrow">Threat intel · segunda tela</p>
+    <h1>Casos e vulnerabilidades</h1>
     <p class="sec-intro">O que está acontecendo agora, com foco em <b>Brasil</b> e <b>grandes fornecedores</b>.${temDados ? ` Atualizado automaticamente &middot; última atualização: ${hoje}.` : ' Atualizado automaticamente.'}</p>
-${LINK_BR}
 ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : placeholder}
   </section>
 </main>
@@ -135,5 +135,5 @@ ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : pl
 </body>
 </html>
 `;
-writeFileSync(join(ROOT, 'radar.html'), PAGE);
-console.log(`radar.html gerado | chave: ${KEY ? 'sim' : 'NÃO'} | vítimas BR: ${victims.length} | KEV: ${kev.length}`);
+writeFileSync(join(ROOT, 'radar-casos.html'), PAGE);
+console.log(`radar-casos.html gerado | chave: ${KEY ? 'sim' : 'NÃO'} | vítimas BR: ${victims.length} | KEV: ${kev.length}`);
