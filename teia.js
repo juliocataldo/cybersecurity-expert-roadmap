@@ -11,6 +11,7 @@
   const exemploEl = document.getElementById("teiaExemplo");
   const infoEl = document.getElementById("teiaInfo");
   const cardEl = document.getElementById("teiaCard");
+  const legEl = document.getElementById("teiaLegenda");
   const ctrlEl = document.getElementById("teiaCtrl");
   if (exemploEl) exemploEl.hidden = data.fonte !== "exemplo"; // aviso só quando as notas são as de tools/sample-vault
   if (!canvas) return;
@@ -25,6 +26,13 @@
   const ctx = canvas.getContext("2d");
   const COL = { node: "#b85e18", nodeHi: "#ff7a1a", text: "#a8a8a8", textHi: "#f2f2f2", link: "#333", linkHi: "#ff7a1a", pill: "rgba(13,13,13,.9)" };
   const FONTE = "ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif";
+  // cor por pasta do vault: cor fixa por nome (nunca pela ordem), paleta validada para o fundo escuro e daltonismo.
+  // O laranja fica de fora de propósito: é a cor de destaque do site (foco e ligações em foco).
+  const CORES = { "Offsec": "#3987e5", "OS": "#199e70", "Swiss Army Kmife": "#c98500", "Swiss Army Knife": "#c98500", "Network": "#d55181", "Web APP and API": "#9085e9", "Defsec": "#e66767" };
+  const OUTRAS = "Outras", COR_OUTRAS = "#8a8a8a";
+  const grupo = n => (CORES[n.pasta] ? n.pasta : OUTRAS);
+  const cor = n => CORES[n.pasta] || COR_OUTRAS;
+  let pastaSel = null; // legenda clicada: destaca só as notas daquela pasta
   const neighbors = new Map(nodes.map(n => [n.id, new Set()]));
   links.forEach(l => { neighbors.get(l.s.id).add(l.t.id); neighbors.get(l.t.id).add(l.s.id); });
   const raioMundo = n => 4 + Math.sqrt(n.deg + 1) * 2.4;
@@ -83,6 +91,7 @@
     if (foco) { escolhidos.add(foco); caixas.push(caixa(foco)); }
     for (const n of ordem) {
       if (escolhidos.has(n) || (foco && !viz.has(n.id))) continue; // com foco, só ele e os vizinhos têm nome
+      if (!foco && pastaSel && grupo(n) !== pastaSel) continue;     // com uma pasta escolhida na legenda, só ela tem nome
       const c = caixa(n); if (livre(c)) { escolhidos.add(n); caixas.push(c); }
     }
     return escolhidos;
@@ -93,18 +102,20 @@
     ctx.clearRect(0, 0, W, H);
     const foco = hover || sel;
     const viz = foco ? neighbors.get(foco.id) : null;
+    const naPasta = n => !pastaSel || grupo(n) === pastaSel;
     for (const l of links) {
       const on = foco && (l.s === foco || l.t === foco);
       const a = tela(l.s), b = tela(l.t);
-      ctx.strokeStyle = on ? COL.linkHi : COL.link; ctx.globalAlpha = foco && !on ? 0.3 : 1; ctx.lineWidth = on ? 1.6 : 1;
+      const apagada = (foco && !on) || (!foco && pastaSel && !(naPasta(l.s) && naPasta(l.t)));
+      ctx.strokeStyle = on ? COL.linkHi : COL.link; ctx.globalAlpha = apagada ? 0.25 : 1; ctx.lineWidth = on ? 1.6 : 1;
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     }
     for (const n of nodes) {
       const p = tela(n);
-      ctx.globalAlpha = !foco || n === foco || viz.has(n.id) ? 1 : 0.3;
-      ctx.beginPath(); ctx.arc(p.x, p.y, raio(n), 0, Math.PI * 2);
-      ctx.fillStyle = n === foco ? COL.nodeHi : COL.node; ctx.fill();
-      if (n === sel) { ctx.strokeStyle = COL.textHi; ctx.lineWidth = 2; ctx.stroke(); }
+      ctx.globalAlpha = foco ? (n === foco || viz.has(n.id) ? 1 : 0.25) : (naPasta(n) ? 1 : 0.18);
+      ctx.beginPath(); ctx.arc(p.x, p.y, raio(n) + (n === foco ? 1.5 : 0), 0, Math.PI * 2);
+      ctx.fillStyle = cor(n); ctx.fill();
+      if (n === foco) { ctx.strokeStyle = n === sel ? COL.textHi : COL.nodeHi; ctx.lineWidth = 2; ctx.stroke(); }
     }
     ctx.globalAlpha = 1; ctx.textAlign = "center";
     for (const n of rotulos(foco, viz)) {
@@ -128,6 +139,27 @@
   if (reduce) for (let i = 0; i < 320; i++) layout.passo(null); // sem animação: já começa assentado
   enquadrar();
   requestAnimationFrame(frame);
+
+  /* ---------- legenda: uma entrada por pasta presente no grafo; clicar destaca a pasta ---------- */
+  if (legEl) {
+    const contagem = new Map();
+    for (const n of nodes) contagem.set(grupo(n), (contagem.get(grupo(n)) || 0) + 1);
+    const itens = [...contagem].sort((a, b) => (a[0] === OUTRAS) - (b[0] === OUTRAS) || b[1] - a[1] || a[0].localeCompare(b[0], "pt"));
+    legEl.replaceChildren(...itens.map(([g, q]) => {
+      const b = document.createElement("button"); b.type = "button"; b.dataset.pasta = g; b.setAttribute("aria-pressed", "false");
+      const sw = document.createElement("span"); sw.className = "sw sw-" + (g === OUTRAS ? "outras" : g.toLowerCase().replace(/[^a-z]+/g, "-"));
+      const nome = document.createElement("span"); nome.textContent = g;
+      const qt = document.createElement("span"); qt.className = "teia-q"; qt.textContent = q;
+      b.append(sw, nome, qt); return b;
+    }));
+    legEl.hidden = false;
+    legEl.addEventListener("click", ev => {
+      const b = ev.target.closest("button[data-pasta]"); if (!b) return;
+      pastaSel = pastaSel === b.dataset.pasta ? null : b.dataset.pasta;
+      for (const x of legEl.querySelectorAll("button")) x.setAttribute("aria-pressed", String(x.dataset.pasta === pastaSel));
+      selecionar(null);
+    });
+  }
 
   /* ---------- cartão da nota selecionada ---------- */
   function selecionar(n) {

@@ -469,6 +469,15 @@ dialog h2{padding-right:36px}
 .teia-card .go:hover{text-decoration:underline}
 .teia-x{position:absolute;top:6px;right:6px;width:28px;height:28px;border:0;background:none;color:var(--mut);font-size:20px;line-height:1;cursor:pointer}
 .teia-x:hover{color:var(--tx)}
+.teia-leg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.teia-leg[hidden]{display:none}
+.teia-leg button{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid var(--line2);border-radius:999px;background:none;color:var(--tx2);font:13px/1.2 inherit;font-family:inherit;cursor:pointer}
+.teia-leg button:hover,.teia-leg button:focus-visible{border-color:var(--tx2);color:var(--tx);outline:none}
+.teia-leg button[aria-pressed="true"]{border-color:var(--acc);color:var(--tx);background:var(--accbg)}
+.teia-leg .sw{width:10px;height:10px;border-radius:50%;flex:none;background:#8a8a8a}
+.teia-leg .sw-offsec{background:#3987e5}.teia-leg .sw-os{background:#199e70}.teia-leg .sw-swiss-army-kmife,.teia-leg .sw-swiss-army-knife{background:#c98500}
+.teia-leg .sw-network{background:#d55181}.teia-leg .sw-web-app-and-api{background:#9085e9}.teia-leg .sw-defsec{background:#e66767}
+.teia-leg .teia-q{color:var(--mut);font:12px var(--mono)}
 .teia-empty{position:absolute;inset:0;place-items:center;color:var(--mut);text-align:center;padding:20px}
 .teia-empty:not([hidden]){display:grid}
 /* wikilinks e metadados nas páginas de nota */
