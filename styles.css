@@ -507,12 +507,14 @@ a.path.path-feat:hover{border-color:#e2904c}
 /* ===== Toque "cyber" leve (preto/laranja, sem brilho exagerado) ===== */
 .hero-tech{position:relative}
 .hero-tech>*{position:relative;z-index:1}
-.hero-tech::before{content:"";position:absolute;inset:-60px 0 -10px;z-index:0;pointer-events:none;
+.hero-tech::before{content:"";position:absolute;z-index:0;pointer-events:none;
+  top:-90px;bottom:-20px;left:calc(50% - 50vw);right:calc(50% - 50vw);
   background:
-    radial-gradient(560px 300px at 86% 4%, #cf6a240d, transparent 70%),
-    linear-gradient(#ffffff05 1px, transparent 1px) 0 0/100% 38px,
-    linear-gradient(90deg,#ffffff05 1px, transparent 1px) 0 0/38px 100%;
-  -webkit-mask:linear-gradient(#000 50%, transparent);mask:linear-gradient(#000 50%, transparent)}
+    radial-gradient(640px 360px at 76% 12%, #cf6a2426, transparent 70%),
+    radial-gradient(#ffffff26 1px, transparent 1.5px) 0 0/24px 24px;
+  -webkit-mask:radial-gradient(1100px 600px at 70% 15%, #000 25%, transparent 75%);
+  mask:radial-gradient(1100px 600px at 70% 15%, #000 25%, transparent 75%)}
+body{overflow-x:clip}
 
 /* ===== Aviso "em construção" (Teia, Artigos) ===== */
 .wip{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2);background:var(--s1);border:1px solid var(--line2);border-radius:999px;padding:7px 15px;margin:0 0 20px}
