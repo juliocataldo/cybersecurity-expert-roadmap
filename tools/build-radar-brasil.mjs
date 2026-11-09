@@ -8,7 +8,7 @@
 // Princípios:
 //  - O dado bruto vive só na memória do processo: nunca é gravado no repositório nem na página.
 //  - Só números agregados são publicados; recortes com menos de K casos são somados ou omitidos.
-//  - Alegação de criminoso em site de vazamento NÃO é incidente confirmado. A ANPD é mostrada à parte.
+//  - Menção em site de vazamento NÃO é incidente confirmado. A ANPD é mostrada à parte.
 //  - Se a fonte vier cortada ou a trava falhar, o build aborta e a página anterior continua no ar.
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -99,18 +99,19 @@ const metros = (itens, max, rotulo = i => i.nome) => `<ul class="hb">\n${itens.m
 const tabela = (cab, linhas) => `<div class="table-scroll"><table class="cert"><thead><tr>${cab.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${linhas.map(l => `<tr>${l.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 const detalhes = (titulo, html) => `<details class="dados"><summary>${titulo}</summary>${html}</details>`;
 
+/* colunas por mês: viewBox largo, um rótulo a cada 3 meses (sem sobreposição); em tela estreita o gráfico rola na horizontal */
 function colunasMes(meses, rotulo) {
-  const W = 480, H = 190, base = 150, topo = 14, esq = 6;
+  const W = 960, H = 250, base = 200, topo = 24, esq = 10;
   const max = Math.max(1, ...meses.map(m => m.n));
-  const passo = (W - esq * 2) / meses.length, larg = passo * 0.68;
+  const passo = (W - esq * 2) / meses.length, larg = passo * 0.62;
   const barras = meses.map((m, i) => {
-    const h = Math.max(m.n ? 2 : 0, (m.n / max) * (base - topo - 14));
-    const x = esq + i * passo + (passo - larg) / 2;
-    const rot = i % 3 === (meses.length - 1) % 3 ? `<text class="ch-t" x="${(x + larg / 2).toFixed(1)}" y="${base + 20}" text-anchor="${i === meses.length - 1 ? 'end' : 'middle'}">${rotuloMes(m.mes)}</text>` : '';
-    const val = m.n ? `<text class="ch-v" x="${(x + larg / 2).toFixed(1)}" y="${(base - h - 5).toFixed(1)}" text-anchor="middle">${fmt(m.n)}</text>` : '';
-    return `<g><title>${rotuloMes(m.mes)}: ${fmt(m.n)} alegações</title><rect class="ch-b" x="${x.toFixed(1)}" y="${(base - h).toFixed(1)}" width="${larg.toFixed(1)}" height="${h.toFixed(1)}" rx="2"/>${val}${rot}</g>`;
+    const h = Math.max(m.n ? 2 : 0, (m.n / max) * (base - topo - 8));
+    const x = esq + i * passo + (passo - larg) / 2, cx = x + larg / 2;
+    const rot = (meses.length - 1 - i) % 3 === 0 ? `<text class="ch-t" x="${cx.toFixed(1)}" y="${base + 26}" text-anchor="${i === meses.length - 1 ? 'end' : 'middle'}">${rotuloMes(m.mes)}</text><line class="ch-tick" x1="${cx.toFixed(1)}" y1="${base}" x2="${cx.toFixed(1)}" y2="${base + 6}"/>` : '';
+    const val = m.n ? `<text class="ch-v" x="${cx.toFixed(1)}" y="${(base - h - 6).toFixed(1)}" text-anchor="middle">${fmt(m.n)}</text>` : '';
+    return `<g><title>${rotuloMes(m.mes)}: ${fmt(m.n)} menções</title><rect class="ch-b" x="${x.toFixed(1)}" y="${(base - h).toFixed(1)}" width="${larg.toFixed(1)}" height="${h.toFixed(1)}" rx="3"/>${val}${rot}</g>`;
   }).join('');
-  return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(rotulo)}, últimos ${meses.length} meses"><line class="ch-ax" x1="${esq}" y1="${base}" x2="${W - esq}" y2="${base}"/>${barras}</svg>`;
+  return `<div class="ch-scroll"><svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(rotulo)}, últimos ${meses.length} meses"><line class="ch-ax" x1="${esq}" y1="${base}" x2="${W - esq}" y2="${base}"/>${barras}</svg></div>`;
 }
 
 /* --- mapa do Brasil por UF (ANPD) --- */
@@ -133,64 +134,42 @@ function mapaUF() {
 }
 const legendaUF = `<ul class="leg" aria-label="Legenda do mapa"><li><i class="m0"></i>0</li><li><i class="m1"></i>1–9</li><li><i class="m2"></i>10–29</li><li><i class="m3"></i>30–99</li><li><i class="m4"></i>100+</li></ul>`;
 
-/* --- mapa-múndi: 3 medidas x 2 períodos, trocados por CSS (radio), sem JS --- */
+/* --- mapa-múndi: menções por país (sem filtros) --- */
 const nomePais = c => (refs.paises[c] && refs.paises[c].nome) || c;
 const linhas = ap.paises.map(p => {
-  const pop = refs.populacao[p.pais]?.v, pib = refs.pib[p.pais]?.v;
-  return { ...p, nome: nomePais(p.pais), pop, pib,
-    abs: { todos: p.todos, '12m': p.m12 },
-    pop_: { todos: taxa(p.todos, pop, 1e6), '12m': taxa(p.m12, pop, 1e6) },
-    pib_: { todos: taxa(p.todos, pib, 1e9), '12m': taxa(p.m12, pib, 1e9) } };
+  const pop = refs.populacao[p.pais]?.v;
+  return { ...p, nome: nomePais(p.pais), pop, porMilhao: taxa(p.todos, pop, 1e6) };
 });
 const porPais = new Map(linhas.map(l => [l.pais, l]));
-const MEDIDAS = [
-  { id: 'abs', chave: 'abs', rotulo: 'Alegações', unidade: 'alegações', dec: 0, nota: `Países com menos de ${K} alegações aparecem em cinza.` },
-  { id: 'pop', chave: 'pop_', rotulo: 'Por milhão de habitantes', unidade: 'por milhão de habitantes', dec: 1, nota: `Só países com ${MIN_TAXA} ou mais alegações no período; os demais ficam em cinza para não distorcer.` },
-  { id: 'pib', chave: 'pib_', rotulo: 'Por US$ bilhão de PIB', unidade: 'por US$ bilhão de PIB', dec: 2, nota: `Só países com ${MIN_TAXA} ou mais alegações no período; os demais ficam em cinza para não distorcer.` },
-];
-const PERIODOS = [{ id: 'todos', rotulo: 'Série completa' }, { id: '12m', rotulo: 'Últimos 12 meses' }];
-
-const defsMundo = `<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>${Object.entries(mundo.paises).map(([c, p]) => `<path id="pais-${c}" d="${p.d}"/>`).join('')}</defs></svg>`;
-function mapaMundo(medida, periodo) {
-  const val = c => { const l = porPais.get(c); return l ? l[medida.chave][periodo.id] : null; };
-  const valores = Object.keys(mundo.paises).map(val).filter(v => v != null);
-  const lim = limitesQuintis(valores);
+function mapaMundo() {
+  const lim = limitesQuintis(linhas.map(l => l.todos));
   const usos = Object.keys(mundo.paises).map(c => {
-    const v = val(c), l = porPais.get(c);
-    let classe = 'nd', dica;
-    if (v != null && lim.length) { classe = 'p' + faixaDe(v, lim); }
-    if (medida.id === 'abs') dica = v != null ? `${nomePais(c)}: ${fmt(v)} alegações` : `${nomePais(c)}: menos de ${K} alegações`;
-    else dica = v != null ? `${nomePais(c)}: ${fmt(v, medida.dec)} ${medida.unidade} (${fmt(l.abs[periodo.id])} alegações)` : `${nomePais(c)}: sem dados suficientes`;
+    const l = porPais.get(c);
+    const classe = l && lim.length ? 'p' + faixaDe(l.todos, lim) : 'nd';
+    const dica = l ? `${nomePais(c)}: ${fmt(l.todos)} menções` : `${nomePais(c)}: menos de ${K} menções`;
     return `<use href="#pais-${c}" class="pais ${classe}${c === 'BR' ? ' br' : ''}"><title>${esc(dica)}</title></use>`;
   }).join('');
-  const faixas = lim.length ? [`< ${fmt(lim[0], medida.dec)}`, ...lim.slice(0, -1).map((x, i) => `${fmt(x, medida.dec)}–${fmt(lim[i + 1], medida.dec)}`), `≥ ${fmt(lim.at(-1), medida.dec)}`] : [];
-  const leg = `<ul class="leg" aria-label="Legenda do mapa">${faixas.map((t, i) => `<li><i class="p${i + 1}"></i>${esc(t)}</li>`).join('')}<li><i class="nd"></i>sem dados suficientes</li><li><i class="brsw"></i>Brasil em destaque</li></ul>`;
-  return `      <div class="mw mw-${medida.id}-${periodo.id}">
-        <svg class="mundo" viewBox="0 0 ${mundo.largura} ${mundo.altura}" role="img" aria-label="Mapa-múndi: ${esc(medida.rotulo.toLowerCase())}, ${esc(periodo.rotulo.toLowerCase())}">${usos}</svg>
-        ${leg}
-        <p class="mut small">${esc(medida.nota)}</p>
-      </div>`;
-}
-const tabsMundo = `<div class="tabs-mapa">
-      <input type="radio" name="med" id="med-abs" checked><input type="radio" name="med" id="med-pop"><input type="radio" name="med" id="med-pib">
-      <input type="radio" name="per" id="per-todos" checked><input type="radio" name="per" id="per-12m">
-      <div class="tab-row"><span class="tab-l">Medida</span>${MEDIDAS.map(m => `<label for="med-${m.id}">${esc(m.rotulo)}</label>`).join('')}</div>
-      <div class="tab-row"><span class="tab-l">Período</span>${PERIODOS.map(p => `<label for="per-${p.id}">${esc(p.rotulo)}</label>`).join('')}</div>
-${MEDIDAS.flatMap(m => PERIODOS.map(p => mapaMundo(m, p))).join('\n')}
+  const faixas = lim.length ? [`menos de ${fmt(lim[0])}`, ...lim.slice(0, -1).map((x, i) => `${fmt(x)} a ${fmt(lim[i + 1] - 1)}`), `${fmt(lim.at(-1))} ou mais`] : [];
+  const leg = `<ul class="leg leg-linha" aria-label="Legenda do mapa">${faixas.map((t, i) => `<li><i class="p${i + 1}"></i>${esc(t)}</li>`).join('')}<li><i class="nd"></i>menos de ${K}</li><li><i class="brsw"></i>Brasil</li></ul>`;
+  return `<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>${Object.entries(mundo.paises).map(([c, p]) => `<path id="pais-${c}" d="${p.d}"/>`).join('')}</defs></svg>
+    <div class="mapa-w">
+      <svg class="mundo" viewBox="0 0 ${mundo.largura} ${mundo.altura}" role="img" aria-label="Mapa-múndi: menções em sites de vazamento por país"><path class="esfera" d="${mundo.esfera}"/><path class="grade" d="${mundo.grade}"/>${usos}</svg>
+      ${leg}
     </div>`;
+}
 
 /* --- ranking de países, com o Brasil sempre visível --- */
 const rankAbs = [...linhas].sort((a, b) => b.todos - a.todos);
-const rankPop = linhas.filter(l => l.pop_.todos != null).sort((a, b) => b.pop_.todos - a.pop_.todos);
+const rankPop = linhas.filter(l => l.porMilhao != null).sort((a, b) => b.porMilhao - a.porMilhao);
 const posAbs = c => rankAbs.findIndex(l => l.pais === c) + 1;
 const posPop = c => rankPop.findIndex(l => l.pais === c) + 1;
 const br = porPais.get('BR');
 const TOP = 15;
 function tabelaPaises() {
-  const linha = (l, i) => `<tr${l.pais === 'BR' ? ' class="br-row"' : ''}><td>${i}</td><td>${esc(l.nome)}</td><td>${fmt(l.todos)}</td><td>${l.m12 != null ? fmt(l.m12) : '—'}</td><td>${l.pop_.todos != null ? fmt(l.pop_.todos, 1) : '—'}</td></tr>`;
+  const linha = (l, i) => `<tr${l.pais === 'BR' ? ' class="br-row"' : ''}><td>${i}</td><td>${esc(l.nome)}</td><td>${fmt(l.todos)}</td><td>${l.m12 != null ? fmt(l.m12) : '—'}</td><td>${l.porMilhao != null ? fmt(l.porMilhao, 1) : '—'}</td></tr>`;
   const top = rankAbs.slice(0, TOP).map((l, i) => linha(l, i + 1));
   if (br && posAbs('BR') > TOP) top.push(`<tr><td colspan="5" class="mut">…</td></tr>`, linha(br, posAbs('BR')));
-  return `<div class="table-scroll"><table class="cert"><thead><tr><th>#</th><th>País</th><th>Alegações</th><th>Últimos 12 meses</th><th>Por milhão de hab.</th></tr></thead><tbody>${top.join('')}</tbody></table></div>`;
+  return `<div class="table-scroll"><table class="cert"><thead><tr><th>#</th><th>País</th><th>Menções</th><th>Últimos 12 meses</th><th>Por milhão de hab.</th></tr></thead><tbody>${top.join('')}</tbody></table></div>`;
 }
 
 /* --- Brasil x mundo por setor (% do total de cada um) --- */
@@ -261,7 +240,7 @@ const PAGE = `<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Radar: ransomware no mundo, com o Brasil em destaque. Mapa-múndi de alegações em sites de vazamento, setores, grupos, comunicações de incidente à ANPD por estado e ferramentas e CVEs usados por grupos.">
+<meta name="description" content="Radar: ransomware no mundo, com o Brasil em destaque. Mapa-múndi de menções em sites de vazamento, setores, grupos, comunicações de incidente à ANPD por estado e ferramentas e CVEs usados por grupos.">
 <title>Radar · Cyber Expert Guide</title>
 ${ICON}
 <link rel="stylesheet" href="styles.css?v=${CSSV}">
@@ -272,69 +251,51 @@ ${ICON}
 ${NAV}
 </header>
 <main class="wrap">
-  <section class="sec-g">
+  <section class="sec-g radar-pg">
     <p class="eyebrow">Threat intel · estatística</p>
     <h1>Radar</h1>
-    <p class="sec-intro">O ransomware no mundo em números agregados, com o <b>Brasil em destaque</b>: onde caem as alegações em sites de vazamento, em que setores e por quais grupos, o que se sabe sobre como atacam e quantas comunicações de incidente chegam à ANPD por estado. Atualizado em ${dataBR(hojeISO)}.</p>
+    <p class="sec-intro">O ransomware no mundo em números agregados, com o <b>Brasil em destaque</b>: onde caem as menções em sites de vazamento, em que setores e por quais grupos, o que se sabe sobre como atacam e quantas comunicações de incidente chegam à ANPD por estado. Atualizado em ${dataBR(hojeISO)}.</p>
 
-    <div class="warn-box">
-      <b>Como ler estes números</b>
-      <ul>
-        <li><b>Alegação não é incidente confirmado.</b> É o que o criminoso publica no seu site de vazamento, e pode haver exagero, repetição ou erro de país e setor (a fonte não passa por revisão manual).</li>
-        <li><b>Nem toda alegação tem país:</b> ${fmt(semPais)} (${fmt(semPais / totalFonte * 100, 0)}% do total da fonte) não informam o país e ficam fora dos mapas e rankings por país.</li>
-        <li><b>É só uma parte dos ataques.</b> Quem paga o resgate tende a não aparecer, e muitos ataques nunca são publicados. Países com mais mídia e mais sites monitorados aparecem mais.</li>
-        <li><b>Esta página não identifica vítimas.</b> Só números agregados; recortes com menos de ${K} casos são somados ou omitidos, e taxas por habitante e por PIB só aparecem com ${MIN_TAXA} ou mais casos.</li>
-        <li><b>ANPD é outra coisa:</b> são comunicações oficiais feitas por organizações. Nunca são somadas às alegações.</li>
-      </ul>
-    </div>
+    <nav class="ancoras" aria-label="Nesta página"><a href="#mundo">Mundo</a><a href="#brasil">Brasil</a><a href="#anpd">ANPD</a>${secaoMatrizes ? '<a href="#como-atacam">Como atacam</a>' : ''}<a href="#observacoes">Observações</a><a href="#fontes">Fontes</a></nav>
 
-    <div class="cards cards-one">
-    <a class="card" href="radar-casos.html"><span class="k">Segunda tela</span><h3>Casos e vulnerabilidades</h3><p>Quer ver os nomes das organizações citadas em sites de vazamento e as vulnerabilidades em exploração ativa (KEV)? Estão na segunda tela. Lembre: citada não quer dizer atacada de fato.</p><span class="go">Abrir →</span></a>
-    </div>
-
-    <nav class="ancoras" aria-label="Nesta página"><a href="#mundo">Mundo</a><a href="#brasil">Brasil</a><a href="#anpd">ANPD</a>${secaoMatrizes ? '<a href="#como-atacam">Como atacam</a>' : ''}<a href="#fontes">Fontes</a></nav>
-
-    <h2 class="rm-h2" id="mundo">Mundo: onde caem as alegações</h2>
+    <h2 class="rm-h2" id="mundo">Mundo: onde caem as menções</h2>
     <div class="kpis">
-      <div class="kpi"><b>${fmt(agMundo.total)}</b><span>alegações no mundo, desde o início da série</span></div>
+      <div class="kpi"><b>${fmt(agMundo.total)}</b><span>menções no mundo, desde o início da série</span></div>
       <div class="kpi"><b>${fmt(agMundo.ultimos12)}</b><span>nos últimos 12 meses</span></div>
-      <div class="kpi"><b>${fmt(ap.paises.length)}</b><span>países com ${K} ou mais alegações</span></div>
-      <div class="kpi kpi-br"><b>${br ? posAbs('BR') + 'º' : '—'}</b><span>posição do Brasil em alegações (${fmt(parteMundo, 1)}% do total)${posPop('BR') ? `; ${posPop('BR')}º por milhão de habitantes` : ''}</span></div>
+      <div class="kpi"><b>${fmt(ap.paises.length)}</b><span>países com ${K} ou mais menções</span></div>
+      <div class="kpi kpi-br"><b>${br ? posAbs('BR') + 'º' : '—'}</b><span>posição do Brasil em menções (${fmt(parteMundo, 1)}% do total)${posPop('BR') ? `; ${posPop('BR')}º por milhão de habitantes` : ''}</span></div>
     </div>
-    <p class="sec-intro">Escolha a medida e o período. Passe o mouse (ou toque) em um país para ver o valor. O Brasil tem contorno claro.</p>
-    ${defsMundo}
-    ${tabsMundo}
-    <h3 class="rm-h3">Países com mais alegações</h3>
+    <p class="sec-intro">Passe o mouse (ou toque) em um país para ver o valor. O Brasil tem contorno claro.</p>
+    ${mapaMundo()}
+
+    <h3 class="rm-h3">Países com mais menções</h3>
     ${tabelaPaises()}
-    <p class="note">Não é um ranking de risco: o número depende do tamanho da economia, da quantidade de organizações expostas e de quem os criminosos escolhem divulgar.</p>
+    <p class="note">Por milhão de habitantes só aparece para países com ${MIN_TAXA} ou mais menções, para não distorcer. Não é um ranking de risco: o número depende do tamanho da economia, da quantidade de organizações expostas e de quem os criminosos escolhem divulgar.</p>
 
     <h3 class="rm-h3">Brasil e mundo, por setor</h3>
-    <p class="sec-intro">Parcela de cada setor no total de alegações do Brasil e do mundo.</p>
+    <p class="sec-intro">Parcela de cada setor no total de menções do Brasil e do mundo.</p>
     ${comparaSetores()}
 
-    <div class="osint-top">
-      <div class="osint-box">
-        <span class="k mono small">Mundo · alegações por mês</span>
-        ${colunasMes(agMundo.meses, 'Alegações por mês no mundo')}
-      </div>
-      <div class="osint-box">
-        <span class="k mono small">Mundo · grupos mais ativos</span>
-        ${metros(agMundo.porGrupo, maxGrupoMundo)}
-      </div>
+    <h3 class="rm-h3">Mundo: menções por mês</h3>
+    ${colunasMes(agMundo.meses, 'Menções por mês no mundo')}
+
+    <h3 class="rm-h3">Mundo: grupos mais ativos</h3>
+    <div class="osint-box">
+      ${metros(agMundo.porGrupo, maxGrupoMundo)}
     </div>
 ${secaoMatrizes}
     <h2 class="rm-h2" id="brasil">Foco no Brasil</h2>
     <div class="kpis">
-      <div class="kpi"><b>${fmt(ag.total)}</b><span>alegações com país Brasil, desde o início da série</span></div>
+      <div class="kpi"><b>${fmt(ag.total)}</b><span>menções com país Brasil, desde o início da série</span></div>
       <div class="kpi"><b>${fmt(ag.ultimos12)}</b><span>nos últimos 12 meses</span></div>
       <div class="kpi"><b>${fmt(ag.gruposDistintos)}</b><span>grupos com ${K} ou mais casos no Brasil</span></div>
       <div class="kpi"><b>${fmt(anpd.total)}</b><span>comunicações à ANPD (${fmt(anpd.ransomware)} de ransomware)</span></div>
     </div>
 
-    <h3 class="rm-h3">Alegações por mês</h3>
-    <p class="sec-intro">Últimos ${ag.meses.length} meses, pela data em que a alegação foi detectada no site de vazamento. O mês corrente ainda está incompleto.</p>
-    ${colunasMes(ag.meses, 'Alegações por mês no Brasil')}
-    ${detalhes('Ver dados do gráfico', tabela(['Mês', 'Alegações'], ag.meses.map(m => [rotuloMes(m.mes), String(m.n)])))}
+    <h3 class="rm-h3">Menções por mês</h3>
+    <p class="sec-intro">Últimos ${ag.meses.length} meses, pela data em que a menção foi detectada no site de vazamento. O mês corrente ainda está incompleto.</p>
+    ${colunasMes(ag.meses, 'Menções por mês no Brasil')}
+    ${detalhes('Ver dados do gráfico', tabela(['Mês', 'Menções'], ag.meses.map(m => [rotuloMes(m.mes), String(m.n)])))}
 
     <div class="osint-top">
       <div class="osint-box">
@@ -348,7 +309,7 @@ ${secaoMatrizes}
     </div>
     <p class="note">O setor vem classificado pela fonte, em inglês, e foi traduzido aqui. Casos sem classificação ficam em "${esc(ag.porSetor.find(s => /Outros/.test(s.nome))?.nome || OUTROS_SETOR)}".</p>
 
-    <h3 class="rm-h3">Alegações por ano</h3>
+    <h3 class="rm-h3">Menções por ano</h3>
     ${metros(anosLista, maxAno)}
 
     <h2 class="rm-h2" id="anpd">Comunicações de incidente à ANPD, por estado</h2>
@@ -374,15 +335,29 @@ ${anpd.anos.map(a => `        <li><span class="hb-l">${a.ano}</span><meter class
       </div>
     </div>
 
+    <div class="cards cards-one">
+    <a class="card" href="radar-casos.html"><span class="k">Segunda tela</span><h3>Casos e vulnerabilidades</h3><p>Quer ver os nomes das organizações citadas em sites de vazamento e as vulnerabilidades em exploração ativa (KEV)? Estão na segunda tela. Lembre: citada não quer dizer atacada de fato.</p><span class="go">Abrir →</span></a>
+    </div>
+
+    <h2 class="rm-h2" id="observacoes">Observações</h2>
+    <div class="warn-box">
+      <ul>
+        <li><b>Menção não é incidente confirmado.</b> É o que o criminoso publica no seu site de vazamento, e pode haver exagero, repetição ou erro de país e setor.</li>
+        <li><b>É só uma parte dos ataques.</b> Quem paga o resgate tende a não aparecer, e países com mais mídia e mais sites monitorados aparecem mais.</li>
+        <li><b>${fmt(semPais / totalFonte * 100, 0)}% das menções da fonte não informam o país</b> (${fmt(semPais)}) e ficam fora dos mapas e rankings por país.</li>
+        <li><b>A ANPD é outra coisa:</b> são comunicações oficiais feitas por organizações e nunca são somadas às menções.</li>
+      </ul>
+    </div>
+
     <h2 class="rm-h2" id="fontes">Fontes, método e limites</h2>
     <ul class="train srcs">
-      <li><b>Alegações:</b> <a href="https://www.ransomware.live" target="_blank" rel="noopener noreferrer">Ransomware.live</a>, de Julien Mousqueton (uso não comercial, com atribuição). Fonte: Ransomware.live. Os dados brutos não são republicados aqui, como pedem os <a href="https://www.ransomware.live/t&amp;c" target="_blank" rel="noopener noreferrer">termos</a>. País e setor são os que a fonte marca, sem revisão manual: podem estar errados.</li>
-      <li><b>População e PIB:</b> <a href="https://data.worldbank.org" target="_blank" rel="noopener noreferrer">Banco Mundial</a> (CC BY 4.0), último valor disponível de cada país (população em ${esc(refs.populacao.BR?.ano || '')} para o Brasil; o ano varia por país). Atualizado em ${dataBR(refs.atualizado)}.</li>
+      <li><b>Menções:</b> <a href="https://www.ransomware.live" target="_blank" rel="noopener noreferrer">Ransomware.live</a>, de Julien Mousqueton (uso não comercial, com atribuição). Fonte: Ransomware.live. Os dados brutos não são republicados aqui, como pedem os <a href="https://www.ransomware.live/t&amp;c" target="_blank" rel="noopener noreferrer">termos</a>. País e setor são os que a fonte marca, sem revisão manual.</li>
+      <li><b>População:</b> <a href="https://data.worldbank.org" target="_blank" rel="noopener noreferrer">Banco Mundial</a> (CC BY 4.0), último valor disponível de cada país (população em ${esc(refs.populacao.BR?.ano || '')} para o Brasil; o ano varia por país). Atualizado em ${dataBR(refs.atualizado)}.</li>
       <li><b>Mapa-múndi:</b> contornos do <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> (domínio público), em projeção Equal Earth.</li>${secaoMatrizes ? `
       <li><b>Ferramentas e CVEs:</b> <a href="https://github.com/BushidoUK/Ransomware-Tool-Matrix" target="_blank" rel="noopener noreferrer">Ransomware Tool Matrix</a> e <a href="https://github.com/BushidoUK/Ransomware-Vulnerability-Matrix" target="_blank" rel="noopener noreferrer">Ransomware Vulnerability Matrix</a>, do BushidoUK (CC BY 4.0).</li>` : ''}
       <li><b>ANPD:</b> painéis públicos de <a href="https://www.gov.br/anpd/pt-br/assuntos/incidente-de-seguranca" target="_blank" rel="noopener noreferrer">comunicação de incidente de segurança</a>. Os valores ficam num arquivo versionado, conferidos contra o total do painel oficial, e <b>não se atualizam sozinhos</b>; a data da última atualização está no texto acima.</li>
       <li><b>Mapa do Brasil:</b> malha dos estados do <a href="https://servicodados.ibge.gov.br/api/docs/malhas?versao=3" target="_blank" rel="noopener noreferrer">IBGE</a>.</li>
-      <li><b>Processo:</b> um GitHub Action diário baixa a fonte, soma tudo em memória e publica só os totais. Uma trava barra a publicação se aparecer texto fora de uma lista autorizada ou recorte com menos de ${K} casos; nesse caso a página fica com os números do dia anterior.</li>
+      <li><b>Processo:</b> um GitHub Action diário baixa a fonte, soma tudo em memória e publica só os totais, sem identificar vítimas. Uma trava barra a publicação se aparecer texto fora de uma lista autorizada ou recorte com menos de ${K} casos; nesse caso a página fica com os números do dia anterior.</li>
     </ul>
   </section>
 </main>

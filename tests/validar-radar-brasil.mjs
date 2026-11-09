@@ -105,7 +105,11 @@ ok(!/ style=/i.test(html), 'radar.html não deve ter style inline (a CSP bloquei
 ok(/Fonte: Ransomware\.live/.test(html), 'atribuição ao Ransomware.live obrigatória');
 ok(/Banco Mundial/.test(html) && /Natural Earth/.test(html), 'atribuição ao Banco Mundial e ao Natural Earth obrigatória');
 ok(!/Panthera/i.test(html), 'a página não deve citar o Panthera Census');
-ok((html.match(/class="mw mw-/g) || []).length === 6, 'devem existir 6 mapas-múndi (3 medidas x 2 períodos)');
+ok((html.match(/<svg class="mundo"/g) || []).length === 1, 'deve existir um único mapa-múndi (sem filtros)');
+ok(!/tabs-mapa|type="radio"/.test(html), 'o mapa-múndi não deve ter abas/filtros');
+ok(!/alega[cç]/i.test(html), 'a página usa "menção", não "alegação"');
+ok(/id="observacoes"/.test(html) && !/Como ler estes números/.test(html), 'observações no final e sem o bloco "Como ler estes números"');
+ok(html.indexOf('href="radar-casos.html"') > html.indexOf('id="anpd"'), 'o card da segunda tela deve ficar no final, depois das seções');
 
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }
 console.log(`Radar Brasil: ${reg.length} registros de teste, K=${K}, ANPD ${anpd.total}, ${Object.keys(mapa.ufs).length} UFs`);

@@ -94,7 +94,7 @@ const NAV = `  <nav aria-label="Seções">
 
 const painelVic = victims.length
   ? `    <h2 class="rm-h2">Ransomware no Brasil</h2>
-    <p class="sec-intro">Organizações brasileiras listadas em leak sites. É <b>alegação</b> do criminoso, não confirmação de ataque.</p>
+    <p class="sec-intro">Organizações brasileiras citadas em leak sites. É <b>menção</b> feita pelo criminoso, não confirmação de ataque.</p>
     <div class="cards">\n${victims.join('\n')}\n    </div>`
   : '';
 const painelKev = kev.length
