@@ -253,6 +253,7 @@ ${ICON}
 ${NAV}
 </header>
 <main class="wrap">
+  <p class="crumb"><a href="./#explore">← Recursos</a></p>
   <section class="sec-g radar-pg">
     <p class="eyebrow">Threat intel · estatística</p>
     <h1>Radar</h1>

@@ -121,7 +121,7 @@ ${ICON}
 ${NAV}
 </header>
 <main class="wrap">
-  <p class="crumb"><a href="./">← Guia</a></p>
+  <p class="crumb"><a href="./#explore">← Recursos</a></p>
   <section class="sec-g radar-pg">
     <p class="eyebrow">Threat intel · notícias</p>
     <h1>Notícias</h1>

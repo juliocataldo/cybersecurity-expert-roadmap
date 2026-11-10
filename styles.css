@@ -30,7 +30,9 @@ input[type=text]{background:var(--bg);color:var(--tx);border:1px solid var(--lin
 .site nav{display:flex;gap:4px}
 .site nav a{color:var(--mut);text-decoration:none;font-size:14px;padding:6px 12px;border-radius:6px}
 .site nav a:hover{color:var(--tx)}
-.site nav a[aria-current=page]{color:var(--tx);background:var(--s2)}
+.site nav a[aria-current=page],.nav-group>summary.cur{color:var(--tx);background:var(--s2);box-shadow:inset 0 -2px 0 var(--acc)}
+/* desktop: logo à esquerda e menu no centro (mais perto de onde o olho lê) */
+@media(min-width:900px){.site{display:grid;grid-template-columns:1fr auto 1fr}.wordmark{margin-right:0;justify-self:start}}
 @media(max-width:640px){
   .site{padding:10px 16px;gap:8px 10px;flex-wrap:wrap}
   .wordmark{margin-right:auto;font-size:14px}
@@ -357,6 +359,13 @@ code{font:13px var(--mono);color:var(--tx);background:var(--s1);border:1px solid
 .crumb{font-size:13px;color:var(--mut);margin:20px 0 -20px}
 .crumb a{color:var(--mut);text-decoration:none}
 .crumb a:hover{color:var(--acc)}
+.crumb-bar{margin:0;padding:10px 24px 0;background:var(--s1)}
+
+/* transição suave entre páginas (View Transitions, só CSS); o cabeçalho fica parado, só o conteúdo troca */
+@view-transition{navigation:auto}
+.site{view-transition-name:site-header}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.18s}
+@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 .sec-g h1{font-size:clamp(26px,5vw,40px);line-height:1.1;letter-spacing:-.02em;margin:0 0 14px}
 
 /* botão X de fechar no canto superior direito dos diálogos */
@@ -552,7 +561,6 @@ table.plat td:first-child{font-weight:600;color:var(--tx);white-space:nowrap}
 .nav-group>summary::-webkit-details-marker{display:none}
 .nav-group>summary::after{content:"";width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.75}
 .nav-group>summary:hover{color:var(--tx)}
-.nav-group>summary.cur{color:var(--tx)}
 .nav-group[open]>summary{color:var(--tx);background:var(--s2)}
 .nav-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:186px;background:var(--s1);border:1px solid var(--line2);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:2px;z-index:20;box-shadow:0 12px 34px #0009}
 .nav-menu a{color:var(--tx2);text-decoration:none;font-size:14px;padding:8px 12px;border-radius:6px;white-space:nowrap}
