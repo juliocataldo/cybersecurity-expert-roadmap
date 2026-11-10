@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Guia de DevSecOps: o ciclo em 7 etapas e o controle de segurança de cada uma, frameworks (NIST SSDF, OWASP SAMM, DSOMM, SLSA, ASVS), métricas, cultura e por onde começar.">
+<title>Guia &middot; DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=cdf480e3">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Início</a>
+    <a href="guia.html" aria-current="page">Guia</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="ferramentas.html">Ferramentas</a>
+    <a href="sre.html">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="./">← DevSecOps</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="./">DevSecOps</a> · Guia</p>
+    <h1>DevSecOps: segurança dentro do ciclo</h1>
+    <p class="int-lead">DevSecOps não é uma ferramenta nem um time novo. É o combinado de que <b>segurança é responsabilidade de quem constrói</b>, com automação para dar retorno rápido e um time de segurança que facilita em vez de só aprovar no final.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#dso-oque">O que é</a><a href="#dso-ciclo">O ciclo</a><a href="#dso-frameworks">Frameworks</a><a href="#dso-metricas">Métricas</a><a href="#dso-cultura">Cultura</a><a href="#dso-comecar">Por onde começar</a>
+    </nav>
+
+    <section class="int-blk" id="dso-oque">
+      <h3><span>01</span>O que é, e o que não é</h3>
+<p>No modelo antigo, a segurança aparecia perto da entrega: um pentest, uma lista de achados e um prazo apertado. Corrigir ali custa caro, e o achado volta na próxima versão. DevSecOps muda duas coisas:</p>
+      <ul class="int-req">
+        <li><b>Shift left</b> Levar o controle para o mais cedo possível: requisito e modelagem de ameaças no planejamento, retorno no editor e no pull request, gate no build.</li>
+        <li><b>Shift right</b> Continuar depois do deploy: logs, detecção em runtime, gestão de vulnerabilidades em produção e resposta a incidentes. Nem tudo se resolve antes.</li>
+        <li><b>Automação</b> O que é repetível vira verificação no pipeline. As pessoas de segurança ficam com o que exige julgamento: arquitetura, ameaças, exceções.</li>
+        <li><b>Não é</b> Comprar um scanner e ligar todas as regras. Isso gera centenas de alertas, o time aprende a ignorar e a segurança perde credibilidade.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="dso-ciclo">
+      <h3><span>02</span>O ciclo e onde entra cada controle</h3>
+<p class="int-hint">Abra cada etapa. Em cada uma: o controle, quem faz e o que acontece se falhar.</p>
+      <details class="int-q"><summary>1. Planejar: requisitos e modelagem de ameaças</summary><div><p>Requisitos de segurança a partir do OWASP ASVS (o nível 2 é um bom padrão para aplicações com dados pessoais) e modelagem de ameaças leve, com a pergunta "o que pode dar errado?" em cada fluxo novo de dados ou de autenticação. Quem faz: o time, com apoio de segurança. Se falhar, a falha de desenho só aparece em produção, quando é mais cara de corrigir.</p></div></details>
+      <details class="int-q"><summary>2. Codar: retorno no editor e na revisão</summary><div><p>Plugins de análise no editor, hook de pre-commit para segredos e revisão de código com um checklist curto (autorização, validação de entrada, dados sensíveis em log). Quem faz: cada pessoa que desenvolve. Retorno em segundos muda hábito; retorno uma semana depois vira ticket esquecido.</p></div></details>
+      <details class="int-q"><summary>3. Build: SAST, SCA, segredos e SBOM</summary><div><p>Análise estática do código (SAST), das dependências (SCA), busca de segredos no histórico e geração do SBOM (a lista de componentes). É aqui que ficam os primeiros gates automáticos. Veja o <a href="pipeline.html">pipeline comentado</a>.</p></div></details>
+      <details class="int-q"><summary>4. Testar: IaC, imagem e DAST</summary><div><p>Varredura de Terraform, Kubernetes e Dockerfile (IaC), da imagem de contêiner e testes dinâmicos (DAST) contra um ambiente de homologação, nunca contra produção sem combinar.</p></div></details>
+      <details class="int-q"><summary>5. Release: assinatura e proveniência</summary><div><p>Assinar o artefato pelo digest (Sigstore Cosign) e gerar a proveniência, isto é, o registro de onde e como foi construído (SLSA). Assim, o ambiente de produção pode recusar o que não veio do pipeline oficial.</p></div></details>
+      <details class="int-q"><summary>6. Deploy: políticas e segredos</summary><div><p>Policy-as-code no cluster (Kyverno ou OPA Gatekeeper) para barrar contêiner privilegiado, imagem sem assinatura ou sem limites de recurso. Segredos vêm de um cofre (Azure Key Vault, Google Secret Manager, AWS Secrets Manager, OpenBao), nunca do repositório nem da imagem.</p></div></details>
+      <details class="int-q"><summary>7. Operar: detecção, vulnerabilidades e resposta</summary><div><p>Logs centralizados sem dados pessoais nem tokens, detecção em runtime (Falco), gestão contínua de vulnerabilidades (uma CVE nova afeta o que já está no ar) e resposta a incidentes. O SBOM gerado no build responde rápido à pergunta "estamos afetados?".</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dso-frameworks">
+      <h3><span>03</span>Frameworks que vale conhecer</h3>
+<ul class="int-req">
+        <li><b>NIST SSDF</b> SP 800-218: práticas de desenvolvimento seguro agrupadas em preparar a organização, proteger o software, produzir software seguro e responder a vulnerabilidades. Referência de contrato com governo nos EUA.</li>
+        <li><b>OWASP SAMM</b> Modelo de maturidade para avaliar onde o programa está e planejar o próximo passo, por função (governança, design, implementação, verificação, operação).</li>
+        <li><b>OWASP DSOMM</b> Maturidade específica de DevSecOps, com atividades por nível. Bom para montar o roadmap do pipeline.</li>
+        <li><b>SLSA</b> Níveis de garantia da cadeia de suprimentos de software: build com proveniência, build isolado e verificável.</li>
+        <li><b>OWASP ASVS</b> Requisitos verificáveis de segurança de aplicação. Use como checklist de requisito e de revisão.</li>
+        <li><b>OWASP Top 10 CI/CD</b> Os riscos do próprio pipeline: controle de fluxo insuficiente, identidades com permissão demais, envenenamento do pipeline, higiene de credenciais, entre outros.</li>
+      </ul>
+      <div class="int-tip">
+        <p class="int-tip-t">Fontes oficiais</p>
+        <div class="path-links">
+          <a href="https://csrc.nist.gov/projects/ssdf" target="_blank" rel="noopener noreferrer">NIST SSDF ↗</a>
+          <a href="https://owaspsamm.org/" target="_blank" rel="noopener noreferrer">OWASP SAMM ↗</a>
+          <a href="https://dsomm.owasp.org/" target="_blank" rel="noopener noreferrer">OWASP DSOMM ↗</a>
+          <a href="https://slsa.dev/" target="_blank" rel="noopener noreferrer">SLSA ↗</a>
+          <a href="https://owasp.org/www-project-application-security-verification-standard/" target="_blank" rel="noopener noreferrer">OWASP ASVS ↗</a>
+          <a href="https://owasp.org/www-project-top-10-ci-cd-security-risks/" target="_blank" rel="noopener noreferrer">OWASP Top 10 CI/CD ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="int-blk" id="dso-metricas">
+      <h3><span>04</span>Métricas que mostram progresso</h3>
+<ul class="int-req">
+        <li><b>Tempo de correção</b> Tempo médio entre achar e corrigir, por severidade. É a métrica principal: mostra se o processo anda.</li>
+        <li><b>Idade das críticas</b> Quantas vulnerabilidades críticas e altas estão abertas, e há quanto tempo. Uma só, aberta há meses num sistema exposto, pesa mais que dez novas.</li>
+        <li><b>Cobertura</b> Percentual de repositórios com o pipeline mínimo ligado (segredos, SCA, SAST).</li>
+        <li><b>Falso positivo</b> Quantos achados são descartados. Se passa de um terço, a regra precisa de ajuste, ou o time vai parar de olhar.</li>
+        <li><b>Exceções vencidas</b> Riscos aceitos com prazo expirado. Exceção sem prazo vira permanente.</li>
+      </ul>
+      <p class="int-note"><b>Cuidado com "builds bloqueados":</b> um número alto pode significar uma regra ruim, não um time descuidado. Olhe junto com o falso positivo.</p>
+    </section>
+
+    <section class="int-blk" id="dso-cultura">
+      <h3><span>05</span>Cultura: o que faz funcionar</h3>
+<ul class="int-req">
+        <li><b>Security champions</b> Uma pessoa por time, com tempo reservado e treinamento, que leva as dúvidas para segurança e as boas práticas para o time.</li>
+        <li><b>Caminho pavimentado</b> Templates de pipeline, módulos de Terraform e bibliotecas já seguros. O jeito certo precisa ser o mais fácil.</li>
+        <li><b>Retorno no pull request</b> O achado aparece onde a pessoa já está trabalhando, com explicação e sugestão de correção.</li>
+        <li><b>Poucas regras boas</b> Começar com regras de baixo falso positivo e bloquear só o que é grave. Ampliar depois, com dados.</li>
+        <li><b>Fail secure</b> Se o scanner falhar ou ficar fora do ar, o gate não passa sozinho: falha de verificação não pode virar aprovação.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="dso-comecar">
+      <h3><span>06</span>Por onde começar</h3>
+<p>Uma ordem que dá resultado rápido e cria confiança antes de ligar os gates mais barulhentos:</p>
+      <ol class="int-days">
+        <li><span>Passo 1</span><b>Segredos</b>Push protection do GitHub e varredura do histórico. Segredo vazado é incidente; rotacione antes de apagar.</li>
+        <li><span>Passo 2</span><b>Dependências</b>Dependabot (ou Renovate) e SCA no pipeline, bloqueando só crítica e alta com correção disponível.</li>
+        <li><span>Passo 3</span><b>SAST</b>Um conjunto pequeno de regras, primeiro só avisando no pull request; bloquear depois de ajustar.</li>
+        <li><span>Passo 4</span><b>IaC e imagem</b>Varredura de Terraform, Kubernetes e da imagem antes do registry.</li>
+        <li><span>Passo 5</span><b>Proteger o pipeline</b>Permissões mínimas, actions fixadas por SHA, OIDC e ambientes com aprovação. Veja <a href="pipeline.html#dso-hardening">o bloco 04 do pipeline</a>.</li>
+        <li><span>Passo 6</span><b>SBOM e assinatura</b>SBOM a cada build e assinatura da imagem; depois, o cluster passa a exigir a assinatura.</li>
+        <li><span>Passo 7</span><b>DAST e runtime</b>DAST em homologação e detecção em runtime em produção.</li>
+      </ol>
+    </section>
+
+    <p class="art-meta art-foot">Conteúdo próprio, com base nas fontes oficiais citadas no bloco 03. Sentiu falta de algo? Conte na página de <a href="../sugestoes.html">Sugestões</a>.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>

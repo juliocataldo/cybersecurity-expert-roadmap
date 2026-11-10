@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="DevSecOps em português: segurança integrada ao ciclo de desenvolvimento, controles por etapa, um pipeline comentado com gates e ferramentas open source com labs.">
+<title>DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=cdf480e3">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./" aria-current="page">Início</a>
+    <a href="guia.html">Guia</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="ferramentas.html">Ferramentas</a>
+    <a href="sre.html">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<section class="hero hero-tech">
+    <div class="hero-main">
+      <p class="eyebrow mono">// devsecops-expert-guide</p>
+      <h1>Segurança e confiabilidade<br>dentro do pipeline.</h1>
+      <p class="lead">DevSecOps é levar a segurança para dentro do jeito como o software é feito: requisitos, código, build, deploy e operação. E SRE é garantir que ele continue de pé e observável em produção. Aqui você encontra o ciclo explicado, um pipeline comentado, SRE e observabilidade, e as ferramentas open source para praticar, em português e escrito do zero.</p>
+      <a class="byline" href="sobre.html"><img src="../assets/julio-mini.webp" width="44" height="44" alt=""><div><b>Por Julio Cataldo</b><span>Head de Segurança, DevOps e SRE · Instrutor universitário</span></div></a>
+      <div class="cta">
+        <a class="btn" href="guia.html">Começar pelo guia</a>
+        <a class="btn sec" href="pipeline.html">Ver o pipeline</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>7</b><span>etapas</span></div>
+        <div class="stat"><b>6</b><span>frameworks</span></div>
+        <div class="stat"><b>27</b><span>ferramentas</span></div>
+        <div class="stat"><b>7</b><span>labs</span></div>
+      </div>
+    </div>
+    <aside class="term" aria-hidden="true">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <pre class="term-body"><span class="term-p">dev@pipeline</span>:<span class="term-d">~</span>$ git push
+<span class="term-o">[ok]   segredos      0 achados</span>
+<span class="term-o">[ok]   sast          0 críticos</span>
+<span class="term-o">[warn] sca          1 alta, com correção</span>
+<span class="term-o">[ok]   iac           0 críticos</span>
+<span class="term-o">[ok]   sbom          gerado</span>
+<span class="term-p">dev@pipeline</span>:<span class="term-d">~</span>$ npm update &amp;&amp; git push
+<span class="term-o">[ok]   pronto para revisão</span>
+<span class="term-p">dev@pipeline</span>:<span class="term-d">~</span>$ slo status api
+<span class="term-o">[ok]   99,95% · error budget 62%</span>
+<span class="term-p">dev@pipeline</span>:<span class="term-d">~</span>$ <span class="cursor">&#9608;</span></pre>
+    </aside>
+  </section>
+  <section class="sec-g" id="explore">
+    <div class="sec-h"><h2>Por onde você quer ir?</h2></div>
+    <p class="sec-intro">Três caminhos: entender DevSecOps e SRE, colocar um pipeline seguro e observável para rodar, ou seguir estudando no Cyber Expert Guide.</p>
+    <div class="journeys">
+      <div class="journey">
+        <span class="j-step">Começar</span>
+        <h3>Quero entender</h3>
+        <p>O que muda quando a segurança passa a fazer parte do ciclo, e não só do fim dele.</p>
+        <ol>
+          <li><a href="guia.html"><div><b>Guia</b><span>O ciclo em 7 etapas, o controle de cada uma, frameworks e métricas.</span></div></a></li>
+          <li><a href="guia.html#dso-comecar"><div><b>Por onde começar</b><span>A ordem que dá resultado rápido sem travar os times.</span></div></a></li>
+          <li><a href="sre.html"><div><b>SRE e observabilidade</b><span>SLI, SLO e error budget, logs, métricas e traces, incidentes e postmortem.</span></div></a></li>
+        </ol>
+      </div>
+      <div class="journey">
+        <span class="j-step">Praticar</span>
+        <h3>Quero pôr para rodar</h3>
+        <p>Um pipeline comentado e as ferramentas open source para montar o seu.</p>
+        <ol>
+          <li><a href="pipeline.html"><div><b>Pipeline</b><span>GitHub Actions com gates de segredos, SAST, SCA, IaC, imagem, SBOM e assinatura.</span></div></a></li>
+          <li><a href="pipeline.html#dso-hardening"><div><b>Proteger o pipeline</b><span>Permissões mínimas, actions fixadas por SHA, OIDC e o que evitar.</span></div></a></li>
+          <li><a href="ferramentas.html"><div><b>Ferramentas e labs</b><span>18 ferramentas de segurança por etapa e 5 labs vulneráveis de propósito.</span></div></a></li>
+          <li><a href="sre.html#sre-pratica"><div><b>SLO na prática</b><span>Alerta por burn rate em PromQL e um OpenTelemetry Collector que tira dados pessoais.</span></div></a></li>
+        </ol>
+      </div>
+      <div class="journey">
+        <span class="j-step">Continuar</span>
+        <h3>Quero seguir estudando</h3>
+        <p>O Cyber Expert Guide cobre o resto da segurança, com o mesmo formato.</p>
+        <ol>
+          <li><a href="../trilhas.html"><div><b>Trilhas</b><span>Trilha gamificada e trilhas por função, inclusive Cloud Security.</span></div></a></li>
+          <li><a href="../entrevistas.html"><div><b>Entrevistas</b><span>Preparação para entrevista técnica em cinco áreas.</span></div></a></li>
+          <li><a href="../solucoes.html"><div><b>HUB Sec</b><span>Containers, gestão de segredos e IA, com labs.</span></div></a></li>
+          <li><a href="../noticias.html"><div><b>Notícias</b><span>Incidentes comentados, vários de cadeia de suprimentos.</span></div></a></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>

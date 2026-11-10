@@ -796,8 +796,8 @@ div.card{cursor:default}div.card:hover{border-color:var(--line)}
 .int-days li>span{display:block;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
 .int-days li>b{display:block;margin:2px 0 6px;color:var(--tx);font-size:16px}
 .int-areas{margin:22px 0 10px}
-.int-areas .card h3{margin:0;font:700 18px/1.25 var(--sans);text-transform:none;letter-spacing:-.01em;color:var(--tx)}
-.int-areas a.card:hover h3{color:var(--acc)}
+.int .cards .card h3{margin:0;font:700 18px/1.25 var(--sans);text-transform:none;letter-spacing:-.01em;color:var(--tx)}
+.int .cards a.card:hover h3{color:var(--acc)}
 .int-q>div pre{margin:12px 0}
 .int-q>div ul{margin:12px 0}
 .int-q>div .int-req{margin:12px 0}

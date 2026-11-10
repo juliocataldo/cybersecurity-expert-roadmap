@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Pipeline DevSecOps comentado em GitHub Actions: gates de segredos, SAST, SCA, IaC, imagem, SBOM e assinatura, política de bloqueio e exceções, e como proteger o próprio pipeline.">
+<title>Pipeline &middot; DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=cdf480e3">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Início</a>
+    <a href="guia.html">Guia</a>
+    <a href="pipeline.html" aria-current="page">Pipeline</a>
+    <a href="ferramentas.html">Ferramentas</a>
+    <a href="sre.html">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="./">← DevSecOps</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="./">DevSecOps</a> · Pipeline</p>
+    <h1>Um pipeline seguro, comentado</h1>
+    <p class="int-lead">Um exemplo em <b>GitHub Actions</b> para um projeto Node.js com contêiner. A ideia vale para Azure DevOps, GitLab ou Jenkins: muda a sintaxe, não os estágios. Use como ponto de partida, não como receita fechada.</p>
+    <p class="int-note"><b>Antes de copiar:</b> troque cada <code>&lt;sha-do-commit&gt;</code> e <code>&lt;versão&gt;</code> por valores fixos que você conferiu, e confira a sintaxe de cada ferramenta na documentação da versão escolhida; as opções mudam entre versões.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#dso-pipeline">O pipeline</a><a href="#dso-imagem">Imagem</a><a href="#dso-gates">O que bloqueia</a><a href="#dso-hardening">Proteger o pipeline</a><a href="#dso-perguntas">Perguntas</a>
+    </nav>
+
+    <section class="int-blk" id="dso-pipeline">
+      <h3><span>01</span>Código, dependências e segredos</h3>
+<p>Roda em todo pull request e em todo push na <code>main</code>. Os jobs são independentes, para o retorno chegar rápido.</p>
+      <div class="int-code">
+        <p class="int-code-t">.github/workflows/devsecops.yml <span>parte 1</span></p>
+        <pre><code>name: devsecops
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Mínimo por padrão: cada job pede só o que precisa.
+permissions:
+  contents: read
+
+jobs:
+  segredos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@&lt;sha-do-commit&gt;   # v4, fixado por SHA
+        with:
+          fetch-depth: 0                          # histórico completo
+          persist-credentials: false
+      - name: Segredos no histórico do Git
+        run: &gt;
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:&lt;versão&gt;
+          git /repo --redact
+
+  codigo-e-dependencias:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@&lt;sha-do-commit&gt;
+        with:
+          persist-credentials: false
+      - name: SAST (Semgrep)
+        run: &gt;
+          docker run --rm -v "$PWD:/src" semgrep/semgrep:&lt;versão&gt;
+          semgrep scan --config p/default --error
+      - name: SCA (dependências do Node)
+        run: |
+          npm ci --ignore-scripts
+          npm audit --audit-level=high
+      - name: Dependências, segredos e IaC (Trivy)
+        run: &gt;
+          docker run --rm -v "$PWD:/src" aquasec/trivy:&lt;versão&gt;
+          fs --scanners vuln,secret,misconfig
+          --severity HIGH,CRITICAL --exit-code 1 /src
+      - name: SBOM (CycloneDX)
+        run: &gt;
+          docker run --rm -v "$PWD:/src" aquasec/trivy:&lt;versão&gt;
+          fs --format cyclonedx --output /src/sbom.cdx.json /src</code></pre>
+      </div>
+      <details class="int-q"><summary>O que cada passo faz e por que está ali?</summary><div><ul><li><b>Segredos no histórico:</b> o Gitleaks olha todos os commits, não só os arquivos atuais; uma chave apagada continua no histórico. <code>--redact</code> evita que o valor apareça no log.</li><li><b>SAST:</b> o Semgrep procura padrões inseguros no código (SQL montado com concatenação, <code>eval</code>, desserialização). <code>--error</code> faz o passo falhar se houver achado.</li><li><b>SCA:</b> <code>npm ci --ignore-scripts</code> instala exatamente o que está no lockfile sem rodar scripts de instalação (um vetor comum de pacote malicioso); <code>npm audit</code> falha a partir de severidade alta.</li><li><b>Trivy:</b> num só passo, vulnerabilidades de dependências, segredos nos arquivos e configuração insegura de IaC e Dockerfile.</li><li><b>SBOM:</b> a lista de componentes no formato CycloneDX. Quando sair uma CVE nova, ela responde se você está afetado sem precisar rodar nada de novo.</li></ul></div></details>
+      <details class="int-q"><summary>Por que <code>persist-credentials: false</code> no checkout?</summary><div><p>Por padrão, o checkout guarda o token do job na configuração do Git do runner. Qualquer passo seguinte, inclusive uma ferramenta comprometida, poderia usá-lo. Se o job não precisa fazer push, não deixe o token lá.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dso-imagem">
+      <h3><span>02</span>Imagem, varredura e assinatura</h3>
+<p>Só roda se os jobs anteriores passarem. É o único job que pede permissão de escrita, e só para o que precisa.</p>
+      <div class="int-code">
+        <p class="int-code-t">.github/workflows/devsecops.yml <span>parte 2</span></p>
+        <pre><code>imagem:
+    needs: [segredos, codigo-e-dependencias]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write     # publicar no registry
+      id-token: write     # assinatura keyless via OIDC (sem chave guardada)
+    steps:
+      - uses: actions/checkout@&lt;sha-do-commit&gt;
+        with:
+          persist-credentials: false
+      - name: Build
+        run: |
+          docker build -t app:${{ github.sha }} .
+          docker save app:${{ github.sha }} -o app.tar
+      - name: Varredura da imagem (sem montar o docker.sock)
+        run: &gt;
+          docker run --rm -v "$PWD:/src" aquasec/trivy:&lt;versão&gt;
+          image --input /src/app.tar
+          --severity HIGH,CRITICAL --exit-code 1
+      # ... login no registry e push (id: push); depois, assinar pelo digest, nunca pela tag:
+      - name: Assinatura (Sigstore Cosign)
+        run: cosign sign --yes ghcr.io/minha-org/app@${{ steps.push.outputs.digest }}</code></pre>
+      </div>
+      <details class="int-q"><summary>Por que exportar a imagem em vez de montar o <code>docker.sock</code>?</summary><div><p>Montar o socket do Docker dentro de um contêiner dá a ele controle total do Docker do host, o equivalente a root. Exportar a imagem para um arquivo e passar com <code>--input</code> dá o mesmo resultado sem esse privilégio.</p></div></details>
+      <details class="int-q"><summary>Por que assinar pelo digest e não pela tag?</summary><div><p>A tag (<code>:latest</code>, <code>:1.4</code>) pode ser movida para outra imagem; o digest (<code>@sha256:...</code>) identifica exatamente aquele conteúdo. Com <code>id-token: write</code>, o Cosign assina sem chave guardada (keyless): a identidade vem do OIDC do GitHub e fica registrada num log público de transparência.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dso-gates">
+      <h3><span>03</span>O que bloqueia, o que avisa</h3>
+<p>Bloquear tudo faz o time contornar o pipeline. Uma política de partida, para ajustar com dados:</p>
+      <ul class="int-req">
+        <li><b>Bloqueia</b> Segredo encontrado; vulnerabilidade crítica ou alta <b>com correção disponível</b> em dependência de produção; configuração crítica de IaC (bucket público, porta de administração aberta para a internet); imagem com crítica corrigível.</li>
+        <li><b>Avisa no PR</b> Achados de SAST de severidade média, vulnerabilidades sem correção disponível, dependências de desenvolvimento.</li>
+        <li><b>Exceção</b> Por escrito, com motivo, dono e prazo, revisada no vencimento. Nunca desligar a regra para o repositório inteiro.</li>
+        <li><b>Falha do scanner</b> Se a ferramenta não rodar (fora do ar, erro de configuração), o job falha. Gate que passa quando não verificou nada é pior que não ter gate.</li>
+      </ul>
+      <div class="int-code">
+        <p class="int-code-t">.trivyignore <span>exceção bem feita</span></p>
+        <pre><code># Toda exceção tem motivo, dono e prazo. Revisar no vencimento.
+# CVE-AAAA-NNNNN: a função vulnerável não é chamada pelo app (analisado no PR #123).
+# Dono: time-pagamentos. Revisar até 2026-12-31.
+CVE-AAAA-NNNNN</code></pre>
+      </div>
+    </section>
+
+    <section class="int-blk" id="dso-hardening">
+      <h3><span>04</span>Proteger o próprio pipeline</h3>
+<p>O pipeline tem acesso ao código, aos segredos e à produção: é um alvo valioso. O OWASP Top 10 CI/CD lista os riscos; na prática, estes controles cobrem a maior parte:</p>
+      <ul class="int-req">
+        <li><b>Permissões mínimas</b> Declare <code>permissions</code> no topo com <code>contents: read</code> e libere o resto só no job que precisa. Configure também o padrão do repositório e da organização como somente leitura.</li>
+        <li><b>Actions fixadas por SHA</b> Tag pode ser movida por quem controla o repositório da action. Em março de 2025, as tags da action <code>tj-actions/changed-files</code> foram apontadas para código malicioso que expôs segredos em logs de milhares de repositórios (CVE-2025-30066). Quem fixava por SHA não foi afetado.</li>
+        <li><b>Atualização das actions</b> Fixar por SHA não é congelar: o Dependabot atualiza actions também, com pull request revisável.</li>
+        <li><b>OIDC em vez de chaves</b> Para AWS, Azure e GCP, use federação OIDC com role restrita ao repositório e à branch. Nada de chave de nuvem guardada como segredo.</li>
+        <li><b>Ambientes com aprovação</b> Segredos de produção só num <i>environment</i> com revisores obrigatórios e restrito à branch <code>main</code>.</li>
+        <li><b>Cuidado com pull_request_target</b> Esse gatilho roda com permissões e segredos do repositório. Nunca faça checkout e execução do código do pull request nele; um fork pode alterar o código e roubar os segredos.</li>
+        <li><b>Proteção da branch</b> Rulesets com revisão obrigatória, status checks obrigatórios e CODEOWNERS para <code>.github/workflows/</code>. Sem isso, qualquer pessoa com escrita desliga o gate.</li>
+        <li><b>Runners</b> Runner self-hosted nunca em repositório público, e de preferência efêmero: um job não pode deixar nada para o próximo.</li>
+      </ul>
+      <div class="int-code">
+        <p class="int-code-t">.github/dependabot.yml <span>atualizar actions e pacotes</span></p>
+        <pre><code>version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly</code></pre>
+      </div>
+    </section>
+
+    <section class="int-blk" id="dso-perguntas">
+      <h3><span>05</span>Perguntas para fixar</h3>
+<p class="int-hint">Tente responder antes de abrir.</p>
+      <details class="int-q"><summary>O SAST encontrou 400 achados no primeiro dia. E agora?</summary><div><p>Não bloquear ainda. Medir quais regras geram mais falso positivo, desligar ou ajustar essas, tratar os verdadeiros por criticidade e só bloquear achados novos (no diff do pull request), para o passivo não travar a entrega.</p></div></details>
+      <details class="int-q"><summary>Uma chave de API apareceu num commit antigo. Apagar o arquivo resolve?</summary><div><p>Não. A chave continua no histórico e pode já ter sido copiada. Primeiro revogar e trocar a chave; depois avaliar se ela foi usada (logs do provedor). Reescrever o histórico é opcional e vem por último.</p></div></details>
+      <details class="int-q"><summary>O scanner de dependências ficou fora do ar e o build passou. Está certo?</summary><div><p>Não: é falhar aberto. O passo precisa falhar quando não consegue verificar, e a equipe decide conscientemente liberar, com registro.</p></div></details>
+      <details class="int-q"><summary>Por que não usar a tag <code>@v4</code> das actions, se é mais simples?</summary><div><p>Porque a tag pode ser movida para outro código. O SHA identifica exatamente o que foi revisado, e o Dependabot cuida da atualização.</p></div></details>
+    </section>
+
+    <p class="art-meta art-foot">Conteúdo próprio. Ferramentas, labs e repositórios oficiais estão em <a href="ferramentas.html">Ferramentas</a>. Sentiu falta de algo? Conte na página de <a href="../sugestoes.html">Sugestões</a>.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>

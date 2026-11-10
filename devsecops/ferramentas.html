@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Ferramentas open source de DevSecOps por etapa (segredos, SAST, SCA, IaC e contêiner, DAST, cadeia de suprimentos, políticas, runtime e gestão de achados) e labs vulneráveis para praticar.">
+<title>Ferramentas &middot; DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=cdf480e3">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Início</a>
+    <a href="guia.html">Guia</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="ferramentas.html" aria-current="page">Ferramentas</a>
+    <a href="sre.html">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="./">← DevSecOps</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="./">DevSecOps</a> · Ferramentas</p>
+    <h1>Ferramentas e labs</h1>
+    <p class="int-lead">Ferramentas <b>open source</b> por etapa do ciclo, com link para o repositório oficial. Não é preciso usar todas: uma por etapa, bem ajustada, vale mais que três ligadas sem critério.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#f-segredos">Segredos</a><a href="#f-codigo">Código</a><a href="#f-deps">Dependências</a><a href="#f-infra">IaC e contêiner</a><a href="#f-dast">DAST</a><a href="#f-supply">Cadeia de suprimentos</a><a href="#f-deploy">Deploy e runtime</a><a href="#f-labs">Labs</a>
+    </nav>
+
+    <h2 id="f-segredos">Segredos</h2>
+    <p>Encontrar credenciais no código e no histórico antes que alguém de fora encontre.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/gitleaks/gitleaks" target="_blank" rel="noopener noreferrer"><span class="k">Segredos</span><h3>Gitleaks</h3><p>Varre o repositório e o histórico do Git com regras para centenas de formatos de credencial. Leve, bom para pre-commit e pipeline.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/trufflesecurity/trufflehog" target="_blank" rel="noopener noreferrer"><span class="k">Segredos</span><h3>TruffleHog</h3><p>Além de encontrar, pode verificar se a credencial ainda é válida junto ao provedor, o que ajuda a priorizar.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-codigo">Código (SAST)</h2>
+    <p>Padrões inseguros no código-fonte, com retorno no pull request.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/semgrep/semgrep" target="_blank" rel="noopener noreferrer"><span class="k">SAST</span><h3>Semgrep</h3><p>Regras legíveis, parecidas com o próprio código, e fáceis de escrever para os padrões da sua empresa. A edição community é open source.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/github/codeql" target="_blank" rel="noopener noreferrer"><span class="k">SAST</span><h3>CodeQL</h3><p>Análise semântica do GitHub, que trata o código como banco de dados consultável. Gratuito em repositórios públicos; nos privados, depende de licença.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-deps">Dependências (SCA)</h2>
+    <p>Vulnerabilidades conhecidas nas bibliotecas de terceiros, que costumam ser a maior parte do código.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/google/osv-scanner" target="_blank" rel="noopener noreferrer"><span class="k">SCA</span><h3>OSV-Scanner</h3><p>Do Google, usa a base aberta OSV e entende os lockfiles das principais linguagens.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/jeremylong/DependencyCheck" target="_blank" rel="noopener noreferrer"><span class="k">SCA</span><h3>OWASP Dependency-Check</h3><p>Clássico do OWASP, forte em Java e .NET, com relatório em HTML.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/DependencyTrack/dependency-track" target="_blank" rel="noopener noreferrer"><span class="k">SBOM</span><h3>OWASP Dependency-Track</h3><p>Recebe os SBOMs de todos os projetos e avisa quando sai uma CVE nova que afeta algum deles.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-infra">IaC e contêiner</h2>
+    <p>Configuração insegura antes do deploy e vulnerabilidades nas imagens.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/aquasecurity/trivy" target="_blank" rel="noopener noreferrer"><span class="k">Multiuso</span><h3>Trivy</h3><p>Vulnerabilidades, segredos, IaC, imagens e clusters numa só ferramenta; também gera SBOM.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/bridgecrewio/checkov" target="_blank" rel="noopener noreferrer"><span class="k">IaC</span><h3>Checkov</h3><p>Centenas de verificações para Terraform, CloudFormation, Kubernetes, Helm e Dockerfile.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/Checkmarx/kics" target="_blank" rel="noopener noreferrer"><span class="k">IaC</span><h3>KICS</h3><p>Da Checkmarx, open source, com consultas para várias tecnologias de IaC.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/anchore/grype" target="_blank" rel="noopener noreferrer"><span class="k">Imagem</span><h3>Grype e Syft</h3><p>Da Anchore: o Syft gera o SBOM e o Grype procura vulnerabilidades nele.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-dast">Testes dinâmicos (DAST)</h2>
+    <p>A aplicação rodando, testada de fora, em homologação e com autorização.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/zaproxy/zaproxy" target="_blank" rel="noopener noreferrer"><span class="k">DAST</span><h3>ZAP</h3><p>Varredura passiva (baseline) para o pipeline e varredura ativa para homologação, com API e imagem Docker.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-supply">Cadeia de suprimentos</h2>
+    <p>Provar de onde o artefato veio e avaliar a saúde dos projetos de que você depende.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/sigstore/cosign" target="_blank" rel="noopener noreferrer"><span class="k">Assinatura</span><h3>Sigstore Cosign</h3><p>Assina e verifica imagens e artefatos, inclusive sem chave guardada (keyless, via OIDC).</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/ossf/scorecard" target="_blank" rel="noopener noreferrer"><span class="k">Avaliação</span><h3>OpenSSF Scorecard</h3><p>Nota automática das práticas de segurança de um repositório open source: proteção de branch, revisão, actions fixadas e mais.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-deploy">Deploy, runtime e gestão</h2>
+    <p>Barrar o que não deveria subir, detectar o que acontece em produção e organizar os achados.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer"><span class="k">Política</span><h3>Kyverno</h3><p>Políticas em YAML para Kubernetes: exigir assinatura, barrar contêiner privilegiado, impor limites.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/open-policy-agent/gatekeeper" target="_blank" rel="noopener noreferrer"><span class="k">Política</span><h3>OPA Gatekeeper</h3><p>Políticas em Rego no Kubernetes, com o mesmo motor usado fora do cluster.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/falcosecurity/falco" target="_blank" rel="noopener noreferrer"><span class="k">Runtime</span><h3>Falco</h3><p>Detecta comportamento suspeito em contêineres e hosts a partir das chamadas de sistema.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/DefectDojo/django-DefectDojo" target="_blank" rel="noopener noreferrer"><span class="k">Gestão</span><h3>DefectDojo</h3><p>Junta os achados de todas as ferramentas, remove duplicados e acompanha prazo e responsável.</p><span class="go">Repositório ↗</span></a>
+    </div>
+
+    <h2 id="f-labs">Labs para praticar</h2>
+    <p>Aplicações e ambientes <b>vulneráveis de propósito</b>. Rode só na sua máquina ou numa conta isolada, nunca exposto à internet, e destrua ao terminar.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/juice-shop/juice-shop" target="_blank" rel="noopener noreferrer"><span class="k">Aplicação</span><h3>OWASP Juice Shop</h3><p>Loja em Node.js com dezenas de falhas. Ótima para rodar SAST, SCA e DAST e comparar o que cada um encontra.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/OWASP/NodeGoat" target="_blank" rel="noopener noreferrer"><span class="k">Aplicação</span><h3>OWASP NodeGoat</h3><p>Aplicação Node.js para aprender o OWASP Top 10 no ecossistema JavaScript, com tutorial de correção.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/OWASP/wrongsecrets" target="_blank" rel="noopener noreferrer"><span class="k">Segredos</span><h3>OWASP WrongSecrets</h3><p>Desafios sobre os jeitos errados de guardar segredos: código, imagem, Kubernetes e nuvem.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/cider-security-research/cicd-goat" target="_blank" rel="noopener noreferrer"><span class="k">Pipeline</span><h3>CI/CD Goat</h3><p>Ambiente com pipelines vulneráveis, baseado nos riscos do OWASP Top 10 CI/CD.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/madhuakula/kubernetes-goat" target="_blank" rel="noopener noreferrer"><span class="k">Kubernetes</span><h3>Kubernetes Goat</h3><p>Cluster com cenários vulneráveis de propósito para aprender ataque e defesa em Kubernetes.</p><span class="go">Repositório ↗</span></a>
+    </div>
+    <p class="note">Ferramentas de gestão de segredos e de contêineres têm páginas próprias no <a href="../solucoes.html">HUB Sec</a> do Cyber Expert Guide.</p>
+
+    <p class="art-meta art-foot">Todas as ferramentas e labs listados são open source, com link para o repositório oficial. Sugestões de inclusão na página de <a href="../sugestoes.html">Sugestões</a>.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>

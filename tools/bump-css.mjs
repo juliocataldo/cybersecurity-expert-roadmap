@@ -26,7 +26,12 @@ export function versionar(html, raiz = RAIZ) {
 export function paginas() {
   const raiz = new URL('..', import.meta.url);
   const lista = readdirSync(raiz).filter(f => f.endsWith('.html')).map(f => new URL(f, raiz));
-  return lista.concat(readdirSync(new URL('notas/', raiz)).filter(f => f.endsWith('.html')).map(f => new URL('notas/' + f, raiz)));
+  // subpastas com páginas: notas/ (gerada pela Teia) e devsecops/ (o DevSecOps Expert Guide)
+  for (const sub of ['notas/', 'devsecops/']) {
+    const d = new URL(sub, raiz);
+    if (existsSync(d)) lista.push(...readdirSync(d).filter(f => f.endsWith('.html')).map(f => new URL(sub + f, raiz)));
+  }
+  return lista;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

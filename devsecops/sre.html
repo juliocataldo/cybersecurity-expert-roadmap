@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="SRE e observabilidade em português: SLI, SLO e error budget, logs, métricas e traces com OpenTelemetry, alertas por burn rate, incidentes e postmortem, a ligação com segurança, ferramentas open source e labs.">
+<title>SRE e observabilidade &middot; DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=cdf480e3">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Início</a>
+    <a href="guia.html">Guia</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="ferramentas.html">Ferramentas</a>
+    <a href="sre.html" aria-current="page">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="./">← DevSecOps</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="./">DevSecOps</a> · SRE</p>
+    <h1>SRE e observabilidade</h1>
+    <p class="int-lead">DevSecOps cuida de como o software chega à produção. <b>SRE</b> (Site Reliability Engineering) cuida de como ele se comporta lá: confiável na medida certa, observável e com um jeito sério de lidar com falhas. A <b>observabilidade</b> é a base dos dois, e também é onde a segurança enxerga ataques.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#sre-oque">O que é</a><a href="#sre-slo">SLI, SLO e budget</a><a href="#sre-obs">Observabilidade</a><a href="#sre-pratica">Na prática</a><a href="#sre-incidentes">Incidentes</a><a href="#sre-seguranca">SRE e segurança</a><a href="#sre-ferramentas">Ferramentas e labs</a>
+    </nav>
+
+    <section class="int-blk" id="sre-oque">
+      <h3><span>01</span>O que é SRE</h3>
+<p>SRE nasceu no Google como a ideia de tratar operação como um problema de engenharia de software. Os princípios que mais aparecem no dia a dia:</p>
+      <ul class="int-req">
+        <li><b>Confiabilidade é uma meta</b> Nenhum sistema precisa de 100% de disponibilidade; o usuário não percebe a diferença entre 99,99% e 100%, mas o custo para chegar lá é enorme. A meta certa vem do que o usuário precisa.</li>
+        <li><b>Error budget</b> O quanto se pode falhar dentro da meta. Enquanto sobra budget, o time entrega com mais velocidade; quando acaba, a prioridade vira estabilidade.</li>
+        <li><b>Menos toil</b> Toil é o trabalho manual, repetitivo e que cresce junto com o sistema. A referência clássica é limitá-lo a metade do tempo do time e automatizar o resto.</li>
+        <li><b>Postmortem sem culpa</b> Falha é sinal de sistema frágil, não de pessoa ruim. O postmortem procura causas e melhorias, não culpados.</li>
+        <li><b>Mudança é o maior risco</b> Boa parte dos incidentes vem de mudança: deploy gradual, rollback rápido e feature flags valem mais que heroísmo.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="sre-slo">
+      <h3><span>02</span>SLI, SLO, SLA e error budget</h3>
+<p class="int-hint">Tente responder em voz alta antes de abrir.</p>
+      <details class="int-q"><summary>Qual a diferença entre SLI, SLO e SLA?</summary><div><p>SLI é a medida (percentual de requisições com sucesso e abaixo de 300 ms, por exemplo). SLO é a meta interna para essa medida (99,9% em 30 dias). SLA é o compromisso com o cliente, com consequência financeira, e por isso costuma ser mais folgado que o SLO.</p></div></details>
+      <details class="int-q"><summary>Quanto tempo fora do ar cabe num SLO de 99,9% em 30 dias?</summary><div><p>Trinta dias têm 43.200 minutos; 0,1% disso são <b>43,2 minutos</b>. Com 99,99%, são 4,3 minutos: cada nove a mais divide o budget por dez e multiplica o esforço.</p></div></details>
+      <details class="int-q"><summary>Que SLI escolher para uma API?</summary><div><p>O que o usuário sente: disponibilidade (requisições sem erro de servidor) e latência (percentual abaixo de um limite, usando percentis como p95 ou p99, nunca a média). Para um pipeline de dados, frescor e completude.</p></div></details>
+      <details class="int-q"><summary>O que acontece quando o error budget acaba?</summary><div><p>O combinado (a política de error budget) entra em ação: pausa de mudanças arriscadas, foco em confiabilidade, revisão das causas. Funciona porque foi acordado antes, entre produto e engenharia, e não decidido no calor do incidente.</p></div></details>
+      <details class="int-q"><summary>Por que alertar por burn rate e não por "erro acima de X%"?</summary><div><p>Alerta por limite fixo dispara em picos irrelevantes e demora em degradações lentas. O burn rate mede a velocidade com que o budget está sendo gasto: 14,4 vezes por 1 hora consome 2% do mês e merece acordar alguém; uma queima lenta vira ticket. Veja o exemplo no bloco 04.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="sre-obs">
+      <h3><span>03</span>Observabilidade: logs, métricas e traces</h3>
+<p>Monitorar é olhar o que você já sabia que podia quebrar. Observabilidade é conseguir responder perguntas novas sobre o sistema, sem mudar o código, a partir do que ele emite.</p>
+      <ul class="int-req">
+        <li><b>Métricas</b> Números agregados no tempo, baratos de guardar e bons para alertas e tendências. Cuidado com a cardinalidade: um label com ID de usuário multiplica as séries e derruba o Prometheus.</li>
+        <li><b>Logs</b> Eventos detalhados. Estruturados (JSON) e com ID de correlação ficam pesquisáveis; texto livre vira garimpo. Nunca com senha, token ou dado pessoal.</li>
+        <li><b>Traces</b> O caminho de uma requisição entre serviços, com o tempo de cada etapa. É o que mostra onde está a lentidão num sistema distribuído.</li>
+        <li><b>Profiles</b> O quarto sinal: onde o código gasta CPU e memória em produção, de forma contínua.</li>
+        <li><b>OpenTelemetry</b> O padrão aberto para instrumentar e coletar os sinais, independente de fornecedor. Instrumente com OpenTelemetry e troque o destino quando quiser.</li>
+      </ul>
+      <details class="int-q"><summary>Golden signals, RED e USE: quando usar cada um?</summary><div><p>Os quatro golden signals (latência, tráfego, erros e saturação) servem para qualquer serviço voltado ao usuário. RED (rate, errors, duration) é a versão enxuta para serviços e APIs. USE (utilization, saturation, errors) é para recursos: CPU, disco, fila, pool de conexões.</p></div></details>
+      <details class="int-q"><summary>O que fazer com logs demais e caros?</summary><div><p>Definir níveis com critério, amostrar o que é repetitivo, reter por tempo diferente conforme o uso (depuração por dias, auditoria e segurança pelo prazo da política) e transformar contagens frequentes em métricas.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="sre-pratica">
+      <h3><span>04</span>Na prática: SLO com alerta e coleta sem dados pessoais</h3>
+<p>Dois exemplos para estudar linha a linha. O primeiro é uma regra do Prometheus que alerta pelo burn rate em duas janelas (a de 5 minutos confirma que o problema ainda está acontecendo). As métricas e os endereços são de exemplo.</p>
+      <div class="int-code">
+        <p class="int-code-t">slo-api.rules.yml <span>Prometheus · burn rate</span></p>
+        <pre><code># SLO: 99,9% das requisições da API sem erro 5xx, em 30 dias.
+# Error budget: 0,1%. Burn rate 14,4 por 1 hora gasta 2% do budget do mês.
+groups:
+  - name: slo-api
+    rules:
+      - alert: ApiQueimandoErrorBudgetRapido
+        expr: |
+          (
+            sum(rate(http_requests_total{job="api", code=~"5.."}[1h]))
+            /
+            sum(rate(http_requests_total{job="api"}[1h]))
+          ) &gt; (14.4 * 0.001)
+          and
+          (
+            sum(rate(http_requests_total{job="api", code=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total{job="api"}[5m]))
+          ) &gt; (14.4 * 0.001)
+        labels:
+          severity: page
+        annotations:
+          summary: "API consumindo o error budget 14x mais rápido que o normal"
+          runbook: "https://wiki.example.com/runbooks/api-erros-5xx"</code></pre>
+      </div>
+      <details class="int-q"><summary>Por que duas janelas, 1 hora e 5 minutos?</summary><div><p>A janela longa garante que o gasto é significativo; a curta garante que ainda está acontecendo. Sem a curta, o alerta continua tocando por quase uma hora depois que o problema acabou. O alerta leva para um runbook: quem acorda de madrugada precisa saber o primeiro passo.</p></div></details>
+      <p>O segundo é um OpenTelemetry Collector que recebe traces e logs das aplicações e <b>remove dados pessoais e tokens antes de enviar</b> para o backend. Esse é o ponto em que observabilidade e LGPD se encontram.</p>
+      <div class="int-code">
+        <p class="int-code-t">otel-collector.yml <span>OpenTelemetry Collector</span></p>
+        <pre><code># OpenTelemetry Collector (distribuição contrib): recebe, limpa e envia.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  memory_limiter:            # protege o Collector de picos
+    check_interval: 1s
+    limit_percentage: 80
+  attributes/sem-pii:        # telemetria não é lugar de dado pessoal nem de token
+    actions:
+      - key: http.request.header.authorization
+        action: delete
+      - key: user.email
+        action: delete
+      - key: enduser.id
+        action: hash         # ainda dá para agrupar, sem expor o identificador
+  batch:
+
+exporters:
+  otlphttp:
+    endpoint: https://otel.example.com   # sempre com TLS
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/sem-pii, batch]
+      exporters: [otlphttp]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/sem-pii, batch]
+      exporters: [otlphttp]</code></pre>
+      </div>
+      <details class="int-q"><summary>Por que limpar no Collector, se a aplicação já não deveria mandar?</summary><div><p>Defesa em profundidade. A aplicação deve evitar mandar, mas uma biblioteca de instrumentação nova ou um log de depuração esquecido escapa. O Collector é a última barreira antes de o dado sair para um backend, muitas vezes de terceiro. Dados que não precisam ser lidos podem virar hash: ainda dá para agrupar sem expor.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="sre-incidentes">
+      <h3><span>05</span>Incidentes, on-call e postmortem</h3>
+<ul class="int-req">
+        <li><b>Severidade</b> Critérios claros e publicados (impacto no usuário, dados, receita), para ninguém discutir a classificação durante o incidente.</li>
+        <li><b>Papéis</b> Quem coordena (incident commander), quem investiga, quem comunica. Quem coordena não põe a mão no teclado.</li>
+        <li><b>Mitigar antes de entender</b> Rollback, desligar a feature flag, desviar tráfego. A causa raiz fica para depois que o usuário voltou a ser atendido.</li>
+        <li><b>On-call saudável</b> Escala com revezamento, alertas que exigem ação (o resto vira ticket), runbooks atualizados e compensação. Alerta que ninguém acompanha deve ser apagado.</li>
+        <li><b>Postmortem</b> Linha do tempo, impacto, o que ajudou, o que atrapalhou e ações com dono e prazo, sem culpados. Publicar internamente multiplica o aprendizado.</li>
+      </ul>
+      <p class="int-note"><b>Incidente de segurança também é incidente:</b> o processo é o mesmo, com dois cuidados a mais. Preservar evidências antes de "limpar", e envolver jurídico e o encarregado de dados quando houver dado pessoal: a LGPD pode exigir comunicação à ANPD. Veja a página de <a href="../entrevista-dfir.html">DFIR</a> no Cyber Expert Guide.</p>
+    </section>
+
+    <section class="int-blk" id="sre-seguranca">
+      <h3><span>06</span>Onde SRE e segurança se encontram</h3>
+<ul class="int-req">
+        <li><b>Telemetria é dado sensível</b> Logs e traces revelam arquitetura, usuários e às vezes segredos. Acesso restrito por papel, retenção definida e criptografia em trânsito e em repouso.</li>
+        <li><b>Nada de PII e tokens</b> Senha, token, cookie de sessão, documento e cartão nunca vão para log ou trace. Mascarar na origem e filtrar no Collector, como no bloco 04.</li>
+        <li><b>Endpoints internos fechados</b> Rotas de métricas, health detalhado e profiling (como <code>/metrics</code> e <code>/debug/pprof</code>) não ficam expostas para a internet.</li>
+        <li><b>Observabilidade é detecção</b> Os mesmos sinais que mostram lentidão mostram abuso: pico de 401 e 403, padrões de enumeração, tráfego de saída anômalo. Mande os logs de segurança também para o SIEM.</li>
+        <li><b>Disponibilidade é segurança</b> O "A" da tríade CIA. Rate limiting, limites de recurso e capacidade planejada também protegem contra abuso e negação de serviço.</li>
+        <li><b>A stack também tem CVE</b> Prometheus, Grafana e o Collector entram na gestão de vulnerabilidades e no pipeline, como qualquer outro software.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="sre-ferramentas">
+      <h3><span>07</span>Ferramentas e labs</h3>
+<p>Ferramentas <b>open source</b> de observabilidade e confiabilidade, com link para o repositório oficial.</p>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/open-telemetry/opentelemetry-collector" target="_blank" rel="noopener noreferrer"><span class="k">Coleta</span><h3>OpenTelemetry Collector</h3><p>Recebe, processa e envia logs, métricas e traces para qualquer backend. O ponto central para filtrar e enriquecer.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/prometheus/prometheus" target="_blank" rel="noopener noreferrer"><span class="k">Métricas</span><h3>Prometheus</h3><p>Coleta e guarda métricas, com a linguagem PromQL para consultas e regras de alerta.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/prometheus/alertmanager" target="_blank" rel="noopener noreferrer"><span class="k">Alertas</span><h3>Alertmanager</h3><p>Agrupa, silencia e roteia os alertas do Prometheus para o on-call.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/grafana/grafana" target="_blank" rel="noopener noreferrer"><span class="k">Painéis</span><h3>Grafana</h3><p>Painéis e alertas sobre várias fontes de dados ao mesmo tempo.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/grafana/loki" target="_blank" rel="noopener noreferrer"><span class="k">Logs</span><h3>Grafana Loki</h3><p>Logs indexados só pelos labels, o que barateia o armazenamento.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/grafana/tempo" target="_blank" rel="noopener noreferrer"><span class="k">Traces</span><h3>Grafana Tempo</h3><p>Armazena traces em larga escala usando armazenamento de objetos.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/jaegertracing/jaeger" target="_blank" rel="noopener noreferrer"><span class="k">Traces</span><h3>Jaeger</h3><p>Projeto da CNCF para coletar e visualizar traces distribuídos.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/grafana/pyroscope" target="_blank" rel="noopener noreferrer"><span class="k">Profiles</span><h3>Grafana Pyroscope</h3><p>Profiling contínuo: onde o código gasta CPU e memória em produção.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/grafana/k6" target="_blank" rel="noopener noreferrer"><span class="k">Carga</span><h3>Grafana k6</h3><p>Testes de carga escritos em JavaScript, para validar capacidade e SLO antes do usuário.</p><span class="go">Repositório ↗</span></a>
+    </div>
+    <h2>Labs e leitura</h2>
+    <div class="cards dso-cards">
+      <a class="card" href="https://github.com/open-telemetry/opentelemetry-demo" target="_blank" rel="noopener noreferrer"><span class="k">Lab</span><h3>OpenTelemetry Demo</h3><p>Uma loja com microsserviços em várias linguagens, já instrumentada, e cenários de falha para investigar.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://github.com/juliocataldo/sre-observability-lab" target="_blank" rel="noopener noreferrer"><span class="k">Lab</span><h3>SRE &amp; Observability Lab</h3><p>Curso prático de SRE e observabilidade que uso com as turmas, com exercícios passo a passo.</p><span class="go">Repositório ↗</span></a>
+      <a class="card" href="https://sre.google/books/" target="_blank" rel="noopener noreferrer"><span class="k">Leitura</span><h3>Livros de SRE do Google</h3><p>Site Reliability Engineering e The Site Reliability Workbook, gratuitos para ler online. O capítulo de alertas por SLO é a base do bloco 04.</p><span class="go">Abrir ↗</span></a>
+    </div>
+    </section>
+
+    <p class="art-meta art-foot">Conteúdo próprio, com base nos livros de SRE do Google e na documentação do OpenTelemetry e do Prometheus. Sentiu falta de algo? Conte na página de <a href="../sugestoes.html">Sugestões</a>.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>
