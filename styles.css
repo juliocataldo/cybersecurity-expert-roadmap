@@ -755,3 +755,43 @@ div.card{cursor:default}div.card:hover{border-color:var(--line)}
 .tema-btn:hover,.tema-btn:focus-visible{background:transparent;color:var(--tx);border-color:var(--acc);outline:none}
 @media(min-width:900px){.tema-btn{justify-self:end;grid-column:3}}
 @media(max-width:640px){.tema-btn{order:1;width:32px;height:32px}}
+
+/* link "Preparar para entrevista" no card da trilha */
+.path-int{margin-top:16px}
+.path-int a{color:var(--acc);text-decoration:none}
+.path-int a:hover{text-decoration:underline}
+
+/* ===== Entrevistas (entrevistas.html): blocos numerados, perguntas que abrem, cartões do plano ===== */
+.prose.int{max-width:820px}
+.int h2{font-size:clamp(24px,4vw,30px);margin:44px 0 10px}
+.int-lead{font-size:17px}
+.int .ancoras{margin:18px 0 0}
+.int-blk{margin-top:40px;padding-top:30px;border-top:1px solid var(--line)}
+.int-blk>h3{display:flex;align-items:baseline;gap:12px;font:700 22px/1.25 var(--sans);text-transform:none;letter-spacing:-.01em;color:var(--tx);margin:0 0 14px}
+.int-blk>h3 span{font:600 13px var(--mono);color:var(--acc);letter-spacing:.08em;flex:none}
+.int-hint{font-size:14px;color:var(--mut)}
+.prose .int-req,.prose .int-days{padding-left:0}
+.int-req{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px}
+.int-req li{margin:0;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--s1)}
+.int-req li>b:first-child{display:block;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:2px}
+.int-note{margin:0;padding:12px 16px;border-left:3px solid var(--acc);border-radius:0 8px 8px 0;background:var(--accbg)}
+.int-q{border:1px solid var(--line);border-radius:10px;background:var(--s1);margin:0 0 8px}
+.int-q>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 16px;font-weight:600;color:var(--tx)}
+.int-q>summary::-webkit-details-marker{display:none}
+.int-q>summary::after{content:"+";flex:none;font:600 18px/1 var(--mono);color:var(--acc)}
+.int-q[open]>summary::after{content:"−"}
+.int-q>summary:hover{color:var(--acc)}
+.int-q>summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:10px}
+.int-q>div{padding:0 16px 4px;border-top:1px solid var(--line)}
+.int-q>div p{margin:12px 0}
+.int-code{margin:0 0 18px}
+.int-code-t{margin:0 0 8px;font-weight:600;color:var(--tx)}
+.int-code-t span{margin-left:8px;font:500 12px var(--mono);color:var(--mut)}
+.int-code pre{margin:0}
+.int-tip{margin-top:22px;padding:14px 16px 16px;border:1px solid var(--acc);border-radius:10px;background:var(--accbg)}
+.int-tip-t{margin:0 0 10px;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+.int-tip .path-links a{color:var(--tx);border-color:var(--line2);background:var(--s1)}
+.int-days{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.int-days li{margin:0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--s1);font-size:14px;color:var(--tx2)}
+.int-days li>span{display:block;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+.int-days li>b{display:block;margin:2px 0 6px;color:var(--tx);font-size:16px}
