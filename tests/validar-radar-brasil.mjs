@@ -100,7 +100,7 @@ ok(rf.populacao.BR.v > 2e8 && rf.pib.BR.v > 1e12, 'população/PIB do Brasil for
 
 // a página gerada não pode ter script nem estilo inline (CSP do site)
 const html = readFileSync(new URL('../radar.html', import.meta.url), 'utf8');
-ok(!/<script/i.test(html), 'radar.html não deve ter <script>');
+ok(!/<script/i.test(html.replace(/<script src="tema\.js\?v=[0-9a-f]+"><\/script>/, '')), 'radar.html não deve ter <script> (só o tema.js próprio)');
 ok(!/ style=/i.test(html), 'radar.html não deve ter style inline (a CSP bloqueia)');
 ok(/Fonte: Ransomware\.live/.test(html), 'atribuição ao Ransomware.live obrigatória');
 ok(/Banco Mundial/.test(html) && /Natural Earth/.test(html), 'atribuição ao Banco Mundial e ao Natural Earth obrigatória');

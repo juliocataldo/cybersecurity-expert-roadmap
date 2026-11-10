@@ -14,6 +14,7 @@ import { createHash } from 'node:crypto';
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const OUTDIR = join(ROOT, 'notas');
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
+const TEMAV = createHash('sha1').update(readFileSync(join(ROOT, 'tema.js'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // versão do tema.js (claro/escuro)
 
 const NAV = `  <nav aria-label="Seções">
     <a href="../">Home</a>
@@ -54,6 +55,7 @@ function notePage(note, backlinks) {
 <title>${esc(note.title)} · Teia</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../styles.css?v=${CSSV}">
+<script src="../tema.js?v=${TEMAV}"></script>
 </head>
 <body>
 <header class="site">

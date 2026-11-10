@@ -98,7 +98,7 @@ for (const a of artigos) {
   if (existsSync(new URL(`artigo-${a.slug}.html`, raiz))) {
     const h = ler(`artigo-${a.slug}.html`);
     ok(h.includes(`<h1>${esc(a.titulo)}</h1>`), `artigo-${a.slug}.html fora de sincronia com o .md (rode node tools/build-artigos.mjs)`);
-    ok(!/<script/i.test(h) && !/ style=/i.test(h), `artigo-${a.slug}.html não pode ter script nem estilo inline`);
+    ok(!/<script/i.test(h.replace(/<script src="(?:\.\.\/)?tema\.js\?v=[0-9a-f]+"><\/script>/, "")) && !/ style=/i.test(h), `artigo-${a.slug}.html não pode ter script nem estilo inline (só o tema.js próprio)`);
   }
 }
 const publicados = new Set(artigos.map(a => `artigo-${a.slug}.html`));
@@ -107,7 +107,7 @@ ok(orfaos.length === 0, 'página de artigo sem .md publicado: ' + orfaos.join(',
 
 // ---- artigos.html: cards e lista de notas ----
 const pagina = ler('artigos.html');
-ok(!/<script(?![^>]*\ssrc="guia\.js(\?v=[0-9a-f]+)?"><\/script>)/i.test(pagina) && !/ style=/i.test(pagina), 'artigos.html não pode ter script inline (só o guia.js externo) nem estilo inline');
+ok(!/<script(?![^>]*\ssrc="guia\.js(\?v=[0-9a-f]+)?"><\/script>)/i.test(pagina.replace(/<script src="tema\.js\?v=[0-9a-f]+"><\/script>/, '')) && !/ style=/i.test(pagina), 'artigos.html não pode ter script inline (só o guia.js e o tema.js externos) nem estilo inline');
 ok((pagina.match(/class="card" href="artigo-/g) || []).length === artigos.filter(a => a.listar).length, 'um card por artigo publicado e listado em artigos.html');
 ok(artigos.some(a => a.listar) || !/Estudos de caso e textos/.test(pagina), 'sem artigo listado, a seção "Estudos de caso e textos" não deve aparecer');
 const teia = lerTeia(ler('teia-data.js'));

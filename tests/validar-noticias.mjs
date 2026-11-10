@@ -66,7 +66,7 @@ ok(Object.keys(STATUS).includes(base.status), 'status do destaque deve existir')
 
 // ---- página gerada ----
 const html = readFileSync(new URL('../noticias.html', import.meta.url), 'utf8');
-ok(!/<script/i.test(html), 'noticias.html não deve ter <script>');
+ok(!/<script/i.test(html.replace(/<script src="tema\.js\?v=[0-9a-f]+"><\/script>/, '')), 'noticias.html não deve ter <script> (só o tema.js próprio)');
 ok(!/ style=/i.test(html), 'noticias.html não deve ter style inline (a CSP bloqueia)');
 ok(/Fonte: The Hacker News/.test(html), 'atribuição ao The Hacker News obrigatória');
 ok(/id="destaques"/.test(html) && /id="manchetes"/.test(html), 'seções Destaques e Manchetes');

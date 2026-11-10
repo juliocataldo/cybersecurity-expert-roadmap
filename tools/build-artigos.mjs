@@ -13,6 +13,7 @@ import { lerArtigos, validarArtigo, lerTeia, notasParaLista, renderNotas } from 
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
+const TEMAV = createHash('sha1').update(readFileSync(join(ROOT, 'tema.js'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // versão do tema.js (claro/escuro)
 const base = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/);
 const ICON = base[9];
 const FOOT = base.find(l => l.startsWith('<footer'));
@@ -61,6 +62,7 @@ const cabeca = (titulo, descricao) => `<!doctype html>
 <title>${esc(titulo)} · Cyber Expert Guide</title>
 ${ICON}
 <link rel="stylesheet" href="styles.css?v=${CSSV}">
+<script src="tema.js?v=${TEMAV}"></script>
 </head>
 <body>
 <header class="site">
