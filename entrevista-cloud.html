@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Preparação para entrevista de Cloud Security: IAM, SCPs, CloudTrail e GuardDuty na AWS, Terraform e policy-as-code, CSPM, Kubernetes, um exercício de política IAM e plano de 7 dias.">
+<title>Entrevista de Cloud Security &middot; Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css?v=cb673890">
+<script src="tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="trilhas.html" aria-current="page">Trilhas</a>
+    <a href="artigos.html">Notas</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html">HUB Sec</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
+        <a href="radar.html">Radar</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
+      </div>
+    </details>
+    <a href="sobre.html">Sobre</a>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="entrevistas.html">← Entrevistas</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="trilhas.html">Trilhas</a> · <a href="entrevistas.html">Entrevistas</a> · Cloud</p>
+    <h1>Cloud Security</h1>
+    <p class="art-meta">Pesquisado em <b>novembro de 2026</b> em vagas públicas no Brasil e no exterior. O mercado muda rápido: os requisitos aqui são revisados a cada seis meses.</p>
+    <p class="int-lead">Segurança em nuvem é, antes de tudo, <b>identidade e configuração</b>: quem pode fazer o quê, em quais contas, e como impedir que um erro vire exposição. A <b>AWS</b> é a nuvem mais cobrada nas vagas, por isso os exemplos usam AWS; Azure e GCP aparecem como segunda nuvem, e os conceitos se traduzem.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#cloud-vagas">Vagas</a><a href="#cloud-perguntas">Perguntas</a><a href="#cloud-cenarios">Cenários</a><a href="#cloud-pratica">Política IAM</a><a href="#cloud-comportamental">Comportamental</a><a href="#cloud-plano">Plano de 7 dias</a><a href="#cloud-entrevistador">Para perguntar</a>
+    </nav>
+
+    <section class="int-blk" id="cloud-vagas">
+      <h3><span>01</span>O que as vagas pedem</h3>
+<p>Os requisitos que mais se repetem nas vagas pesquisadas, sem identificar empresas:</p>
+      <ul class="int-req">
+        <li><b>IAM</b> O requisito número um: políticas, roles, federação, menor privilégio e como a AWS avalia uma permissão.</li>
+        <li><b>Governança multi-conta</b> AWS Organizations e SCPs como guardrails, com contas separadas por ambiente e uma conta central de logs e segurança.</li>
+        <li><b>Logs e detecção</b> CloudTrail, Config, GuardDuty e Security Hub. Esperam que você saiba qual responde a qual pergunta.</li>
+        <li><b>Dados e rede</b> KMS e criptografia, S3 Block Public Access, VPC, security groups e endpoints privados.</li>
+        <li><b>IaC e policy-as-code</b> Terraform é o mais citado; checagens automáticas no pipeline (Checkov, Trivy, OPA) para barrar configuração insegura antes do deploy.</li>
+        <li><b>CSPM / CNAPP</b> Ferramentas de postura que listam milhares de achados. O diferencial pedido é <b>priorizar e remediar</b>, não só abrir chamado.</li>
+        <li><b>Kubernetes</b> RBAC, NetworkPolicies, Pod Security e cadeia de suprimentos (imagens assinadas, SBOM, varredura).</li>
+        <li><b>Certificação</b> AWS Certified Security Specialty, CKS e CCSP. Para Azure, a <b>SC-500</b>: a AZ-500 foi aposentada em 31 de agosto de 2026.</li>
+      </ul>
+      <p class="int-note"><b>Contexto de 2026:</b> se o seu plano de estudos ainda cita a AZ-500, troque pela SC-500, a sucessora indicada pela Microsoft (<a href="https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" target="_blank" rel="noopener noreferrer">lista oficial de provas aposentadas ↗</a>).</p>
+    </section>
+
+    <section class="int-blk" id="cloud-perguntas">
+      <h3><span>02</span>Perguntas conceituais</h3>
+<p class="int-hint">Tente responder em voz alta antes de abrir: é o melhor treino.</p>
+      <details class="int-q"><summary>Explique o modelo de responsabilidade compartilhada.</summary><div><p>O provedor protege a nuvem (data center, hardware, hipervisor); o cliente protege o que coloca nela (identidades, configuração, dados, sistema operacional das VMs). A linha muda com o serviço: num serviço gerenciado, o provedor assume mais.</p></div></details>
+      <details class="int-q"><summary>Como a AWS decide se uma requisição é permitida?</summary><div><p>Tudo começa negado. Um deny explícito em qualquer política vence. Para permitir, a ação precisa estar liberada em todas as camadas que se aplicam: SCP da organização, limite de permissões, política de sessão, política de identidade ou de recurso.</p></div></details>
+      <details class="int-q"><summary>SCP concede permissão?</summary><div><p>Não. A SCP só define o teto do que as contas podem fazer; quem concede é a política de IAM. Ela serve como guardrail, por exemplo, para impedir que alguém desligue o CloudTrail ou use regiões não aprovadas.</p></div></details>
+      <details class="int-q"><summary>Por que preferir roles a chaves de acesso?</summary><div><p>Roles geram credenciais temporárias que expiram sozinhas. Chaves de acesso são de longa duração, vazam em repositório e laptop e precisam de rotação. No CI/CD, o padrão é federação por OIDC, sem chave guardada.</p></div></details>
+      <details class="int-q"><summary>CloudTrail, Config, GuardDuty e Security Hub: o que cada um faz?</summary><div><p>CloudTrail registra quem fez qual chamada de API. Config registra o estado e as mudanças de configuração dos recursos e avalia regras. GuardDuty detecta ameaças a partir de logs e telemetria. Security Hub centraliza e prioriza os achados e compara com padrões de boas práticas.</p></div></details>
+      <details class="int-q"><summary>Como funciona a criptografia com KMS?</summary><div><p>Por envelope: a chave do KMS protege chaves de dados, que cifram o conteúdo. O controle está na política da chave: quem pode usar, quem pode administrar. Separar essas funções e registrar o uso no CloudTrail é o que dá valor ao KMS.</p></div></details>
+      <details class="int-q"><summary>Por que exigir IMDSv2 nas instâncias?</summary><div><p>O IMDSv2 exige um token de sessão obtido com PUT, o que bloqueia a maior parte dos abusos via SSRF contra o serviço de metadados, de onde sairiam as credenciais da role da instância.</p></div></details>
+      <details class="int-q"><summary>Quais são os controles básicos de segurança em Kubernetes?</summary><div><p>RBAC com menor privilégio (e sem cluster-admin para aplicações), NetworkPolicy com negação padrão, Pod Security Admission para barrar contêineres privilegiados, segredos fora da imagem, imagens verificadas e assinadas, e logs de auditoria do API server ligados.</p></div></details>
+      <details class="int-q"><summary>CSPM, CWPP e CNAPP: qual a diferença?</summary><div><p>CSPM avalia a configuração da nuvem; CWPP protege as cargas (VMs, contêineres, funções) em execução; CNAPP junta os dois, mais a análise de código e de identidade, para correlacionar o risco num só lugar.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="cloud-cenarios">
+      <h3><span>03</span>Cenários: "chegou este achado, o que você faz?"</h3>
+<p class="int-hint">Método esperado: confirmar, conter com o menor impacto possível, investigar pelo CloudTrail e corrigir a causa, não só o sintoma.</p>
+      <details class="int-q"><summary>O GuardDuty alerta uso de uma chave de acesso a partir de um IP desconhecido.</summary><div><p>Ver no CloudTrail o que aquela chave fez e de onde. Desativar a chave (não apagar, para preservar a investigação), revogar sessões ativas da role, procurar recursos criados ou permissões alteradas e descobrir onde a chave vazou. Depois, substituir por role ou federação.</p></div></details>
+      <details class="int-q"><summary>Um bucket com dados de clientes está público.</summary><div><p>Bloquear o acesso público já, conferir nos logs de acesso ao S3 e no CloudTrail se houve leitura de fora, envolver o encarregado de dados se houve exposição, e ativar o Block Public Access no nível da conta, com uma SCP que impeça desligá-lo.</p></div></details>
+      <details class="int-q"><summary>Um time pede AdministratorAccess "só para o deploy".</summary><div><p>Entender o que o deploy precisa e entregar uma role específica para o pipeline, com federação OIDC. Para emergência, acesso temporário com aprovação e registro.</p></div></details>
+      <details class="int-q"><summary>Uma chave da AWS foi commitada no GitHub.</summary><div><p>Desativar a chave na hora (remover do histórico não basta), investigar o uso no CloudTrail, trocar o processo para segredos fora do código e ativar a varredura de segredos no repositório e no pipeline.</p></div></details>
+      <details class="int-q"><summary>O CSPM aponta 2 mil achados. Por onde começar?</summary><div><p>Pelo que combina exposição externa, dado sensível e permissão ampla. Agrupar pela causa (um módulo de Terraform errado pode gerar centenas), corrigir na origem e criar uma regra no pipeline para não voltar.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="cloud-pratica">
+      <h3><span>04</span>Exercício prático: revise esta política</h3>
+<p>É comum mostrarem uma política ou um trecho de Terraform e pedirem a revisão. A política abaixo está ligada à role de uma função Lambda que <b>só precisa ler relatórios</b> de uma pasta de um bucket.</p>
+      <div class="int-code">
+        <p class="int-code-t">Política atual <span>role da Lambda</span></p>
+        <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": "s3:*",
+    "Resource": "*"
+  }]
+}</code></pre>
+      </div>
+      <details class="int-q"><summary>O que está errado e como fica a versão corrigida?</summary><div><p>A política permite qualquer ação em qualquer bucket da conta: ler, apagar, mudar a política do bucket e torná-lo público. Se a função for comprometida, o estrago alcança todos os dados do S3. A correção limita a ação e o recurso ao necessário:</p><pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "LerRelatorios",
+    "Effect": "Allow",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::relatorios-exemplo/saida/*"
+  }]
+}</code></pre><p>Para chegar a ela sem adivinhar, o IAM Access Analyzer gera uma política a partir da atividade real registrada no CloudTrail. Para impedir que o problema volte: checagem no pipeline do Terraform barrando <code>"Action": "*"</code> ou <code>"s3:*"</code> com <code>"Resource": "*"</code>.</p></div></details>
+      <div class="int-code">
+        <p class="int-code-t">Segundo exemplo <span>Terraform · security group</span></p>
+        <pre><code>resource "aws_security_group_rule" "ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.app.id
+}</code></pre>
+      </div>
+      <details class="int-q"><summary>O que você recomendaria?</summary><div><p>A porta 22 está aberta para a internet inteira, alvo constante de tentativas de senha. A recomendação é remover a regra e usar o AWS Systems Manager Session Manager, que dá acesso ao terminal sem porta aberta e com registro de sessão. Se o SSH for inevitável, restringir à faixa da VPN corporativa. No pipeline, uma regra do Checkov ou do Trivy impede o merge desse padrão.</p></div></details>
+      <div class="int-tip">
+        <p class="int-tip-t">Onde treinar (em conta própria e isolada; destrua tudo ao terminar, porque gera custo)</p>
+        <div class="path-links">
+          <a href="https://github.com/RhinoSecurityLabs/cloudgoat" target="_blank" rel="noopener noreferrer">CloudGoat ↗</a>
+          <a href="https://github.com/madhuakula/kubernetes-goat" target="_blank" rel="noopener noreferrer">Kubernetes Goat ↗</a>
+          <a href="http://flaws.cloud/" target="_blank" rel="noopener noreferrer">flAWS ↗</a>
+          <a href="https://skillbuilder.aws/" target="_blank" rel="noopener noreferrer">AWS Skill Builder ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="int-blk" id="cloud-comportamental">
+      <h3><span>05</span>Perguntas comportamentais</h3>
+<details class="int-q"><summary>Conte uma vez em que você convenceu um time a reduzir permissões.</summary><div><p>Formato STAR. Mostre que facilitou o caminho (gerou a política certa, testou junto) em vez de só negar o pedido.</p></div></details>
+      <details class="int-q"><summary>Como você equilibra segurança e velocidade de entrega?</summary><div><p>Guardrails automáticos e módulos de Terraform já seguros: o time entrega rápido pelo caminho certo, e o pipeline barra só o que é risco real.</p></div></details>
+      <details class="int-q"><summary>Conte um incidente ou lab de nuvem que você investigou.</summary><div><p>Linha do tempo pelo CloudTrail, o que foi contido, a causa e o que mudou depois.</p></div></details>
+      <details class="int-q"><summary>Como você acompanha as mudanças dos provedores?</summary><div><p>Cite fontes concretas: blogs de segurança dos provedores, notas de versão, labs que refez quando um serviço mudou.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="cloud-plano">
+      <h3><span>06</span>Plano para a semana da entrevista</h3>
+<ol class="int-days">
+        <li><span>Dia 1</span><b>IAM</b>Responsabilidade compartilhada, avaliação de políticas, roles, federação e o Access Analyzer.</li>
+        <li><span>Dia 2</span><b>Multi-conta</b>Organizations, SCPs e o desenho de uma landing zone com conta de logs e de segurança.</li>
+        <li><span>Dia 3</span><b>Detecção</b>CloudTrail, Config, GuardDuty e Security Hub. Responda os cenários do bloco 03 em voz alta.</li>
+        <li><span>Dia 4</span><b>Dados</b>KMS e políticas de chave, S3 Block Public Access e Secrets Manager.</li>
+        <li><span>Dia 5</span><b>Rede</b>VPC, security groups e NACLs, endpoints privados e IMDSv2.</li>
+        <li><span>Dia 6</span><b>IaC e Kubernetes</b>Rode Checkov ou Trivy num Terraform de exemplo; revise RBAC e NetworkPolicy. Apoio: <a href="solucoes-containers.html">containers no HUB Sec</a>.</li>
+        <li><span>Dia 7</span><b>Lab e revisão</b>Um cenário do CloudGoat ou do Kubernetes Goat, escrevendo o que corrigiria em cada passo.</li>
+      </ol>
+    </section>
+
+    <section class="int-blk" id="cloud-entrevistador">
+      <h3><span>07</span>Perguntas para fazer ao entrevistador</h3>
+<ul>
+        <li>Quantas contas ou assinaturas existem e como são governadas?</li>
+        <li>Quanto da infraestrutura está em código (Terraform) e passa por checagem no pipeline?</li>
+        <li>Quem corrige os achados do CSPM: o time de segurança ou os times de produto?</li>
+        <li>A empresa usa mais de uma nuvem? Qual é a principal?</li>
+        <li>Há incentivo para certificações como a AWS Security Specialty ou a SC-500?</li>
+      </ul>
+    </section>
+
+    <p class="art-meta art-foot">Metodologia: leitura de vagas públicas de segurança em nuvem (Brasil e exterior) em novembro de 2026, com os requisitos agregados e sem identificar empresas, e conferência das certificações na fonte oficial (<a href="https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" target="_blank" rel="noopener noreferrer">provas aposentadas da Microsoft ↗</a>). Fez uma entrevista e sentiu falta de algo aqui? Conte na página de <a href="sugestoes.html">Sugestões</a>.</p>
+    <p class="int-k">Outras áreas</p>
+    <nav class="ancoras int-outras" aria-label="Outras áreas">
+      <a href="entrevista-soc.html">SOC</a><a href="entrevista-pentest.html">Pentest</a><a href="entrevista-grc.html">GRC</a><a href="entrevista-dfir.html">DFIR</a><a href="entrevistas.html">Todas as áreas</a>
+    </nav>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>

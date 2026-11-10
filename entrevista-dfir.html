@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Preparação para entrevista de DFIR: ordem de volatilidade (RFC 3227), cadeia de custódia, artefatos de Windows e Linux, memória, uma linha do tempo para interpretar e plano de 7 dias.">
+<title>Entrevista de DFIR &middot; Cyber Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css?v=cb673890">
+<script src="tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="trilhas.html" aria-current="page">Trilhas</a>
+    <a href="artigos.html">Notas</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html">HUB Sec</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
+        <a href="radar.html">Radar</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
+      </div>
+    </details>
+    <a href="sobre.html">Sobre</a>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="entrevistas.html">← Entrevistas</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="trilhas.html">Trilhas</a> · <a href="entrevistas.html">Entrevistas</a> · DFIR</p>
+    <h1>DFIR · Forense e resposta a incidentes</h1>
+    <p class="art-meta">Pesquisado em <b>novembro de 2026</b> em vagas públicas no Brasil e no exterior. O mercado muda rápido: os requisitos aqui são revisados a cada seis meses.</p>
+    <p class="int-lead">DFIR reconstrói o que aconteceu num incidente e ajuda a resolvê-lo: coletar e preservar evidências, analisar disco, memória e logs, montar a linha do tempo e dizer o que conter e corrigir. Na entrevista, pesam <b>método e rigor</b>: o que você coleta primeiro, como garante que a evidência vale, e como explica o que encontrou.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#dfir-vagas">Vagas</a><a href="#dfir-perguntas">Perguntas</a><a href="#dfir-cenarios">Cenários</a><a href="#dfir-pratica">Linha do tempo</a><a href="#dfir-comportamental">Comportamental</a><a href="#dfir-plano">Plano de 7 dias</a><a href="#dfir-entrevistador">Para perguntar</a>
+    </nav>
+
+    <section class="int-blk" id="dfir-vagas">
+      <h3><span>01</span>O que as vagas pedem</h3>
+<p>Os requisitos que mais se repetem nas vagas pesquisadas, sem identificar empresas:</p>
+      <ul class="int-req">
+        <li><b>Coleta e triagem</b> KAPE e Velociraptor são os mais citados: coletar artefatos de muitas máquinas rapidamente, sem imagem completa de disco.</li>
+        <li><b>Memória</b> Volatility 3 para analisar processos, conexões e injeções a partir de um dump de memória.</li>
+        <li><b>Artefatos</b> Windows (logs de eventos, registro, Prefetch, Amcache, $MFT, LNK) e Linux (logs de autenticação, journal, cron, histórico de shell).</li>
+        <li><b>Cadeia de custódia</b> Registro de quem coletou, quando, como, com hash, e por onde a evidência passou.</li>
+        <li><b>Base de SOC e EDR</b> Consultar telemetria de EDR e SIEM, entender alertas e usar o MITRE ATT&amp;CK para descrever o que o atacante fez.</li>
+        <li><b>Scripting</b> Python ou PowerShell para tratar grandes volumes de artefatos e automatizar coletas.</li>
+        <li><b>Certificação</b> GCFE, GCFA e GCIH (SANS / GIAC) são as referências; para começar, BTL1 e casos do CyberDefenders contam.</li>
+        <li><b>Sênior</b> Forense em nuvem: CloudTrail, logs do Entra ID e do Microsoft 365, snapshots de disco e preservação de evidências em recursos efêmeros.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="dfir-perguntas">
+      <h3><span>02</span>Perguntas conceituais</h3>
+<p class="int-hint">Tente responder em voz alta antes de abrir: é o melhor treino.</p>
+      <details class="int-q"><summary>O que é a ordem de volatilidade?</summary><div><p>A ordem de coleta da evidência mais efêmera para a mais estável, descrita na <b>RFC 3227</b>: registradores e cache; tabela de rotas, cache ARP, tabela de processos e memória; arquivos temporários; disco; logs remotos e dados de monitoramento; configuração física e topologia; mídia de arquivamento. Desligar a máquina primeiro perde tudo o que está em memória.</p></div></details>
+      <details class="int-q"><summary>O que é cadeia de custódia e por que importa?</summary><div><p>É o registro contínuo de quem teve a evidência, quando, onde e para quê, com o hash de cada item. Sem ela, a evidência pode ser contestada num processo e perde valor jurídico, mesmo que a análise esteja certa.</p></div></details>
+      <details class="int-q"><summary>Para que serve o hash na forense?</summary><div><p>Para provar a integridade: o hash da cópia precisa ser igual ao do original, antes e depois da análise. Use SHA-256; MD5 e SHA-1 ainda aparecem em ferramentas antigas, mas têm colisões conhecidas.</p></div></details>
+      <details class="int-q"><summary>Imagem completa ou triagem?</summary><div><p>A imagem bit a bit preserva tudo, mas demora e não escala. A triagem coleta só os artefatos que importam e permite olhar dezenas de máquinas em horas. O comum é triagem primeiro e imagem completa das máquinas-chave.</p></div></details>
+      <details class="int-q"><summary>O que a memória mostra que o disco não mostra?</summary><div><p>Processos em execução, conexões de rede abertas, código injetado, comandos digitados, chaves e malware que roda só em memória (fileless).</p></div></details>
+      <details class="int-q"><summary>Quais artefatos indicam execução de programa no Windows?</summary><div><p>Prefetch, Amcache, BAM, SRUM, o evento 4688 (com auditoria ligada) e o Sysmon evento 1. O Shimcache mostra que o sistema viu o arquivo, mas, nas versões recentes do Windows, sozinho não prova execução. Cruzar fontes é o que dá confiança.</p></div></details>
+      <details class="int-q"><summary>Onde procurar persistência no Windows?</summary><div><p>Chaves Run do registro, serviços (evento 7045), tarefas agendadas (evento 4698), pasta de inicialização, assinaturas WMI e contas criadas (evento 4720).</p></div></details>
+      <details class="int-q"><summary>E no Linux?</summary><div><p>Logs de autenticação (<code>auth.log</code> ou <code>secure</code>), journal do systemd, crontabs, unidades do systemd, <code>authorized_keys</code>, histórico de shell e binários alterados.</p></div></details>
+      <details class="int-q"><summary>Como você monta uma linha do tempo?</summary><div><p>Juntando as fontes (logs, sistema de arquivos, registro, EDR) numa só linha, em UTC, e marcando os eventos-chave: acesso inicial, execução, persistência, movimento lateral, impacto. Ferramentas de super timeline (como o plaso) ajudam; o raciocínio é seu.</p></div></details>
+      <details class="int-q"><summary>Conter rápido ou preservar evidência?</summary><div><p>Os dois, na ordem certa: isolar da rede (o EDR faz isso sem desligar), coletar memória e artefatos voláteis, e só depois erradicar. Quem decide o equilíbrio é o responsável pelo incidente, com o risco em vista.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dfir-cenarios">
+      <h3><span>03</span>Cenários: "o incidente começou, o que você faz?"</h3>
+<p class="int-hint">Método esperado: preservar, delimitar, conter sem destruir evidência, comunicar e documentar cada passo com horário.</p>
+      <details class="int-q"><summary>Um servidor está criptografando arquivos (ransomware).</summary><div><p>Isolar da rede sem desligar, capturar memória se for possível com segurança, identificar a conta e a origem, verificar o alcance em outros hosts e os backups (estão íntegros e isolados?). Acionar o plano de resposta, o jurídico e a comunicação. Não pagar nem negociar por conta própria.</p></div></details>
+      <details class="int-q"><summary>Uma conta de administrador foi usada às 3h da manhã.</summary><div><p>Confirmar com o dono, ver de onde veio o acesso, o que foi feito, e se a mesma credencial aparece em outros hosts. Se for indevido: desabilitar, revogar sessões, trocar a credencial e procurar persistência.</p></div></details>
+      <details class="int-q"><summary>Suspeita de que um colaborador está levando dados ao sair da empresa.</summary><div><p>Envolver RH e jurídico antes de agir, coletar com cadeia de custódia (pode virar processo), olhar e-mail, armazenamento em nuvem e mídia removível, e respeitar a privacidade e a LGPD: investigar o necessário, com base legal.</p></div></details>
+      <details class="int-q"><summary>Uma instância na AWS parece comprometida.</summary><div><p>Não encerrar a instância: tirar snapshot dos discos, isolar com um security group sem regras, coletar memória se possível, e preservar CloudTrail, VPC Flow Logs e logs da aplicação. Recursos de nuvem somem rápido; a preservação vem antes.</p></div></details>
+      <details class="int-q"><summary>O gestor pede para formatar e reinstalar a máquina agora.</summary><div><p>Explicar o que se perde (como a máquina foi invadida e se há outras afetadas) e propor o caminho mínimo: coleta de triagem de alguns minutos e depois a reinstalação. Se ele mantiver a decisão, registrar.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dfir-pratica">
+      <h3><span>04</span>Exercício prático: interprete a linha do tempo</h3>
+<p>É comum receber um trecho de eventos e ter de contar a história. A linha do tempo abaixo é fictícia (horário UTC; o IP é de uma faixa reservada para documentação).</p>
+      <div class="int-code">
+        <p class="int-code-t">Eventos do servidor FS01 <span>Windows · logs de segurança e sistema</span></p>
+        <pre><code>2026-11-03 02:14:07  4624  logon tipo 10 (RDP)        conta: svc_backup  origem: 203.0.113.45
+2026-11-03 02:16:51  4688  powershell.exe criado      pai: explorer.exe  conta: svc_backup
+2026-11-03 02:19:30  7045  serviço instalado          nome: UpdaterSvc   caminho: C:\ProgramData\upd\u.exe
+2026-11-03 02:20:02  4698  tarefa agendada criada     \Microsoft\Windows\Updater
+2026-11-03 02:41:12  4688  vssadmin.exe criado        conta: SYSTEM
+2026-11-03 02:44:58  1102  log de segurança apagado</code></pre>
+      </div>
+      <details class="int-q"><summary>Que história esses eventos contam?</summary><div><p>Uma conta de serviço (svc_backup) entrou por RDP a partir de um IP externo, o que já é anormal: contas de serviço não deveriam fazer logon interativo. Em seguida, abriu um PowerShell, instalou um serviço e criou uma tarefa agendada com nomes que imitam atualização (persistência), usou o <code>vssadmin</code> como SYSTEM (padrão comum de apagar cópias de sombra antes de criptografar) e apagou o log de segurança para dificultar a investigação.</p><p>No MITRE ATT&amp;CK: acesso por serviço remoto externo com conta válida (T1133, T1078), PowerShell (T1059.001), serviço do Windows (T1543.003), tarefa agendada (T1053.005), inibição de recuperação do sistema (T1490) e limpeza de logs (T1070.001).</p></div></details>
+      <details class="int-q"><summary>O que você coletaria e verificaria em seguida?</summary><div><ul><li>Memória do FS01, antes de qualquer reinício.</li><li>O arquivo <code>u.exe</code>: hash, Prefetch e Amcache para confirmar execução e primeira vez visto.</li><li>Logs que o 1102 não apaga: os já enviados ao SIEM, os de TerminalServices e o log do Sysmon, se houver.</li><li>VPN, firewall e proxy: o IP 203.0.113.45 acessou outros hosts? Como o RDP estava exposto?</li><li>Onde mais a conta svc_backup fez logon, e se a senha dela estava em algum script.</li><li>Estado dos backups e das cópias de sombra.</li></ul></div></details>
+      <details class="int-q"><summary>Quais recomendações saem daqui?</summary><div><p>Imediatas: isolar o FS01, desabilitar e trocar a credencial da svc_backup, remover o serviço e a tarefa depois de coletar. Estruturais: RDP só via VPN com MFA, contas de serviço sem logon interativo (ou gMSA), envio de logs para fora da máquina (o 1102 vira só um alerta) e alerta para criação de serviço e uso do vssadmin.</p></div></details>
+      <div class="int-tip">
+        <p class="int-tip-t">Onde treinar</p>
+        <div class="path-links">
+          <a href="https://cyberdefenders.org/" target="_blank" rel="noopener noreferrer">CyberDefenders ↗</a>
+          <a href="https://dfirmadness.com/" target="_blank" rel="noopener noreferrer">DFIR Madness ↗</a>
+          <a href="https://docs.velociraptor.app/" target="_blank" rel="noopener noreferrer">Velociraptor ↗</a>
+          <a href="https://github.com/volatilityfoundation/volatility3" target="_blank" rel="noopener noreferrer">Volatility 3 ↗</a>
+          <a href="https://www.rfc-editor.org/rfc/rfc3227" target="_blank" rel="noopener noreferrer">RFC 3227 ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="int-blk" id="dfir-comportamental">
+      <h3><span>05</span>Perguntas comportamentais</h3>
+<details class="int-q"><summary>Conte uma investigação (ou caso de lab) do início ao fim.</summary><div><p>Formato STAR. Mostre a hipótese inicial, as fontes que olhou, o que descartou e a conclusão, com a linha do tempo.</p></div></details>
+      <details class="int-q"><summary>Como você explica um achado forense para o jurídico ou para a diretoria?</summary><div><p>Fatos, grau de certeza e o que ainda não se sabe, sem jargão. Separar o que é evidência do que é inferência.</p></div></details>
+      <details class="int-q"><summary>Como você lida com a pressão para "voltar ao ar" logo?</summary><div><p>Mostrando o custo de perder a evidência e propondo o caminho que atende os dois lados, com a decisão final registrada por quem tem alçada.</p></div></details>
+      <details class="int-q"><summary>Como você trabalha em incidentes longos?</summary><div><p>Revezamento, registro contínuo para a passagem de turno e comunicação em horários combinados. Cansaço gera erro em evidência.</p></div></details>
+    </section>
+
+    <section class="int-blk" id="dfir-plano">
+      <h3><span>06</span>Plano para a semana da entrevista</h3>
+<ol class="int-days">
+        <li><span>Dia 1</span><b>Processo</b>Ciclo de resposta do NIST SP 800-61, ordem de volatilidade (RFC 3227) e cadeia de custódia.</li>
+        <li><span>Dia 2</span><b>Windows</b>Eventos 4624 (tipos de logon), 4688, 7045, 4698, 1102; Prefetch, Amcache e registro.</li>
+        <li><span>Dia 3</span><b>Memória</b>Volatility 3: processos, conexões e injeções. Resolva um caso de memória no CyberDefenders.</li>
+        <li><span>Dia 4</span><b>Coleta</b>KAPE ou Velociraptor numa VM sua: colete os artefatos e entenda o que cada módulo traz.</li>
+        <li><span>Dia 5</span><b>Linux e nuvem</b>Logs de autenticação, journal e cron; CloudTrail e logs de entrada do Entra ID.</li>
+        <li><span>Dia 6</span><b>Linha do tempo</b>Refaça o exercício do bloco 04 e escreva a sua versão da narrativa com as técnicas do ATT&amp;CK.</li>
+        <li><span>Dia 7</span><b>Relatório e revisão</b>Um relatório curto de um caso: resumo executivo, linha do tempo, evidências e recomendações. Apoio: <a href="entrevista-soc.html">a página de SOC</a> para a base de detecção.</li>
+      </ol>
+    </section>
+
+    <section class="int-blk" id="dfir-entrevistador">
+      <h3><span>07</span>Perguntas para fazer ao entrevistador</h3>
+<ul>
+        <li>A resposta a incidentes é feita pelo time interno ou com apoio de uma empresa contratada (retainer)?</li>
+        <li>Que ferramentas de coleta em escala e de EDR vocês usam?</li>
+        <li>Existem playbooks e exercícios simulados (tabletop) com a liderança?</li>
+        <li>Como é o envolvimento do jurídico durante um incidente?</li>
+        <li>Como funciona o plantão e o revezamento em incidentes longos?</li>
+      </ul>
+    </section>
+
+    <p class="art-meta art-foot">Metodologia: leitura de vagas públicas de DFIR (Brasil e exterior) em novembro de 2026, com os requisitos agregados e sem identificar empresas, e conferência dos conceitos nas fontes primárias (<a href="https://www.rfc-editor.org/rfc/rfc3227" target="_blank" rel="noopener noreferrer">RFC 3227 ↗</a> e <a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&amp;CK ↗</a>). Fez uma entrevista e sentiu falta de algo aqui? Conte na página de <a href="sugestoes.html">Sugestões</a>.</p>
+    <p class="int-k">Outras áreas</p>
+    <nav class="ancoras int-outras" aria-label="Outras áreas">
+      <a href="entrevista-soc.html">SOC</a><a href="entrevista-pentest.html">Pentest</a><a href="entrevista-grc.html">GRC</a><a href="entrevista-cloud.html">Cloud</a><a href="entrevistas.html">Todas as áreas</a>
+    </nav>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>
