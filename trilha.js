@@ -252,8 +252,8 @@ const TRILHA = {
     badge: { nome: 'Caçador de bugs' },
     missoes: [
       { id: 'F06-M1', tipo: 'estudo', titulo: 'OWASP Top 10',
-        descricao: 'Leia a lista atual e, para cada item, escreva em uma linha o que é e como se previne.',
-        links: [['OWASP Top 10', 'https://owasp.org/www-project-top-ten/']] },
+        descricao: 'Leia a lista atual e, para cada item, escreva em uma linha o que é e como se previne. Depois, veja cada falha no código com os exercícios interativos da Application Security antes de ir para os labs.',
+        links: [['OWASP Top 10', 'https://owasp.org/www-project-top-ten/'], ['Application Security: OWASP Top 10 interativo', 'https://application.security/free/owasp-top-10']] },
       { id: 'F06-M2', tipo: 'pratica', titulo: 'SQL Injection na Web Security Academy',
         descricao: 'Faça os laboratórios de nível Apprentice de SQL injection. São gratuitos, legais e feitos para isso.',
         links: [['PortSwigger Web Security Academy', 'https://portswigger.net/web-security']] },
