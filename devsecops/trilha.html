@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Trilha de DevSecOps e SRE em português: 7 etapas, dos fundamentos de Linux e Git a containers, pipeline seguro, deploy, SRE e entrevista, cada uma com o que estudar, onde praticar e como saber que está pronto.">
+<title>Trilha DevSecOps e SRE &middot; DevSecOps Expert Guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=49900d9a">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">DEVSECOPS<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Início</a>
+    <a href="trilha.html" aria-current="page">Trilha</a>
+    <a href="guia.html">Guia</a>
+    <a href="pipeline.html">Pipeline</a>
+    <a href="deploy.html">Deploy</a>
+    <a href="ferramentas.html">Ferramentas</a>
+    <a href="sre.html">SRE</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="../">Cyber Expert Guide</a>
+  </nav>
+</header>
+<main class="wrap">
+<p class="crumb"><a href="./">← DevSecOps</a></p>
+  <article class="sec-g prose int">
+    <p class="eyebrow"><a href="./">DevSecOps</a> · Trilha</p>
+    <h1>Trilha DevSecOps e SRE</h1>
+    <p class="int-lead">Um caminho em <b>7 etapas</b>, na ordem em que um assunto apoia o seguinte: dos fundamentos ao pipeline seguro, ao deploy e à operação em produção. Cada etapa diz <b>o que estudar</b>, <b>onde praticar</b> e <b>como saber que você está pronto</b> para seguir.</p>
+    <nav class="ancoras" aria-label="Nesta página">
+      <a href="#t-visao">Visão geral</a><a href="#t-fundamentos">1. Fundamentos</a><a href="#t-containers">2. Containers</a><a href="#t-devsecops">3. DevSecOps</a><a href="#t-pipeline">4. Pipeline</a><a href="#t-deploy">5. Deploy</a><a href="#t-sre">6. SRE</a><a href="#t-entrevista">7. Entrevista</a>
+    </nav>
+
+    <section class="int-blk" id="t-visao">
+      <h3><span>00</span>Visão geral</h3>
+<p>Os prazos são uma referência para quem estuda cerca de <b>6 horas por semana</b>: no total, uns quatro meses. Se você já trabalha com desenvolvimento ou infraestrutura, a etapa 1 vira revisão e o caminho encurta.</p>
+      <ol class="int-days">
+        <li><span>Etapa 1 · 3 a 4 semanas</span><b>Fundamentos</b>Linux e terminal, Git, redes e HTTP.</li>
+        <li><span>Etapa 2 · 3 semanas</span><b>Containers e Kubernetes</b>Dockerfile, imagem, Pod, Deployment e Service.</li>
+        <li><span>Etapa 3 · 1 semana</span><b>DevSecOps</b>O ciclo em 7 etapas, frameworks e métricas.</li>
+        <li><span>Etapa 4 · 2 a 3 semanas</span><b>Pipeline seguro</b>Gates de segredos, SAST, SCA, IaC, SBOM e assinatura.</li>
+        <li><span>Etapa 5 · 2 semanas</span><b>Deploy</b>Rolling, Blue-Green e Canary, políticas de admissão.</li>
+        <li><span>Etapa 6 · 2 a 3 semanas</span><b>SRE e observabilidade</b>SLO, error budget, OpenTelemetry e incidentes.</li>
+        <li><span>Etapa 7 · 1 semana</span><b>Entrevista</b>Revisão, projeto para mostrar e perguntas.</li>
+      </ol>
+      <p class="int-note"><b>Monte um projeto só, do começo ao fim.</b> Uma API pequena (Node.js, por exemplo) que atravessa todas as etapas: vira imagem na 2, ganha pipeline com gates na 4, sobe no cluster com canary na 5 e ganha SLO e painel na 6. No fim, é o repositório que você mostra na entrevista.</p>
+    </section>
+
+    <section class="int-blk" id="t-fundamentos">
+      <h3><span>01</span>Fundamentos: Linux, Git e redes</h3>
+<p>Quase todo o resto acontece num terminal Linux, versionado em Git e falando HTTP pela rede. Sem essa base, as ferramentas viram receita decorada.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> Navegação, permissões, processos, variáveis de ambiente e <i>pipes</i> no shell; Git além do commit (branch, merge, rebase, pull request); DNS, TCP, TLS e o ciclo de uma requisição HTTP. O <a href="https://roadmap.sh/devops" target="_blank" rel="noopener noreferrer">roadmap.sh/devops ↗</a> ajuda a enxergar o todo.</li>
+        <li><b>Pratique</b> Os jogos de terminal e de Git em <a href="ferramentas.html#f-jogos">Ferramentas</a>: cmdchallenge, Learn Git Branching e Oh My Git!. Escreva um script Bash que automatize algo que você faz à mão.</li>
+        <li><b>Pronto quando</b> Você resolve um problema no terminal sem interface gráfica, faz rebase de uma branch e resolve o conflito, e explica o que acontece entre digitar uma URL e a página carregar, inclusive o handshake TLS.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-containers">
+      <h3><span>02</span>Containers e Kubernetes</h3>
+<p>É onde o software roda hoje, e onde boa parte das falhas de configuração aparece. Entenda o mecanismo antes das ferramentas de segurança.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> O diagrama <a href="deploy.html#dep-docker-k8s">Docker x Kubernetes</a>: do <code>docker run</code> ao Pod, o papel do API Server, do etcd e do kubelet. Depois, Dockerfile com multi-stage, imagem mínima e usuário não-root; Deployment, Service, ConfigMap, Secret e namespaces.</li>
+        <li><b>Pratique</b> Suba um cluster local com <a href="https://github.com/kubernetes-sigs/kind" target="_blank" rel="noopener noreferrer">kind ↗</a> ou use o <a href="https://killercoda.com/" target="_blank" rel="noopener noreferrer">Killercoda ↗</a> no navegador. Coloque a API do seu projeto numa imagem e publique com Deployment e Service. O K8s Games, em <a href="ferramentas.html#f-jogos">Ferramentas</a>, treina o diagnóstico.</li>
+        <li><b>Pronto quando</b> Sua imagem roda como não-root, tem menos de algumas dezenas de MB e sobe no cluster; e você explica o que acontece, peça por peça, entre o <code>kubectl apply</code> e o Pod receber tráfego.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-devsecops">
+      <h3><span>03</span>DevSecOps: o ciclo e o porquê</h3>
+<p>Uma etapa curta e conceitual, para as próximas fazerem sentido: o que é levar segurança para dentro do jeito como o software é feito, e não só para o fim.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> O <a href="guia.html#dso-ciclo">ciclo em 7 etapas</a> e o controle de cada uma, os <a href="guia.html#dso-frameworks">frameworks</a> (NIST SSDF, OWASP SAMM, DSOMM, SLSA), as <a href="guia.html#dso-metricas">métricas</a> e <a href="guia.html#dso-comecar">por onde começar</a> numa empresa.</li>
+        <li><b>Pratique</b> Pegue o seu projeto e escreva, em uma página, o que pode dar errado em cada etapa do ciclo e qual controle entra ali. É um threat model simplificado.</li>
+        <li><b>Pronto quando</b> Você explica shift left e shift right com exemplos, diz em que etapa entram SAST, SCA, IaC e DAST, e defende por que um gate que bloqueia tudo é tão ruim quanto não ter gate.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-pipeline">
+      <h3><span>04</span>Pipeline seguro</h3>
+<p>O coração do DevSecOps: o pipeline que impede o problema de chegar à produção e que, ele mesmo, não vira porta de entrada.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> O <a href="pipeline.html">pipeline comentado</a> em GitHub Actions: <a href="pipeline.html#dso-pipeline">segredos, SAST e SCA</a>, <a href="pipeline.html#dso-imagem">imagem, SBOM e assinatura</a>, <a href="pipeline.html#dso-gates">política de bloqueio e exceções</a> e <a href="pipeline.html#dso-hardening">como proteger o próprio pipeline</a>. As ferramentas de cada etapa estão em <a href="ferramentas.html">Ferramentas</a>.</li>
+        <li><b>Pratique</b> Coloque no seu projeto: Gitleaks, Semgrep, auditoria de dependências, Trivy, SBOM e assinatura com Cosign. Depois ataque pipelines de propósito no CI/CD Goat e procure segredos no WrongSecrets (os dois em <a href="ferramentas.html#f-labs">Labs</a>).</li>
+        <li><b>Pronto quando</b> Um segredo commitado ou uma dependência com CVE crítica quebram o build do seu projeto; as actions estão fixadas por SHA, o token tem permissão mínima e a publicação usa OIDC em vez de chave guardada.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-deploy">
+      <h3><span>05</span>Deploy e entrega progressiva</h3>
+<p>A imagem passou nos gates. Agora ela precisa entrar em produção sem derrubar ninguém e sem que o cluster aceite qualquer coisa.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> <a href="deploy.html#dep-estrategias">Rolling, Blue-Green e Canary</a> lado a lado, <a href="deploy.html#dep-seguranca">o que muda na segurança</a> de cada um e os <a href="deploy.html#dep-pratica">manifestos comentados</a>. Políticas de admissão com Kyverno ou OPA Gatekeeper, em <a href="ferramentas.html#f-deploy">Ferramentas</a>.</li>
+        <li><b>Pratique</b> No seu cluster kind: rolling update com readiness probe e <code>maxUnavailable: 0</code>; depois instale o Argo Rollouts e faça um canary que aborta sozinho. Crie uma política que recuse imagem sem digest. Explore o Kubernetes Goat para ver o lado do atacante.</li>
+        <li><b>Pronto quando</b> Uma versão quebrada do seu projeto não chega a 100% dos usuários, um Pod privilegiado é recusado na entrada do cluster, e você sabe dizer quando escolheria cada uma das três estratégias.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-sre">
+      <h3><span>06</span>SRE e observabilidade</h3>
+<p>Em produção, o trabalho muda: manter o sistema confiável na medida certa, enxergar o que acontece nele e responder bem quando falha. É também onde a segurança vê o ataque.</p>
+      <ul class="int-req">
+        <li><b>Estude</b> <a href="sre.html#sre-slo">SLI, SLO e error budget</a>, <a href="sre.html#sre-obs">logs, métricas e traces</a>, <a href="sre.html#sre-pratica">alerta por burn rate e coleta sem dados pessoais</a>, <a href="sre.html#sre-incidentes">incidentes e postmortem</a> e <a href="sre.html#sre-seguranca">a ligação com segurança</a>.</li>
+        <li><b>Pratique</b> Instrumente seu projeto com OpenTelemetry, defina um SLO e uma regra de burn rate no Prometheus e monte um painel no Grafana. Investigue falhas no OpenTelemetry Demo e conserte servidores no SadServers (os dois em <a href="sre.html#sre-ferramentas">SRE</a>).</li>
+        <li><b>Pronto quando</b> Você calcula o error budget de um SLO de cabeça, o seu alerta dispara pela queima do budget e não por um pico qualquer, os logs não carregam token nem dado pessoal, e você escreve um postmortem sem culpados.</li>
+      </ul>
+    </section>
+
+    <section class="int-blk" id="t-entrevista">
+      <h3><span>07</span>Entrevista e próximos passos</h3>
+<p>Revise com perguntas, não relendo. E leve o projeto: ele responde "você já fez isso?" melhor que qualquer certificado.</p>
+      <ul class="int-req">
+        <li><b>Revise</b> As perguntas para fixar de cada página: <a href="pipeline.html#dso-perguntas">Pipeline</a>, <a href="deploy.html#dep-perguntas">Deploy</a> e <a href="sre.html#sre-slo">SRE</a>. Explique em voz alta o seu pipeline e por que cada gate está ali.</li>
+        <li><b>Mostre</b> O repositório do projeto com um README que conta as decisões: o que o pipeline bloqueia, como é o deploy, qual é o SLO. Decisão explicada vale mais que ferramenta listada.</li>
+        <li><b>Certificações (opcional)</b> CKA para Kubernetes e CKS para segurança de Kubernetes são as mais pedidas nas vagas da área. Ajudam a passar pelo filtro, mas não substituem o projeto.</li>
+        <li><b>Continue</b> Para a entrevista em si, a preparação de <a href="../entrevista-cloud.html">Cloud Security ↗</a> é a mais próxima de DevSecOps. As demais carreiras de segurança estão nas <a href="../trilhas.html">trilhas por função ↗</a>. Os dois links abrem o Cyber Expert Guide, o site irmão.</li>
+      </ul>
+    </section>
+
+    <p class="art-meta art-foot">Conteúdo próprio. Os prazos são referência, não regra: ajuste ao seu ritmo. Sentiu falta de algo? Conte na página de <a href="../sugestoes.html">Sugestões</a>.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>
