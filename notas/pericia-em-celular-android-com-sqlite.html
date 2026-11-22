@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Perícia em celular Android com SQLite — nota do Cyber Expert Guide.">
+<title>Perícia em celular Android com SQLite · Teia</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css?v=49900d9a">
+<script src="../tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../index.html">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="../">Home</a>
+    <a href="../guia.html">Guia</a>
+    <a href="../trilhas.html">Trilhas</a>
+    <a href="../artigos.html" aria-current="page">Notas</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
+        <a href="../canivete.html">Canivete suíço</a>
+        <a href="../solucoes.html">HUB Sec</a>
+        <a href="../plataformas.html">Plataformas</a>
+        <a href="../checklist.html">Checklist</a>
+        <span class="nav-sub">Atualização</span>
+        <a href="../radar.html">Radar</a>
+        <a href="../noticias.html">Notícias</a>
+        <a href="../eventos.html">Eventos</a>
+      </div>
+    </details>
+    <a href="../sobre.html">Sobre</a>
+    <a href="../sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="../teia.html">&larr; Teia</a></p>
+  <article class="sec-g prose">
+    <h1>Perícia em celular Android com SQLite</h1>
+    <p class="nota-tags"><span class="nota-tag">#dfir</span> <span class="nota-tag">#forensics</span> <span class="nota-tag">#blue-team</span> <span class="nota-tag">#android</span> <span class="nota-tag">#sqlite</span></p>
+    <p>Boa parte do que um celular Android sabe sobre o dono mora em bancos <b>SQLite</b>: mensagens, chamadas, histórico do navegador, localização e uso de apps. Numa perícia de <a href="blue-team.html" class="wl">Blue Team</a>, o trabalho não é ler um banco, é <b>cruzar todos</b> numa linha do tempo e contar a história que eles sustentam.</p>
+<p>Para praticar, montei um lab com seis bancos fictícios que imitam um aparelho apreendido: <a href="https://github.com/juliocataldo/dfir" target="_blank" rel="noopener noreferrer">github.com/juliocataldo/dfir</a>.</p>
+<h3>As fontes de evidência</h3>
+<pre><code>BANCO              IMITA NO ANDROID        RESPONDE
+1_uso_apps.db      UsageStats              quais apps, quanto, quando
+2_mensagens.db     app de mensagens        com quem e o quê
+3_chamadas.db      calllog.db              quem ligou, por quanto tempo
+4_navegacao.db     histórico do Chrome     onde navegou, o que baixou
+5_localizacao.db   cache de GPS            onde o aparelho esteve
+6_integridade.db   inventário de arquivos  hashes e senhas guardadas
+</code></pre>
+<p>Nenhuma fonte prova nada sozinha. Uma mensagem diz &quot;entrega às 22h&quot;, a navegação mostra um download, o GPS mostra um trajeto de madrugada. A força do laudo vem da <b>correlação</b> entre fontes independentes.</p>
+<h3>O método</h3>
+<ol><li><b>Preserve</b>: trabalhe em cópia e registre o hash de cada arquivo antes de abrir.</li><li><b>Leia sem alterar</b>: abra em modo somente leitura.</li><li><b>Normalize o tempo</b>: tudo no mesmo fuso e na mesma unidade.</li><li><b>Decodifique</b>: conteúdo ofuscado nem sempre é criptografado.</li><li><b>Procure o que foi apagado</b>: páginas livres, WAL e journal.</li><li><b>Correlacione</b>: uma tabela única, ordenada por horário, com a fonte de cada evento.</li><li><b>Escreva com cuidado</b>: o que os dados mostram e o que eles não permitem afirmar.</li></ol>
+<pre><code>shasum -a 256 *.db &gt; hashes.sha256          # cadeia de custódia
+sqlite3 -readonly 2_mensagens.db &quot;.schema&quot;  # nunca abra em modo escrita
+shasum -a 256 -c hashes.sha256              # no fim: nada mudou
+</code></pre>
+<h3>Tempo: a armadilha mais comum</h3>
+<p>O Android grava timestamps Unix, mas <b>nem sempre na mesma unidade</b>. O log de chamadas e o UsageStats usam milissegundos; muitos apps usam segundos. Converter tudo igual empurra eventos décadas para frente ou para trás.</p>
+<pre><code>-- segundos
+SELECT datetime(enviada_em, 'unixepoch', '-3 hours') FROM mensagens;
+
+-- milissegundos
+SELECT datetime(date / 1000, 'unixepoch', '-3 hours') FROM calls;
+</code></pre>
+<p>Os timestamps vêm em UTC. Converta para o fuso local e <b>escreva no laudo qual fuso usou</b>. E desconfie das datas do sistema de arquivos: arquivo extraído de <code>.zip</code> pode aparecer com data de 1980.</p>
+<h3>Codificação não é criptografia</h3>
+<p>Mensagem com <code>ZW50cmVnYSBhcyAyMmg...</code> parece segredo, mas é <b>Base64</b>: qualquer um decodifica sem chave. Criptografia de verdade (veja <a href="cryptography.html" class="wl">Cryptography</a>) exige chave, e a análise de dado criptografado deve ser feita em ambiente controlado e documentada.</p>
+<pre><code>echo 'ZW50cmVnYSBhcyAyMmggbmEgZG9jYSA3' | base64 -d
+</code></pre>
+<h3>O que foi apagado</h3>
+<p>Quando alguém apaga uma conversa, o SQLite nem sempre sobrescreve o dado na hora. Antes de concluir, verifique:</p>
+<pre><code>sqlite3 -readonly 2_mensagens.db &quot;PRAGMA freelist_count&quot;  # páginas livres
+ls *.db-wal *.db-journal                                  # transações pendentes
+strings -n 6 2_mensagens.db                               # texto residual
+</code></pre>
+<p>Se nada aparecer, a conclusão honesta é: <b>intenção de apagar registrada, apagamento não confirmado</b>.</p>
+<h3>Ligando pessoas e arquivos entre fontes</h3>
+<ul><li><b>Pessoas</b>: o mesmo apelido, número ou usuário aparecendo em mensagens, chamadas e contas liga um contato anônimo a uma identidade.</li><li><b>Arquivos</b>: um download de um <code>.onion</code> (veja <a href="deep-web.html" class="wl">Deep Web</a>) com o mesmo tamanho de um arquivo do inventário é um <b>indício</b>. Só o <b>hash</b> do arquivo físico prova que é o mesmo.</li><li><b>Senhas em MD5</b>: MD5 sem salt cai em segundos com tabelas prontas. O laudo deve recomendar bcrypt, scrypt ou Argon2.</li></ul>
+<h3>Armadilhas comuns</h3>
+<ul><li><b>Misturar segundos e milissegundos</b>: a linha do tempo inteira fica errada.</li><li><b>Esquecer o fuso</b>: um evento &quot;às 02h&quot; pode ser às 23h do dia anterior.</li><li><b>Abrir o banco em modo escrita</b>: o SQLite pode mexer no arquivo e quebrar o hash da evidência.</li><li><b>Confundir indício com prova</b>: tamanho igual, horário próximo e apelido parecido sugerem, não provam.</li><li><b>Afirmar além dos dados</b>: &quot;o suspeito esteve na doca 7&quot; exige a localização da doca. Sem ela, escreva &quot;não foi possível confirmar&quot;.</li></ul>
+<blockquote>Um bom perito não é quem encontra mais coisas, é quem escreve só o que a evidência sustenta e deixa claro onde ela termina.</blockquote>
+    
+    <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>
