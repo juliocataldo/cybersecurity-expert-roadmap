@@ -45,6 +45,7 @@ const head = base.slice(0, base.indexOf('<main class="wrap">'))
 const foot = base.slice(base.indexOf('</main>'));
 
 const main = `<main class="wrap">
+  <p class="crumb"><a href="./#explore">← Recursos</a></p>
   <section class="sec-g">
     <p class="eyebrow">Onde se conectar</p>
     <h1>Eventos</h1>
