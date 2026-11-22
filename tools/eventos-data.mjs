@@ -26,7 +26,7 @@ export const EVENTOS = [
   ['DICB', 'Porto Alegre · BR', 'presencial', 't', 'Digital Investigation Conference Brazil: forense e investigação digital.', 'https://wbeducacional.ac-page.com/dicb-2026'],
   ['SBSeg', 'Armação dos Búzios · BR', 'presencial', 't', 'Simpósio acadêmico de segurança da informação e sistemas computacionais.', 'https://www.sbseg2026.uff.br/'],
   ['CryptoRave', 'São Paulo · BR', 'presencial', 't', 'Privacidade, criptografia e cultura hacker.', 'https://cryptorave.org'],
-  ['Roadsec', 'São Paulo e outras cidades · BR', 'presencial', 't', 'Circuito itinerante de segurança e comunidade hacker.', 'https://roadsec.com.br/'],
+  ['Roadsec', 'São Paulo e outras cidades · BR', 'presencial', 't', 'Circuito itinerante de segurança e comunidade hacker.', 'https://www.roadsec.com.br/'],
   ['BHack Conference', 'Belo Horizonte · BR', 'presencial', 't', 'Comunidade e pesquisa em Minas Gerais.', 'https://bhack.com.br/'],
   ['Tosconf', 'Campinas · BR', 'presencial', 't', 'Pesquisa e comunidade.', 'https://tosconf.lhc.net.br'],
   ['0x3 Hacker Conference', 'Maceió · BR', 'presencial', 't', 'Comunidade hacker do Nordeste.', 'https://conference.oxehc.com.br'],

@@ -275,6 +275,8 @@ dialog table{width:100%;border-collapse:collapse;margin:6px 0}dialog td,dialog t
 
 /* cursos */
 .card.tool .pills{margin-top:4px}
+.card.tool .g-ver{margin-top:8px;font-size:13px;color:var(--mut)}
+.card.tool .g-ver a{color:var(--acc-hi)}
 .card.tool.pick{border-color:var(--acc);background:linear-gradient(var(--accbg),var(--accbg)),var(--s2)}
 /* laboratório e IA */
 code{font:13px var(--mono);color:var(--tx);background:var(--s1);border:1px solid var(--line);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
@@ -417,6 +419,7 @@ dialog h2{padding-right:36px}
 .t-red{color:var(--acc);border-color:var(--acc)}
 .t-grc{color:#b98cff;border-color:#5b4a86}
 .t-cloud{color:#49c6a0;border-color:#2f6d57}
+.t-app{color:#e3c65a;border-color:#6d5f2b}
 .path-desc{color:var(--tx2);font-size:14px;margin:0 0 12px}
 .path-meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 4px}
 .path-meta dt{font:600 10px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
@@ -736,6 +739,7 @@ div.card{cursor:default}div.card:hover{border-color:var(--line)}
 :root[data-theme="light"] .t-blue{color:#1d5fae;border-color:#a9c6ec}
 :root[data-theme="light"] .t-grc{color:#6a3fc0;border-color:#cdbcef}
 :root[data-theme="light"] .t-cloud{color:#137a57;border-color:#a3d9c4}
+:root[data-theme="light"] .t-app{color:#7a5c00;border-color:#e2d39a}
 :root[data-theme="light"] .path-links a.yt{border-color:#e6c2b2;color:#9a3d1d}
 :root[data-theme="light"] .sug-err{color:#b91c1c}
 :root[data-theme="light"] .price.free{color:#137a57}

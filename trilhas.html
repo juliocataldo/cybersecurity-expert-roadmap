@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Trilhas de cibersegurança: a trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR) com onde aprender e vídeos.">
+<meta name="description" content="Trilhas de cibersegurança: a trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR, AppSec) com onde aprender e vídeos.">
 <title>Trilhas &middot; Cyber Expert Guide</title>
 <!-- seo -->
 <link rel="canonical" href="https://www.juliocataldo.dev/trilhas.html">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Cyber Expert Guide">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Trilhas &middot; Cyber Expert Guide">
-<meta property="og:description" content="Trilhas de cibersegurança: a trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR) com onde aprender e vídeos.">
+<meta property="og:description" content="Trilhas de cibersegurança: a trilha gamificada e as trilhas por função (SOC, Pentester, GRC, Cloud, DFIR, AppSec) com onde aprender e vídeos.">
 <meta property="og:url" content="https://www.juliocataldo.dev/trilhas.html">
 <meta property="og:image" content="https://www.juliocataldo.dev/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <!-- /seo -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=49900d9a">
+<link rel="stylesheet" href="styles.css?v=0511ac30">
 <script src="tema.js?v=733e83a3"></script>
 </head>
 <body>
@@ -41,6 +41,7 @@
         <a href="solucoes.html">HUB Sec</a>
         <a href="plataformas.html">Plataformas</a>
         <a href="checklist.html">Checklist</a>
+        <a href="glossario.html">Glossário</a>
         <span class="nav-sub">Atualização</span>
         <a href="radar.html">Radar</a>
         <a href="noticias.html">Notícias</a>
@@ -114,6 +115,14 @@
         <p class="path-k">Onde aprender</p><div class="path-links"><a href="https://cyberdefenders.org/" target="_blank" rel="noopener noreferrer" class="">CyberDefenders</a> <a href="https://dfirmadness.com/" target="_blank" rel="noopener noreferrer" class="">DFIR Madness</a> <a href="https://blueteamlabs.online/" target="_blank" rel="noopener noreferrer" class="">Blue Team Labs Online</a> <a href="https://github.com/juliocataldo/dfir" target="_blank" rel="noopener noreferrer" class="">Lab: celular Android (SQLite)</a></div>
         <p class="path-k">Vídeos e canais</p><div class="path-links"><a href="https://www.youtube.com/@13Cubed" target="_blank" rel="noopener noreferrer" class="yt">13Cubed</a> <a href="https://www.youtube.com/@DFIRScience" target="_blank" rel="noopener noreferrer" class="yt">DFIRScience</a> <a href="https://www.youtube.com/@_JohnHammond" target="_blank" rel="noopener noreferrer" class="yt">John Hammond</a></div>
         <p class="path-k">Dicas</p><ul class="path-tips"><li>Aprenda a montar a timeline: a ordem dos eventos conta a história do incidente.</li><li>Preserve evidências antes de mexer: ordem de volatilidade, hashes e cópia bit a bit.</li><li>Pratique com casos reais: CyberDefenders e DFIR Madness trazem imagens e PCAPs completos.</li><li>Detecção é escrever e testar regras (Sigma) — valide com o Atomic Red Team.</li></ul><p class="path-k path-int"><a href="entrevista-dfir.html">Preparar para entrevista &rarr;</a></p>
+        </article>
+      <article class="path">
+        <div class="path-h"><span class="path-team t-app">AppSec</span><h3>AppSec / DevSecOps</h3></div>
+        <p class="path-desc">Segurança no ciclo de desenvolvimento: código, dependências, pipeline e deploy.</p>
+        <dl class="path-meta"><div><dt>Tempo</dt><dd>9–15 meses</dd></div><div><dt>Certificações</dt><dd>eWPT, CDP, CSSLP</dd></div></dl>
+        <p class="path-k">Onde aprender</p><div class="path-links"><a href="https://portswigger.net/web-security" target="_blank" rel="noopener noreferrer" class="">PortSwigger Web Security Academy</a> <a href="https://owasp.org/www-project-juice-shop/" target="_blank" rel="noopener noreferrer" class="">OWASP Juice Shop</a> <a href="https://cheatsheetseries.owasp.org/" target="_blank" rel="noopener noreferrer" class="">OWASP Cheat Sheets</a></div>
+        <p class="path-k">Vídeos e canais</p><div class="path-links"><a href="https://www.youtube.com/@SheHacksPurple" target="_blank" rel="noopener noreferrer" class="yt">She Hacks Purple</a> <a href="https://www.youtube.com/@LiveOverflow" target="_blank" rel="noopener noreferrer" class="yt">LiveOverflow</a> <a href="https://www.youtube.com/@PwnFunction" target="_blank" rel="noopener noreferrer" class="yt">PwnFunction</a></div>
+        <p class="path-k">Dicas</p><ul class="path-tips"><li>Programe: AppSec sem ler código vira checklist. Escolha uma linguagem e um framework e conheça os dois a fundo.</li><li>Domine o OWASP Top 10 e o ASVS, e saiba explicar a correção, não só a falha.</li><li>Automatize no pipeline (SAST, SCA, segredos), mas ajuste o ruído: gate que bloqueia tudo acaba desligado.</li><li>Faça threat modeling antes de codar: é o controle mais barato que existe.</li></ul><p class="path-k path-int"><a href="devsecops/trilha.html">Trilha DevSecOps em 7 etapas &rarr;</a></p>
         </article>
     </div>
   </section>

@@ -1,0 +1,23 @@
+name: Links externos (verificação semanal)
+
+# Testa os links externos do site uma vez por semana. Se algum estiver quebrado (404/410, ou o nome sem
+# endereço no DNS), o job falha e o GitHub avisa por e-mail; o resumo fica na aba do run. Não altera nada no repo.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 11 * * 1'   # segunda-feira, 11:00 UTC = 08:00 em Brasília
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verificar links externos
+        run: node tools/verificar-links.mjs

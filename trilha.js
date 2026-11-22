@@ -77,6 +77,7 @@ const TRILHA = {
     missoes: [
       { id: 'F01-M1', tipo: 'estudo', titulo: 'Como um computador funciona',
         descricao: 'Assista às primeiras aulas do CS50 (legendas em português): bits, memória e como o software conversa com o hardware.',
+        aprofunde: [['Glossário: as siglas da área explicadas', 'glossario.html']],
         links: [['CS50 - Harvard (gratuito)', 'https://cs50.harvard.edu/x/']] },
       { id: 'F01-M2', tipo: 'estudo', titulo: 'Binário e hexadecimal',
         descricao: 'Converta à mão 10, 255 e 4096 para binário e hexadecimal e confira no CyberChef. Redes e cripto usam isso o tempo todo.',
