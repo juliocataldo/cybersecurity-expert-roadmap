@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
+import { aplicarSeo } from './seo-lib.mjs';
 import {
   agregar, normalizarMundo, contarSemPais, agregarPaises, travaSaida, travaPaises, validarFonte, validarAnpd, taxa, limitesQuintis, faixaDe,
   lerMatrizFerramentas, lerMatrizCves, topMatriz, travaMatriz, K, MIN_TAXA, OUTROS_GRUPOS, OUTROS_SETOR,
@@ -207,7 +208,7 @@ const NAV = `  <nav aria-label="Seções">
   </nav>`;
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const TEMAV = createHash('sha1').update(readFileSync(join(ROOT, 'tema.js'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // versão do tema.js (claro/escuro)
-const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/)[9];
+const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<link rel="icon"')); // pelo conteúdo, não pela posição
 const FOOT = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<footer'));
 
 const maxSetor = Math.max(...ag.porSetor.map(s => s.n));
@@ -371,7 +372,7 @@ ${FOOT}
 </html>
 `;
 
-writeFileSync(join(ROOT, 'radar.html'), PAGE);
+writeFileSync(join(ROOT, 'radar.html'), aplicarSeo(PAGE, 'radar.html'));
 // histórico: só o total do Brasil do dia (sem nenhum dado de caso)
 if (!existsSync(HISTORICO)) writeFileSync(HISTORICO, 'data,total_br\n');
 const linhasH = readFileSync(HISTORICO, 'utf8').trim().split('\n');

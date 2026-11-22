@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { FONTE, STATUS, parseRss, filtrarItens, mesclarHistorico, travaNoticias, tagsDe, validarCuradas } from './noticias-lib.mjs';
+import { aplicarSeo } from './seo-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const DATA = join(ROOT, 'tools', 'data');
@@ -100,7 +101,7 @@ const NAV = `  <nav aria-label="Seções">
   </nav>`;
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const TEMAV = createHash('sha1').update(readFileSync(join(ROOT, 'tema.js'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // versão do tema.js (claro/escuro)
-const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/)[9];
+const ICON = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<link rel="icon"')); // pelo conteúdo, não pela posição
 const FOOT = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/).find(l => l.startsWith('<footer'));
 const ultimaAtualizacao = diaBR(Date.now());
 
@@ -151,6 +152,6 @@ ${FOOT}
 </html>
 `;
 
-writeFileSync(join(ROOT, 'noticias.html'), PAGE);
+writeFileSync(join(ROOT, 'noticias.html'), aplicarSeo(PAGE, 'noticias.html'));
 writeFileSync(HISTORICO, JSON.stringify(historico) + '\n'); // só título, link e data (já validados)
 console.log(`noticias.html gerado | ${bons.length} do feed, ${historico.length} no histórico, ${pagina.length} na página | ${curadas.length} destaque(s)`);

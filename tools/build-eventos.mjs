@@ -1,6 +1,7 @@
 // Gera eventos.html a partir de tools/eventos-data.mjs. Uso: node tools/build-eventos.mjs
 import { readFileSync, writeFileSync } from 'node:fs';
 import { EVENTOS } from './eventos-data.mjs';
+import { aplicarSeo } from './seo-lib.mjs';
 
 const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const LBL = { t: 'Técnico', e: 'Executivo', te: 'Técnico + Executivo' };
@@ -70,6 +71,6 @@ ${cards}
     <p class="note">Lista inspirada no <a href="https://github.com/marianabsctba/Mapa_Eventos_Ciber" target="_blank" rel="noopener noreferrer">Mapa de Eventos de Cyber</a>, reescrita e classificada por público. Faltou algum? Sugira em <a href="sugestoes.html">Sugestões</a>. Os links levam a sites externos; confira o endereço antes de comprar ingresso.</p>
   </section>
 `;
-writeFileSync('eventos.html', head + main + foot);
+writeFileSync('eventos.html', aplicarSeo(head + main + foot, 'eventos.html'));
 console.log(`eventos.html: ${EVENTOS.length} eventos (${nT} técnico, ${nE} executivo)`);
 console.log('regiões: ' + Object.entries(REG).map(([k, l]) => `${l} ${nReg(k)}`).join(' · '));

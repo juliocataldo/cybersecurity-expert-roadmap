@@ -32,6 +32,12 @@ O site tem estas partes. A home organiza tudo em três caminhos (**Começar**, *
 
 **CSP:** todas as páginas usam a mesma política (`script-src 'self'` mais o host do Cloudflare Web Analytics, e `connect-src` só para o próprio site — o beacon envia para `/cdn-cgi/rum` no mesmo domínio — e o destino dele), sem `unsafe-inline`. `node tests/validar-csp.mjs` falha se alguma página ou gerador divergir. O script inline que o Cloudflare injeta para detecção de bots (JavaScript Detections) continua bloqueado de propósito: ele muda a cada requisição e só liberaria com `unsafe-inline`.
 
+**SEO e preview de compartilhamento:** toda página tem `canonical` e Open Graph (título, descrição e a imagem `assets/og.png`, 1200x630), montados a partir do próprio `<title>` e da meta description, num bloco entre `<!-- seo -->` e `<!-- /seo -->`. Os geradores aplicam o bloco sozinhos (`tools/seo-lib.mjs`); depois de criar ou renomear uma página estática, rode `node tools/seo.mjs`, que também regera o `sitemap.xml`. O `robots.txt` aponta o sitemap, e a `404.html` (servida pelo GitHub Pages em qualquer caminho, por isso só com links absolutos) redireciona endereços antigos de notas renomeadas pelo `404.js`. `node tests/validar-seo.mjs` falha se faltar o bloco, se ele estiver desatualizado ou se o sitemap não bater.
+
+**Trava de dados de ambiente real nas notas:** além de segredos e rascunhos, `tools/producao-lib.mjs` retém a nota com CPF válido ou com algum termo da lista de bloqueio (secret `NOTAS_BLOQUEIO` no Action: domínios, hostnames e contas da empresa, separados por vírgula; fica fora do repositório público). IP público fora das faixas de documentação (RFC 5737) não bloqueia, mas gera aviso no log. Nunca registra o valor encontrado, só o tipo e a linha. Testado por `node tests/validar-producao.mjs`.
+
+**Aprofunde (trilha → site):** as missões da trilha podem ter o campo `aprofunde` com páginas do próprio site (nota, HUB Sec, entrevista, Radar), mostradas como "Aprofunde no site". É a ponte entre a trilha de iniciante e o conteúdo especializado. `node tests/validar-trilha.mjs` exige ao menos uma por fase e confere se cada página e âncora existe.
+
 ## Como usar a trilha
 1. Abra a **Trilha** e comece pela fase **00. Base de lançamento**.
 2. Cada fase tem **missões** (estudo, prática e chefões, que são os labs da disciplina) e um **checkpoint** de 3 questões.

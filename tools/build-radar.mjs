@@ -7,6 +7,7 @@ import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { criarCliente, LIMITE_REQ_PADRAO, MAX_DETALHES } from './vexday-lib.mjs';
+import { aplicarSeo } from './seo-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const KEY = process.env.CHAVE_VEXDAY || process.env.VEXDAY_API_KEY || '';
@@ -141,5 +142,5 @@ ${temDados ? painelVic + (painelVic && painelKev ? '\n\n' : '') + painelKev : pl
 </body>
 </html>
 `;
-writeFileSync(join(ROOT, 'radar-casos.html'), PAGE);
+writeFileSync(join(ROOT, 'radar-casos.html'), aplicarSeo(PAGE, 'radar-casos.html'));
 console.log(`radar-casos.html gerado | chave: ${KEY ? 'sim' : 'NÃO'} | vítimas BR: ${victims.length} | KEV: ${kev.length}`);

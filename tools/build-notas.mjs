@@ -7,9 +7,11 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node
 import { join, basename, relative, sep } from 'node:path';
 import { esc, slug, walk, parseFront, mdToHtml, resumoTexto } from './markdown-lib.mjs';
 import { acharSegredos } from './segredos-lib.mjs';
+import { acharDadosProducao, lerBloqueio } from './producao-lib.mjs';
 import { motivoRascunho } from './rascunho-lib.mjs';
 import { versionar } from './bump-css.mjs';
 import { createHash } from 'node:crypto';
+import { aplicarSeo } from './seo-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const OUTDIR = join(ROOT, 'notas');
@@ -88,7 +90,11 @@ const pastaDe = f => { const partes = relative(VAULT, f).split(sep); return part
 let notes = [];
 let semPublicar = 0;
 const retidas = [];
+const retidasProd = [];
+const avisosProd = [];
 const rascunhos = [];
+// termos da empresa que nunca podem sair numa nota (secret NOTAS_BLOQUEIO no Action; vazio quando roda local)
+const BLOQUEIO = lerBloqueio(process.env.NOTAS_BLOQUEIO);
 for (const f of files) {
   const bruto = readFileSync(f, 'utf8');
   const { meta, body } = parseFront(bruto);
@@ -98,12 +104,24 @@ for (const f of files) {
   // segunda barreira (a primeira é o push protection do GitHub): nota com possível segredo NÃO é publicada
   const achados = acharSegredos(bruto);
   if (achados.length) { retidas.push({ title, achados }); continue; }
+  // terceira barreira: dado de ambiente real (CPF, termos da lista de bloqueio); IP público só gera aviso
+  const prod = acharDadosProducao(bruto, BLOQUEIO);
+  if (prod.avisos.length) avisosProd.push({ title, achados: prod.avisos });
+  if (prod.bloqueios.length) { retidasProd.push({ title, achados: prod.bloqueios }); continue; }
   // rascunho: sem título de verdade ou com quase nada além de links -> fica fora do site (vitrine pública)
   const motivo = motivoRascunho(title, body);
   if (motivo) { rascunhos.push({ title, motivo }); continue; }
   notes.push({ file: f, title, slug: slug(title), tags: Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []), body });
 }
-console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} publicáveis | ${semPublicar} privados (ficam fora do site) | ${retidas.length} retidos por possível segredo | ${rascunhos.length} rascunhos`);
+console.log(`vault: ${files.length} arquivo(s) .md | ${notes.length} publicáveis | ${semPublicar} privados (ficam fora do site) | ${retidas.length} retidos por possível segredo | ${retidasProd.length} retidos por dado de ambiente real | ${rascunhos.length} rascunhos | lista de bloqueio: ${BLOQUEIO.length} termo(s)`);
+for (const r of retidasProd) {
+  const resumo = [...new Set(r.achados.map(a => `${a.tipo} (linha ${a.linha})`))].join('; ');
+  console.warn(`::warning title=Teia: nota retida::"${r.title}" não foi publicada: possível dado de ambiente real: ${resumo}. Anonimize (domínio .example, IP de documentação, usuário genérico) e envie de novo.`);
+}
+for (const r of avisosProd) {
+  const resumo = [...new Set(r.achados.map(a => `linha ${a.linha}`))].join(', ');
+  console.warn(`::notice title=Teia: IP público na nota::"${r.title}" foi publicada, mas tem IP público (${resumo}). Se não for de um lab público, troque por 192.0.2.x, 198.51.100.x ou 203.0.113.x.`);
+}
 for (const r of rascunhos) console.warn(`::notice title=Teia: rascunho fora do site::"${r.title}" não foi publicada (${r.motivo}). Complete a nota ou dê um título e ela entra no próximo build.`);
 for (const r of retidas) {
   const resumo = [...new Set(r.achados.map(a => `${a.tipo} (linha ${a.linha})`))].join('; ');
@@ -141,7 +159,7 @@ for (const e of edges) backlinks.get(e.t).push({ slug: e.s, title: bySlug.get(e.
 // escreve páginas das notas
 if (existsSync(OUTDIR)) rmSync(OUTDIR, { recursive: true, force: true });
 mkdirSync(OUTDIR, { recursive: true });
-for (const n of notes) writeFileSync(join(OUTDIR, `${n.slug}.html`), notePage(n, backlinks.get(n.slug)));
+for (const n of notes) writeFileSync(join(OUTDIR, `${n.slug}.html`), aplicarSeo(notePage(n, backlinks.get(n.slug)), `notas/${n.slug}.html`));
 
 // grau (nº de conexões) para tamanho do nó
 const deg = new Map(notes.map(n => [n.slug, 0]));

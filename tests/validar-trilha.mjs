@@ -1,5 +1,5 @@
 // Valida a integridade de trilha.js. Uso: node tests/validar-trilha.mjs
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
 
 const src = readFileSync(new URL('../trilha.js', import.meta.url), 'utf8');
@@ -11,6 +11,7 @@ const ok = (cond, msg) => { if (!cond) erros.push(msg); };
 const ids = new Set();
 const unico = id => { ok(!ids.has(id), `id duplicado: ${id}`); ids.add(id); };
 const dist = [0, 0, 0, 0];
+let aprofunde = 0;
 const HTTP_OK = new Set(['http://flaws.cloud/', 'http://scanme.nmap.org/']); // sites que só existem em http
 
 T.fases.forEach((f, i) => {
@@ -24,7 +25,17 @@ T.fases.forEach((f, i) => {
     ok(['estudo', 'pratica', 'chefao'].includes(m.tipo), `${m.id}: tipo inválido`);
     ok(m.titulo && m.descricao, `${m.id}: falta título/descrição`);
     m.links.forEach(([n, u]) => { ok(n, `${m.id}: link sem nome`); ok(u.startsWith('https://') || HTTP_OK.has(u), `${m.id}: link não-https ${u}`); });
+    // "aprofunde": só páginas do próprio site; a página (e a âncora, se houver) precisa existir
+    (m.aprofunde || []).forEach(([n, u]) => {
+      ok(n, `${m.id}: aprofunde sem nome`);
+      if (!/^[a-z0-9][a-z0-9/_-]*\.html(?:#[A-Za-z0-9_-]+)?$/.test(u)) { erros.push(`${m.id}: aprofunde deve ser caminho relativo .html: ${u}`); return; }
+      const [arq, ancora] = u.split('#'); const caminho = new URL('../' + arq, import.meta.url);
+      if (!existsSync(caminho)) { erros.push(`${m.id}: aprofunde aponta para página inexistente ${arq}`); return; }
+      if (ancora) ok(readFileSync(caminho, 'utf8').includes(`id="${ancora}"`), `${m.id}: âncora #${ancora} não existe em ${arq}`);
+      aprofunde++;
+    });
   });
+  ok(f.missoes.some(m => m.aprofunde && m.aprofunde.length), `${f.id}: a fase precisa de ao menos uma missão com "aprofunde" (ponte para o conteúdo do site)`);
   ok(f.checkpoint.length === 3, `${f.id}: checkpoint deve ter 3 questões`);
   f.checkpoint.forEach(q => {
     unico(q.id); ok(q.id.startsWith(f.id + '-Q'), `${q.id}: prefixo errado`);
@@ -43,6 +54,6 @@ ok(Math.max(...dist) - Math.min(...dist) <= 2, `distribuição do gabarito deseq
 ok(T.niveis.every((l, i) => i === 0 || l.xp > T.niveis[i - 1].xp), 'níveis devem ter XP crescente');
 
 const missoes = T.fases.reduce((s, f) => s + f.missoes.length, 0);
-console.log(`${T.fases.length} fases, ${missoes} missões, ${n} questões | gabarito A=${dist[0]} B=${dist[1]} C=${dist[2]} D=${dist[3]}`);
+console.log(`${T.fases.length} fases, ${missoes} missões, ${aprofunde} links para o site, ${n} questões | gabarito A=${dist[0]} B=${dist[1]} C=${dist[2]} D=${dist[3]}`);
 if (erros.length) { console.error('FALHOU:\n- ' + erros.join('\n- ')); process.exit(1); }
 console.log('OK');

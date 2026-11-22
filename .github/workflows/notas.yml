@@ -57,14 +57,21 @@ jobs:
         with:
           node-version: '20'
       - name: Gerar Teia
+        # NOTAS_BLOQUEIO: termos da empresa (domínios, hostnames, contas) que retêm a nota; ver tools/producao-lib.mjs
+        env:
+          NOTAS_BLOQUEIO: ${{ secrets.NOTAS_BLOQUEIO }}
         run: node tools/build-notas.mjs
       - name: Gerar Artigos (e a lista de notas)
         run: node tools/build-artigos.mjs
+      - name: SEO e sitemap (notas e artigos entram e saem do site)
+        run: node tools/seo.mjs
       - name: Testes das páginas geradas (se falhar, nada é publicado)
         run: |
           node tests/validar-artigos.mjs
           node tests/validar-segredos.mjs
+          node tests/validar-producao.mjs
           node tests/validar-teia-layout.mjs
+          node tests/validar-seo.mjs
       - name: Commit se houver mudanças
         run: |
           git config user.name  "github-actions[bot]"
@@ -73,7 +80,7 @@ jobs:
           if ! ls notas/*.html >/dev/null 2>&1; then
             echo "Pasta notas/ vazia — nada a publicar, abortando."; exit 0
           fi
-          git add teia-data.js teia.html notas/ artigos.html artigo-*.html
+          git add teia-data.js teia.html notas/ artigos.html artigo-*.html sitemap.xml
           if git diff --staged --quiet; then
             echo "Sem mudanças na Teia."
           else

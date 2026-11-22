@@ -171,7 +171,10 @@ function renderPhase() {
         h('label', { for: 'cb-' + m.id, class: 'mt' }, m.titulo), ' ',
         h('span', { class: 'chip ' + m.tipo }, tipo), ' ', h('span', { class: 'chip xp' }, `+${T.xp[m.tipo]} XP`),
         h('p', { id: 'ds-' + m.id }, m.descricao),
-        m.links.length ? h('div', { class: 'links' }, ...m.links.map(([n, u]) => ext(u, n))) : null)));
+        m.links.length ? h('div', { class: 'links' }, ...m.links.map(([n, u]) => ext(u, n))) : null,
+        // "aprofunde": páginas do próprio site (mesma aba), a ponte entre a trilha e o conteúdo especializado
+        m.aprofunde && m.aprofunde.length ? h('div', { class: 'links' }, h('span', { class: 'mut small' }, 'Aprofunde no site:'),
+          ...m.aprofunde.map(([n, u]) => h('a', { href: u }, n))) : null)));
   });
   box.append(h('h3', null, `Checkpoint (+${T.xp.questao} XP por acerto)`),
     h('p', { class: 'mut small' }, 'Cada questão pode ser respondida uma única vez. Leia a explicação: ela vale mais que o ponto.'));

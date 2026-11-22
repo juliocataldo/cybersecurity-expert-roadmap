@@ -10,12 +10,13 @@ import { createHash } from 'node:crypto';
 import { esc, mdToHtml, mdInline } from './markdown-lib.mjs';
 import { hash } from './bump-css.mjs';
 import { lerArtigos, validarArtigo, lerTeia, notasParaLista, renderNotas } from './artigos-lib.mjs';
+import { aplicarSeo } from './seo-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'styles.css'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // cache-busting do CSS (ver tools/bump-css.mjs)
 const TEMAV = createHash('sha1').update(readFileSync(join(ROOT, 'tema.js'), 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8); // versão do tema.js (claro/escuro)
 const base = readFileSync(join(ROOT, 'canivete.html'), 'utf8').split(/\r?\n/);
-const ICON = base[9];
+const ICON = base.find(l => l.startsWith('<link rel="icon"')); // pelo conteúdo, não pela posição (o bloco de SEO muda a contagem de linhas)
 const FOOT = base.find(l => l.startsWith('<footer'));
 const CSP = "default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'";
 
@@ -92,7 +93,7 @@ ${mdToHtml(a.body, a.titulo, () => null).split('\n').map(l => '    ' + l).join('
 
 const atuais = new Set(artigos.map(a => `artigo-${a.slug}.html`));
 for (const f of readdirSync(ROOT).filter(n => /^artigo-.+\.html$/.test(n) && !atuais.has(n))) unlinkSync(join(ROOT, f)); // artigo despublicado some
-for (const a of artigos) writeFileSync(join(ROOT, `artigo-${a.slug}.html`), paginaArtigo(a));
+for (const a of artigos) writeFileSync(join(ROOT, `artigo-${a.slug}.html`), aplicarSeo(paginaArtigo(a), `artigo-${a.slug}.html`));
 
 /* ---------- artigos.html: estudos de caso + notas da Teia ---------- */
 // artigo com "listar: false" continua publicado (a página existe), mas não entra na lista; sem nenhum listado, a seção some
@@ -129,5 +130,5 @@ ${listados.length ? `
   </section>
 </main>
 ` + rodape.replace('</body>', `<script src="guia.js?v=${hash(join(ROOT, 'guia.js'))}"></script>\n</body>`); // guia.js traz o filtro de busca ([data-tf])
-writeFileSync(join(ROOT, 'artigos.html'), PAGINA);
+writeFileSync(join(ROOT, 'artigos.html'), aplicarSeo(PAGINA, 'artigos.html'));
 console.log(`artigos.html gerado | ${listados.length} artigo(s) listado(s) de ${artigos.length} publicado(s) | ${notas.length} nota(s) (${teia.fonte})`);

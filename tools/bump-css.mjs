@@ -13,8 +13,9 @@ const RAIZ = fileURLToPath(new URL('..', import.meta.url));
 /** Hash do conteúdo com finais de linha normalizados (igual no Windows e no Linux). */
 export const hash = arquivo => createHash('sha1').update(readFileSync(arquivo, 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 8);
 export const versaoCss = () => hash(RAIZ + 'styles.css');
-export const RE_LINK = /href="((?:\.\.\/)?)styles\.css(?:\?v=[0-9a-f]+)?"/g;
-export const RE_SCRIPT = /(<script src=")((?:\.\.\/)?)([a-z0-9-]+\.js)(?:\?v=[0-9a-f]+)?(")/g;
+// o prefixo aceita "../" (subpastas) e "/" (a 404, servida em qualquer caminho)
+export const RE_LINK = /href="((?:\.\.\/|\/)?)styles\.css(?:\?v=[0-9a-f]+)?"/g;
+export const RE_SCRIPT = /(<script src=")((?:\.\.\/|\/)?)([a-z0-9-]+\.js)(?:\?v=[0-9a-f]+)?(")/g;
 
 /** Reescreve os links de CSS e de scripts locais com o hash atual de cada arquivo. */
 export function versionar(html, raiz = RAIZ) {
