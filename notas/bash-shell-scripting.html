@@ -42,7 +42,7 @@
   <article class="sec-g prose">
     <h1>Bash Shell Scripting</h1>
     <p class="nota-tags"><span class="nota-tag">#linux</span> <span class="nota-tag">#os</span></p>
-    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <span class="wl-missing">Code</span> <span class="wl-missing">Hacking</span></p>
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <a href="code.html" class="wl">Code</a> <a href="hacking.html" class="wl">Hacking</a></p>
 <h3>List of shells which are available with your operating system, use this command:</h3>
 <p><code>` shell cat /etc/shells` # /etc/shells: valid login shells /bin/sh /bin/bash /usr/bin/bash /bin/rbash /usr/bin/rbash /bin/dash /usr/bin/dash /usr/bin/tmux /usr/bin/screen`</code>`</p>
 <h3>Creating your shell</h3>
@@ -51,11 +51,11 @@
 <p><code>` shell #! /bin/bash s=&quot;Hello word!&quot; echo &quot;$s&quot;`</code>`</p>
 <p>The output is:<br>`Hello Word!</p>
 <p>You need to change the permission, look here:</p>
-<p><code>` shell jayce@ADMND8960546570:~/docs/study/shell$ ls -lrt  -rw-r--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
+<p><code>` shell jayce@lab:~/docs/study/shell$ ls -lrt  -rw-r--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
 <p>Use this command to change de file permission to have execution mode to user:</p>
 <p><code>` shell chmod u+x myfirstshell.sh`</code>`</p>
 <p>And now:</p>
-<p><code>` shell jayce@ADMND8960546570:~/docs/study/shell$ ls -lrt total 0 -rwxr--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
+<p><code>` shell jayce@lab:~/docs/study/shell$ ls -lrt total 0 -rwxr--r-- 1 jayce jayce 40 Jul  9 10:04 myfirstshell.sh`</code>`</p>
 <h3>Variables</h3>
 <p>Simple variable<br>X = 4</p>
 <p>We created a variable called X and in that we stored a value called for 4.</p>
@@ -103,11 +103,11 @@ EOF
 </code></pre>
 <p>The <code>b.txt</code> file contains <code>bar</code> and <code>baz</code> lines.</p>
 <h4>4. Example</h4>
-<p><code>`bash jayce@ADMND8960546570:~/docs/study/shell$ cat &lt;&lt; EOF &gt; multiline.txt &gt; Line 1 &gt; Line 2 &gt; Line 3 &gt; EOF jayce@ADMND8960546570:~/docs/study/shell$ cat multiline.txt Line 1 Line 2 Line 3 jayce@ADMND8960546570:~/docs/study/shell$ cat &lt;&lt; EOF | grep 2 &gt; multiline_secondline.txt Line 1 Line 2 Line 3 EOF jayce@ADMND8960546570:~/docs/study/shell$ cat multiline_secondline.txt Line 2</code>`</p>
+<p><code>`bash jayce@lab:~/docs/study/shell$ cat &lt;&lt; EOF &gt; multiline.txt &gt; Line 1 &gt; Line 2 &gt; Line 3 &gt; EOF jayce@lab:~/docs/study/shell$ cat multiline.txt Line 1 Line 2 Line 3 jayce@lab:~/docs/study/shell$ cat &lt;&lt; EOF | grep 2 &gt; multiline_secondline.txt Line 1 Line 2 Line 3 EOF jayce@lab:~/docs/study/shell$ cat multiline_secondline.txt Line 2</code>`</p>
 <h3>Using #!/usr/bin/env bash</h3>
 <p><b>It is also a shebang line used in script files to execute commands with a bash shell</b>. the difference is it uses the env command to display the environment variable present in the system, then executes commands with a defined interpreter.system, then executes commands with a defined interpreter. The env command works by instructing the system to look for specifies interpreters through the $PATH variable and use the first occurrence found. </p>
 <h3>String Operations</h3>
-<p><code>`Unix jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo $MYVARIABLE Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$HOSTNAME&quot; Are you safe?ADMND8960546570 jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$USER&quot; Are you safe?jayce jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE^^}&quot; ARE YOU SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE,,}&quot; are you safe? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; | tr [a-z] [A-Z] ARE YOU SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE/safe/SAFE}&quot; Are you SAFE? jayce@ADMND8960546570:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; |sed s/safe/SAFE/g Are you SAFE?</code>`</p>
+<p><code>`Unix jayce@lab:~/docs/study/shell/compressed_files$ echo $MYVARIABLE Are you safe? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; Are you safe? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$HOSTNAME&quot; Are you safe?lab jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE$USER&quot; Are you safe?jayce jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; Are you safe? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE^^}&quot; ARE YOU SAFE? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE,,}&quot; are you safe? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;$MYVARIABLE&quot; | tr [a-z] [A-Z] ARE YOU SAFE? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE/safe/SAFE}&quot; Are you SAFE? jayce@lab:~/docs/study/shell/compressed_files$ echo &quot;${MYVARIABLE}&quot; |sed s/safe/SAFE/g Are you SAFE?</code>`</p>
 <h2>Set command - Debbug</h2>
 <p>set -e -&gt; Exit Script if any command fails<br>set -n -&gt; No Execution, Purely for syntax check.<br>set -x -&gt; Prints the command before executinf it in scrip#set -n</p>
 <p><code>` Unix #!/usr/bin/bash #Script criado para treinar Debug #set -e #--&gt; Exit Script if any command fails #set -n #--&gt; No Execution, Purely for syntax check. #set -x #--&gt; Prints the command before executinf it in scrip#set -n user=$(whoami) echo &quot;Path directory&quot; pwd echo &quot;Date&quot; date echo &quot;------&quot; read -p &quot;Your name: &quot; name read -p &quot;Your age: &quot; echo &quot;Your age is $REPLY&quot; user=$(whoami) echo &quot;${user^^} welcome in the Hacker World. Are you safe, $name?&quot;</code>`</p>
@@ -184,7 +184,7 @@ done
 <p>redirects standard output (<code>stdout</code>) to <code>/dev/null</code>, which discards it.</p>
 <pre><code>&gt;&gt; /dev/null
 </code></pre>
-    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="shell-script.html">Shell Script</a></li></ul></div>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="code.html">Code</a></li><li><a href="shell-script.html">Shell Script</a></li><li><a href="hacking.html">Hacking</a></li></ul></div>
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>

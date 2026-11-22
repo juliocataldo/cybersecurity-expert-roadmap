@@ -67,10 +67,10 @@
 <p>`docker -v | cut -d &quot; &quot; -f 3 | tr -d &quot;,&quot; = Command to show just the docker version, and the TR deletes the ,</p>
 <p>Exemple using <b>AWK + TR</b><br><code>` Unix # systemctl status docker | awk '/Active {print}' Active: active (running) since Sun 2020-08-16 # systemctl status docker | awk '/Active {print $3}' (running) # systemctl status docker | awk '/Active {print $3}' | tr -d &quot;(&quot; | tr -d &quot;)&quot; running # systemctl status docker | awk '/Active {print $3}' | tr -d &quot;[()]&quot; running</code>`</p>
 <p>Example using TR with Sting Usage:</p>
-<pre><code>jayce@ADMND8960546570:~/docs/study/shell$ echo &quot;Hello Word!&quot; | tr [a-z] [A-Z]
+<pre><code>jayce@lab:~/docs/study/shell$ echo &quot;Hello Word!&quot; | tr [a-z] [A-Z]
 HELLO WORD!
 
-jayce@ADMND8960546570:~/docs/study/shell$ tr [a-z] [A-Z] &lt;&lt;&lt; &quot;Hello Word!&quot;
+jayce@lab:~/docs/study/shell$ tr [a-z] [A-Z] &lt;&lt;&lt; &quot;Hello Word!&quot;
 HELLO WORD!
 </code></pre>
 <p>ls -lrt &gt; ls_out.txt --&gt; Just record the output inside the file<br>ls -lrt | tee ls_out.txt --&gt; Record the output in my screen and inside the file</p>

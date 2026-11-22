@@ -42,7 +42,7 @@
   <article class="sec-g prose">
     <h1>DNSSEC</h1>
     <p class="nota-tags"><span class="nota-tag">#network</span> <span class="nota-tag">#security</span></p>
-    <p>Skills: <span class="wl-missing">Network</span></p>
+    <p>Skills: <a href="network.html" class="wl">Network</a></p>
 <h2>Como funciona o DNSSEC</h2>
 <p>O DNS (sistema de nomes de domínio) costuma ser considerado como a lista telefônica da internet, dizendo aos computadores para onde enviar e onde recuperar informações. Infelizmente, também aceita qualquer endereço que lhe for oferecido, sem questionar.</p>
 <p>Os servidores de e-mail usam o DNS para rotear suas mensagens, o que significa que ficam vulneráveis a problemas de segurança na infraestrutura do DNS. Em setembro de 2014, pesquisadores da CMU encontraram e-mails supostamente enviados pelos servidores do Yahoo!, Hotmail e Gmail que, na verdade, estavam vindo de servidores de e-mail não autorizados. Os invasores estavam explorando uma vulnerabilidade muito antiga do DNS (Sistema de Nomes de Domínio): o sistema não verifica as credenciais antes de aceitar uma resposta.</p>
@@ -79,7 +79,7 @@
 <p>No entanto, quando finalmente chegamos à zona raiz do DNS, temos um problema: não há registro DS mãe frente ao qual validar. É aqui que vemos um lado muito humano da internet global.</p>
 <p>Na Cerimônia de Assinatura da Zona Raiz, vários indivíduos selecionados de todo o mundo se reúnem e assinam o RRSet do DNSKEY raiz de uma forma muito pública e altamente auditada. A cerimônia produz um registro RRSIG que pode ser usado para verificar a KSK e a ZSK públicas do nameserver raiz. Ao invés de confiar na KSK pública por conta do registro DS da mãe, <i>presumimos</i> que ela é válida porque confiamos nos procedimentos de segurança em torno do acesso à KSK privada.</p>
 <p>A capacidade de estabelecer confiança entre as zonas mãe e filha é uma parte integrante do DNSSEC. Se alguma parte da cadeia for violada, não poderemos confiar nos registros que estamos solicitando porque um man-in-the-middle poderia alterar os registros e nos direcionar para qualquer endereço de IP que quisesse.</p>
-    
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="network.html">Network</a></li></ul></div>
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>

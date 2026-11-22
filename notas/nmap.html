@@ -42,7 +42,7 @@
   <article class="sec-g prose">
     <h1>Nmap</h1>
     <p class="nota-tags"><span class="nota-tag">#offsec</span> <span class="nota-tag">#tools</span></p>
-    <p>Type: <a href="linux.html" class="wl">Linux</a> <a href="cyber.html" class="wl">Cyber</a><br>Skills: <span class="wl-missing">Code</span> <span class="wl-missing">Hacking</span></p>
+    <p>Type: <a href="linux.html" class="wl">Linux</a> <a href="cyber.html" class="wl">Cyber</a><br>Skills: <a href="code.html" class="wl">Code</a> <a href="hacking.html" class="wl">Hacking</a></p>
 <p>Nmap is a free port scanning software developed by Gordon Lyon, self-proclaimed hacker &quot;Fyodor&quot;. It is widely used to assess computer security, and to discover services or servers on a computer network. It can e used in <a href="linux.html" class="wl">Linux</a>.</p>
 <h3>Commands</h3>
 <ol><li><b>Simple Scan</b>: This command performs a basic scan on the target host or network, identifying open ports and services.</li></ol>
@@ -69,10 +69,10 @@
 <p>==<code>nmap -oN &lt;outputfile&gt; &lt;target&gt;</code></p>
 <ol><li><b>scan TCP SYN</b></li></ol>
 <p>O scan SYN é a opção de scan padrão e mais popular por boas razões. Pode ser executada rapidamente, escaneando milhares de portas por segundo em uma rede rápida, não bloqueada por firewalls intrusivos. O scan SYN é relativamente não-obstrusivo e camuflado, uma vez que ele nunca completa uma conexão TCP. Ele também trabalha contra qualquer pilha TCP padronizada ao invés de depender de idiossincrasias de plataformas específicas como os scans Fin/Null/Xmas, Maimon e Idle fazem. Ele também permite uma diferenciação limpa e confiável entre os estados <code>aberto (open)</code>, <code>fechado (closed)</code>, e <code>filtrado (filtered)</code>.</p>
-<p>==`nmap -sS -p 80,443 189.39.64.216</p>
+<p>==`nmap -sS -p 80,443 203.0.113.10</p>
 <ol><li><b>It tells nmap not to send ICMP echo requests</b></li></ol>
 <p>This option disables host discovery and assumes that all specified targets are online. </p>
-<p>==`nmap -Pn -p 80,443 189.39.64.216</p>
+<p>==`nmap -Pn -p 80,443 203.0.113.10</p>
 <p>ENGANANDO O PENTEST NO REASON (CONFIGURAÇÃO DO FIREWALL)<br>==<code>nmap -sS -p 80 -Pn 172.16.1.5 --reason</code></p>
 <pre><code>SCAN TECHNIQUES:
   -sS/sT/sA/sW/sM: TCP SYN/Connect()/ACK/Window/Maimon scans
@@ -101,7 +101,7 @@
 <p>And there you go! You have your list of live hosts on the network and can begin port scanning them. This will save you lots of time. It is worth mentioning that it is a good idea to combine this scan with querying DNS, just in case some hosts block ICMP altogether. You can gather DNS info with the below commands:  </p>
 <p>dig -x &lt;IP&gt; @&lt;DNS_IP&gt;  <br>dig ANY &lt;DOMAIN&gt; @&lt;DNS_IP&gt;</p>
 <p>===========</p>
-    
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="code.html">Code</a></li><li><a href="hacking.html">Hacking</a></li><li><a href="scanning-enumeration.html">Scanning &amp; enumeration</a></li></ul></div>
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>

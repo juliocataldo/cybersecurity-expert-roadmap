@@ -42,7 +42,7 @@
   <article class="sec-g prose">
     <h1>Tcpdump &amp; SSLdump</h1>
     <p class="nota-tags"><span class="nota-tag">#offsec</span> <span class="nota-tag">#tools</span></p>
-    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <span class="wl-missing">Network</span></p>
+    <p>Type: <a href="linux.html" class="wl">Linux</a> #Linux<br>Skills: <a href="network.html" class="wl">Network</a></p>
 <h2>Tcpdump Commands – A Network Sniffer Tool</h2>
 <p><b>tcpdump</b> is a most powerful and widely used command-line packets sniffer or package analyzer tool which is used to capture or filter <b>TCP/IP</b> packets that are received or transferred over a network on a specific interface.</p>
 <h3>How to Install tcpdump in Linux</h3>
@@ -75,7 +75,7 @@
 <h4>12. Capture Packets from destination IP</h4>
 <p><code>`Unix tcpdump -i eth0 dst 50.116.66.139</code>`</p>
 <h4>13. Verbose capture - IP both sides</h4>
-<p><code>`Unix tcpdump -nni 0.0 -vvv host 177.32.240.218 -s 0 -w /var/log/LOG.pcap  ##To save packets in a file tcpdump -nni 0.0 -vvv host 177.32.240.218 and port 443</code>`</p>
+<p><code>`Unix tcpdump -nni 0.0 -vvv host 198.51.100.25 -s 0 -w /var/log/LOG.pcap  ##To save packets in a file tcpdump -nni 0.0 -vvv host 198.51.100.25 and port 443</code>`</p>
 <h4>14.  To examine server-side traffic from one client</h4>
 <p><code>` Unix tcpdump -vvv -s 0 -nni 0.0 -w /var/tmp/www-ssl-server.cap host 192.168.22.33 and net 10.1.1.0/24 and port 8080</code>`</p>
 <ul><li><b>-vvv</b> Maximum verbosity</li><li><b>-s</b> Snaplength (0 captures full packets)</li><li><b>-nn</b> Do not resolve host or service names</li><li><b>-i</b> Interface - can be ifname or vlan name</li><li><b>-w</b> Write output to file</li></ul>
@@ -115,8 +115,8 @@ tcpdump -vnr portscan.pcap src host 192.168.0.104 | cut -d &quot;,&quot; -f1 | g
 </code></pre>
 <h4>Estudo técnico: Ping Sweep</h4>
 <p>TCPDUMP para escutar o que está acontecendo</p>
-<p><code>tcpdump -cn -i tun0 host 172.90.0.151 and 172.16.1.5 -e #-e para visualizar 'real time' # SSLDUMP _ssldump_ is an SSL/TLS network protocol analyzer. It identifies TCP connections on the chosen network interface and attempts to interpret them as SSL/TLS traffic. When it identifies SSL/TLS traffic, it decodes the records and displays them in a textual form to stdout. If provided with the appropriate keying material, it will also decrypt the connections and display the application data traffic. #### To listen to traffic on interface _le0_ port _443_</code>`Unix<br>ssldump -i eth0 port 443<br><code>` #### To listen traffic to the server _romeo_ on port _443_.</code>`Unix<br>ssldump -i le0 port 443 and host romeo<br><code>` #### To listen traffic from any host</code>`Unix<br>ssldump -i any host 177.32.240.218<br>````</p>
-    
+<p><code>tcpdump -cn -i tun0 host 172.90.0.151 and 172.16.1.5 -e #-e para visualizar 'real time' # SSLDUMP _ssldump_ is an SSL/TLS network protocol analyzer. It identifies TCP connections on the chosen network interface and attempts to interpret them as SSL/TLS traffic. When it identifies SSL/TLS traffic, it decodes the records and displays them in a textual form to stdout. If provided with the appropriate keying material, it will also decrypt the connections and display the application data traffic. #### To listen to traffic on interface _le0_ port _443_</code>`Unix<br>ssldump -i eth0 port 443<br><code>` #### To listen traffic to the server _romeo_ on port _443_.</code>`Unix<br>ssldump -i le0 port 443 and host romeo<br><code>` #### To listen traffic from any host</code>`Unix<br>ssldump -i any host 198.51.100.25<br>````</p>
+    <div class="nota-back"><p class="path-k">Mencionada em</p><ul><li><a href="network.html">Network</a></li></ul></div>
     <p class="art-meta art-foot">Nota do meu segundo cérebro (Obsidian), publicada aqui. Conteúdo próprio.</p>
   </article>
 </main>
