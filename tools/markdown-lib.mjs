@@ -4,6 +4,7 @@ import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 export const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const unesc = s => s.replace(/&quot;/g, '"').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
 export const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 64) || 'nota';
 
@@ -61,10 +62,11 @@ export function mdToHtml(md, noteTitle, resolve) {
     // embeds de imagem do Obsidian (![[foto.png]]): ainda não publicamos imagens, então são omitidos (sem sobrar texto quebrado)
     t = t.replace(/!\[\[[^\]]+?\.(?:png|jpe?g|gif|webp|svg|bmp|avif)(?:\|[^\]]*)?\]\]/gi, '');
     t = t.replace(/!(\[\[[^\]]+\]\])/g, '$1'); // ![[Outra nota]] (incorporar nota): vira um link comum
-    // wikilinks [[Nota]] ou [[Nota|texto]]
+    // wikilinks [[Nota]] ou [[Nota|texto]]; o texto já veio escapado (esc(t) acima): o alvo volta ao original
+    // para achar a nota (ex.: "Tcpdump & SSLdump") e o rótulo não é escapado de novo (viraria &amp;amp;)
     t = t.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, target, alias) => {
-      const r = resolve(target.trim());
-      const label = esc((alias || target).trim());
+      const r = resolve(unesc(target.trim()));
+      const label = (alias || target).trim();
       return r ? `<a href="${r}" class="wl">${label}</a>` : `<span class="wl-missing">${label}</span>`;
     });
     // link interno do próprio site: só caminho relativo .html, com âncora opcional (nada de esquema, // ou ..)
