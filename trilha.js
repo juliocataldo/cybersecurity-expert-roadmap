@@ -332,7 +332,7 @@ const TRILHA = {
       { id: 'F07-M6', tipo: 'pratica', titulo: 'Desafios de Blue Team',
         descricao: 'Resolva um desafio gratuito de investigação no CyberDefenders ou no LetsDefend e escreva um mini-relatório.',
         aprofunde: [['Entrevista DFIR: cenários', 'entrevista-dfir.html#dfir-cenarios']],
-        links: [['CyberDefenders', 'https://cyberdefenders.org/'], ['LetsDefend', 'https://letsdefend.io/']] }
+        links: [['Lab: análise de phishing (cabeçalho de e-mail)', 'https://github.com/juliocataldo/lab-phishing'], ['CyberDefenders', 'https://cyberdefenders.org/'], ['LetsDefend', 'https://letsdefend.io/']] }
     ],
     checkpoint: [
       { id: 'F07-Q1', p: 'Um alerta dispara, mas a atividade é legítima e documentada. Ele é um:',
@@ -370,7 +370,7 @@ const TRILHA = {
         links: [['TryHackMe', 'https://tryhackme.com/']] },
       { id: 'F08-M5', tipo: 'estudo', titulo: 'Engenharia social e phishing',
         descricao: 'Faça o quiz de phishing do Google e anote os sinais que você deixou passar. Engenharia social é o vetor mais comum de acesso inicial.',
-        aprofunde: [['Nota: Engenharia Social', 'notas/engenharia-social.html'], ['Notícia comentada: a entrevista falsa da Binance', 'noticias.html#binance-entrevista-falsa-2026-11']],
+        aprofunde: [['Nota: análise de phishing pelo cabeçalho', 'notas/analise-de-phishing-pelo-cabecalho-do-e-mail.html'], ['Nota: Engenharia Social', 'notas/engenharia-social.html'], ['Notícia comentada: a entrevista falsa da Binance', 'noticias.html#binance-entrevista-falsa-2026-11']],
         links: [['Phishing Quiz (Google)', 'https://phishingquiz.withgoogle.com/']] },
       { id: 'F08-M6', tipo: 'pratica', titulo: 'Agora sim: monte o Kali numa rede isolada',
         descricao: 'Baixe a imagem oficial do Kali (confira o hash SHA256) e coloque-a numa rede host-only, junto com a VM alvo. O Kali só alcança o alvo e a internet para se atualizar, nunca a rede de casa ou da faculdade.',
