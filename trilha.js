@@ -289,7 +289,7 @@ const TRILHA = {
         links: [['threat-modeling-lab', 'https://github.com/juliocataldo/threat-modeling-lab']] },
       { id: 'F06-M6', tipo: 'chefao', titulo: 'Chefão: Supply Chain Lab',
         descricao: 'Revise 7 pull requests de dependências e decida o que aceitar, rejeitar ou investigar. Lab da disciplina, sem nota.',
-        aprofunde: [['DevSecOps: ferramentas de supply chain', 'devsecops/ferramentas.html#f-supply'], ['DevSecOps: gates do pipeline', 'devsecops/pipeline.html#dso-gates']],
+        aprofunde: [['Estudo de caso: o backdoor no xz-utils', 'artigo-xz-utils.html'], ['DevSecOps: ferramentas de supply chain', 'devsecops/ferramentas.html#f-supply'], ['DevSecOps: gates do pipeline', 'devsecops/pipeline.html#dso-gates']],
         links: [['supply-chain-lab', 'https://github.com/juliocataldo/supply-chain-lab']] }
     ],
     checkpoint: [

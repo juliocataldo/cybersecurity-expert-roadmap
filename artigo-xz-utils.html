@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Estudo de caso do CVE-2024-3094: como o backdoor no xz-utils foi plantado com engenharia social, escondido no tarball de release e descoberto por acaso, e o que ele ensina sobre supply chain.">
+<title>Backdoor no xz-utils · Cyber Expert Guide</title>
+<!-- seo -->
+<link rel="canonical" href="https://www.juliocataldo.dev/artigo-xz-utils.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cyber Expert Guide">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Backdoor no xz-utils · Cyber Expert Guide">
+<meta property="og:description" content="Estudo de caso do CVE-2024-3094: como o backdoor no xz-utils foi plantado com engenharia social, escondido no tarball de release e descoberto por acaso, e o que ele ensina sobre supply chain.">
+<meta property="og:url" content="https://www.juliocataldo.dev/artigo-xz-utils.html">
+<meta property="og:image" content="https://www.juliocataldo.dev/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cyber Expert Guide: roadmap de cibersegurança em português, por Julio Cataldo">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /seo -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23cf6a24'%3EJC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css?v=a6787c14">
+<script src="tema.js?v=733e83a3"></script>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="./">CYBER<span>/</span>EXPERT GUIDE</a>
+  <nav aria-label="Seções">
+    <a href="./">Home</a>
+    <a href="guia.html">Guia</a>
+    <a href="trilhas.html">Trilhas</a>
+    <a href="artigos.html" aria-current="page">Notas</a>
+    <details class="nav-group">
+      <summary>Recursos</summary>
+      <div class="nav-menu">
+        <span class="nav-sub">Ferramentas</span>
+        <a href="canivete.html">Canivete suíço</a>
+        <a href="solucoes.html">HUB Sec</a>
+        <a href="plataformas.html">Plataformas</a>
+        <a href="checklist.html">Checklist</a>
+        <a href="glossario.html">Glossário</a>
+        <span class="nav-sub">Atualização</span>
+        <a href="radar.html">Radar</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="eventos.html">Eventos</a>
+      </div>
+    </details>
+    <a href="busca.html">Buscar</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="sugestoes.html">Sugestões</a>
+  </nav>
+</header>
+<main class="wrap">
+  <p class="crumb"><a href="artigos.html">&larr; Notas</a></p>
+  <article class="sec-g prose">
+    <p class="eyebrow">Artigo · estudo de caso</p>
+    <h1>O backdoor no xz-utils: meio segundo que salvou a internet</h1>
+    <p class="art-meta">Leitura de ~8 min · tema: supply chain de software e open source. Baseado no aviso original de <a href="https://www.openwall.com/lists/oss-security/2024/03/29/4" target="_blank" rel="noopener noreferrer">Andres Freund (oss-security, 29/03/2024)</a> e na <a href="https://research.swtch.com/xz-timeline" target="_blank" rel="noopener noreferrer">linha do tempo de Russ Cox</a>.</p>
+
+    <p>Em março de 2024, um engenheiro chamado Andres Freund percebeu que o login por SSH numa máquina de testes estava um pouco mais lento: cerca de meio segundo a mais, e com o processador trabalhando mais do que devia. Muita gente ignoraria. Ele foi atrás e encontrou um <b>backdoor</b> plantado no xz-utils, uma biblioteca de compressão que está em praticamente toda distribuição Linux. O caso virou o <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-3094" target="_blank" rel="noopener noreferrer">CVE-2024-3094</a>, com nota máxima (10.0) no <a href="glossario.html#g-cvss">CVSS</a>.</p>
+    <p>O ataque não explorou um bug. Ele explorou <b>pessoas e processos</b>: levou mais de dois anos, mirou um projeto mantido por uma pessoa só e quase chegou às versões estáveis das principais distribuições. É o exemplo mais claro de ataque de <a href="glossario.html#g-supply-chain">supply chain</a> em open source até hoje.</p>
+    <h2>Como foi descoberto</h2>
+    <p>Freund trabalhava com PostgreSQL e fazia testes de desempenho no Debian <i>sid</i>, a versão de desenvolvimento do Debian. Ele notou três coisas que não fechavam:</p>
+    <ul><li>logins por SSH, mesmo com usuário inexistente, gastando CPU demais;</li><li>um login que levava cerca de 0,3 segundo passando a levar 0,8 segundo;</li><li>erros estranhos do <code>valgrind</code>, uma ferramenta que procura problemas de memória.</li></ul>
+    <p>Ao rastrear a causa, ele chegou à <code>liblzma</code>, parte do xz-utils, nas versões <b>5.6.0</b> e <b>5.6.1</b>. Em 28 de março avisou o time de segurança do Debian e a lista privada das distribuições. No dia 29 publicou o aviso na lista <a href="https://www.openwall.com/lists/oss-security/2024/03/29/4" target="_blank" rel="noopener noreferrer">oss-security</a>, e a CISA emitiu um alerta no mesmo dia.</p>
+    <h2>Dois anos de engenharia social</h2>
+    <p>O xz-utils era mantido praticamente por uma pessoa, Lasse Collin, como trabalho voluntário. É o cenário que o atacante procurou.</p>
+    <ul><li><b>Outubro de 2021:</b> uma conta chamada <b>Jia Tan</b> manda a primeira contribuição, um arquivo de configuração inofensivo.</li><li><b>2022:</b> Jia Tan segue contribuindo com patches úteis. Ao mesmo tempo, outras contas (Jigar Kumar e Dennis Ens), sem histórico na comunidade e hoje tidas como parte da mesma operação, passam a cobrar o mantenedor em público: o projeto estaria parado, ele deveria passar a responsabilidade adiante. Uma das mensagens dizia que nada ia avançar &quot;enquanto não houver um novo mantenedor&quot;.</li><li><b>Final de 2022:</b> Jia Tan ganha acesso de commit ao repositório.</li><li><b>2023:</b> Jia Tan passa a publicar releases.</li><li><b>Fevereiro e março de 2024:</b> saem as versões 5.6.0 e 5.6.1, já com o backdoor.</li></ul>
+    <p>Repare no método: confiança construída devagar, com trabalho de verdade, e pressão sobre um voluntário cansado. É <a href="glossario.html#g-engenharia-social">engenharia social</a> aplicada a um projeto inteiro, não a uma pessoa clicando num link.</p>
+    <h2>Como o backdoor se escondia</h2>
+    <p>Sem entrar no funcionamento do payload, vale entender <b>onde</b> ele estava, porque é isso que muda a forma de defender:</p>
+    <ul><li><b>Nos arquivos de teste.</b> O código malicioso foi guardado, disfarçado, dentro de dois arquivos binários de teste (<code>.xz</code> e <code>.lzma</code>) commitados no repositório. Arquivo de teste binário quase ninguém revisa.</li><li><b>Só no pacote de release.</b> A peça que ativava tudo era uma linha num script de build (<code>build-to-host.m4</code>) que existia <b>apenas no tarball</b> publicado como release, e não no código do repositório git. Quem revisasse o git não via; quem baixasse o pacote &quot;oficial&quot;, recebia.</li><li><b>Num caminho indireto até o SSH.</b> O OpenSSH não usa a <code>liblzma</code>. Mas várias distribuições aplicam um patch no OpenSSH para integrá-lo ao systemd, e a <code>libsystemd</code> usa a <code>liblzma</code>. Por esse caminho, o código malicioso entrava no processo do <code>sshd</code> e interceptava a verificação de chaves RSA no login.</li><li><b>Só para o dono da chave.</b> Segundo as análises publicadas depois, o backdoor só obedecia a quem tivesse uma chave privada específica do atacante. Para qualquer outra pessoa, o SSH funcionava normalmente. Era um acesso remoto exclusivo, sem senha, a servidores do mundo todo.</li></ul>
+    <h2>Quem foi afetado</h2>
+    <p>Pouca gente, por sorte e por timing. As versões 5.6.0 e 5.6.1 tinham chegado principalmente a versões de teste e de desenvolvimento: Debian <i>sid</i> e <i>testing</i>, Fedora Rawhide e o beta do Fedora 40, openSUSE Tumbleweed e Kali, entre outras. As versões estáveis das grandes distribuições ainda não tinham recebido o pacote. A recomendação da CISA foi voltar para uma versão sem o código malicioso, como a 5.4.6.</p>
+    <p>Se o backdoor tivesse sobrevivido mais alguns meses, teria entrado nas versões estáveis e em milhões de servidores.</p>
+    <h2>O que aprender</h2>
+    <p><b>Se você mantém software:</b></p>
+    <ul><li><b>O que você publica precisa bater com o repositório.</b> Build reproduzível e geração do pacote de release pelo próprio pipeline, a partir do git, eliminam a diferença entre &quot;o que foi revisado&quot; e &quot;o que foi entregue&quot;.</li><li><b>Binário no repositório é ponto cego.</b> Arquivos de teste binários merecem a mesma desconfiança que código.</li><li><b>Acesso de mantenedor é privilégio.</b> Conceder commit e publicação a alguém é decisão de segurança, não só de comunidade.</li></ul>
+    <p><b>Se você consome software (ou seja, todo mundo):</b></p>
+    <ul><li><b>Saiba o que você usa.</b> Um <a href="glossario.html#g-sbom">SBOM</a> e uma ferramenta de <a href="glossario.html#g-sca">SCA</a> mostram em minutos se a versão afetada está no seu ambiente. Foi a primeira pergunta de todo time de segurança naquela sexta-feira.</li><li><b>Não rode o mais novo em produção só por ser novo.</b> O atraso entre o lançamento e a chegada às versões estáveis foi o que salvou a maioria dos servidores.</li><li><b>Dependência indireta também é dependência.</b> O SSH foi atingido por uma biblioteca que ele nem usava diretamente.</li></ul>
+    <p><b>Se você defende ambientes:</b></p>
+    <ul><li><b>Desempenho é sinal de segurança.</b> O alerta foi meio segundo de atraso e CPU alta. Monitorar o comportamento normal dos serviços críticos é o que permite notar o anormal.</li><li><b>Curiosidade é uma ferramenta.</b> Freund não estava caçando ameaças. Ele só não aceitou uma explicação que não fechava.</li></ul>
+    <p><b>Para todos:</b> boa parte da internet depende de projetos mantidos por poucas pessoas, de graça. Financiar, contribuir e dividir a manutenção desses projetos também é segurança.</p>
+    <h2>Para ir além</h2>
+    <ul><li>No glossário: <a href="glossario.html#g-supply-chain">supply chain</a>, <a href="glossario.html#g-sbom">SBOM</a>, <a href="glossario.html#g-sca">SCA</a> e <a href="glossario.html#g-devsecops">DevSecOps</a>.</li><li>No DevSecOps Expert Guide: as <a href="devsecops/ferramentas.html#f-supply">ferramentas de supply chain</a> e os <a href="devsecops/pipeline.html#dso-gates">gates do pipeline</a>.</li><li>Na trilha gamificada: o chefão de supply chain da <a href="trilha.html#F06">fase 06</a>.</li></ul>
+
+    <p class="art-meta art-foot">Fontes: <a href="https://www.openwall.com/lists/oss-security/2024/03/29/4" target="_blank" rel="noopener noreferrer">aviso de Andres Freund na oss-security</a>, <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-3094" target="_blank" rel="noopener noreferrer">CVE-2024-3094 no NVD</a>, <a href="https://www.cisa.gov/news-events/alerts/2024/03/29/reported-supply-chain-compromise-affecting-xz-utils-data-compression-library-cve-2024-3094" target="_blank" rel="noopener noreferrer">alerta da CISA</a> e <a href="https://research.swtch.com/xz-timeline" target="_blank" rel="noopener noreferrer">linha do tempo de Russ Cox</a>. Texto escrito do zero, com foco em defesa; não reproduz o funcionamento do payload.</p>
+  </article>
+</main>
+<footer class="site-foot"><div class="wrap"><p>&copy; 2026 Julio Cataldo. <span class="foot-quote">&ldquo;Dedicado a proteger as fronteiras digitais, atravessar o mundo cyber com resiliência e defender a segurança como pilar do nosso futuro digital.&rdquo;</span></p></div></footer>
+</body>
+</html>
