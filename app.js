@@ -34,7 +34,18 @@ function load() {
   try { const raw = localStorage.getItem(KEY); if (raw) { const o = sanitize(JSON.parse(raw)); if (o) return o; } } catch (e) { /* storage indisponível ou corrompido */ }
   return blank();
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* modo privado: segue sem persistir */ } }
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); localStorage.setItem(KEY_RESUMO, JSON.stringify(resumo())); } catch (e) { /* modo privado: segue sem persistir */ }
+}
+/* Resumo para o painel da home (home.js): só o necessário, sem carregar a trilha inteira na home. */
+const KEY_RESUMO = KEY + '-resumo';
+function resumo() {
+  const f = FASES.find(x => isOpen(x) && !isDone(x)) || [...FASES].reverse().find(isOpen) || FASES[0];
+  const prox = f.missoes.find(m => !S.done[m.id]);
+  const lv = levelOf(xpTotal());
+  return { v: 1, fase: f.id, n: FASES.indexOf(f), total: FASES.length - 1, titulo: f.titulo, proxima: prox ? prox.titulo : (quizAnswered(f) < f.checkpoint.length ? 'checkpoint da fase' : ''),
+    feitas: Object.keys(S.done).length, missoes: MISSOES.size, nivel: lv.cur.nome, concluida: FASES.every(isDone) };
+}
 
 /* Valida qualquer estado vindo de fora (localStorage ou arquivo importado): entrada não confiável. */
 function sanitize(o) {
@@ -302,4 +313,6 @@ updateUnlocks();
   selected = (fromHash || next).id;
 }
 render();
+// quem já tinha progresso antes do painel da home ganha o resumo na primeira visita
+if (Object.keys(S.done).length) { try { localStorage.setItem(KEY_RESUMO, JSON.stringify(resumo())); } catch (e) { /* sem storage */ } }
 if (!Object.keys(S.done).length && !Object.keys(S.quiz).length) openAbout();

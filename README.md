@@ -41,6 +41,8 @@ O site tem estas partes. A home organiza tudo em três caminhos (**Começar**, *
 
 **Links:** `node tests/validar-links-internos.mjs` confere offline todo link interno de todas as páginas (arquivo e âncora; `trilha.html#F05` vale se a fase existe). Os links externos são testados toda segunda pelo Action `links.yml` (`tools/verificar-links.mjs`, 8 conexões por vez): 404/410 ou nome sem endereço no DNS fazem o job falhar e o GitHub avisa por e-mail; site que recusa robôs (401/403/429/999) e erro de rede passageiro só aparecem no resumo do run. As notas da Teia ficam de fora.
 
+**Busca e painel de progresso:** `busca.html` busca em todo o site (páginas, seções com âncora, glossário, fases e missões da trilha, notas) a partir de um índice pronto, `busca-data.js`, gerado por `node tools/build-busca.mjs` (o Action das notas regera sozinho). As páginas atualizadas por outros Actions (Notícias, Radar, Eventos) entram só com título e descrição, para o índice não envelhecer a cada rodada. Na home, o campo de busca leva para `busca.html?q=` e o painel "Continue de onde parou" (`home.js`) lê um resumo que a trilha grava no navegador (`cyber-roadmap-v1-resumo`), tratado como entrada não confiável. `node tests/validar-busca.mjs` confere se o índice está em dia, se cada resultado aponta para página e âncora que existem e se nada monta HTML a partir de texto.
+
 ## Como usar a trilha
 1. Abra a **Trilha** e comece pela fase **00. Base de lançamento**.
 2. Cada fase tem **missões** (estudo, prática e chefões, que são os labs da disciplina) e um **checkpoint** de 3 questões.

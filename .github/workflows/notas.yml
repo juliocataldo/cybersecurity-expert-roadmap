@@ -65,6 +65,8 @@ jobs:
         run: node tools/build-artigos.mjs
       - name: SEO e sitemap (notas e artigos entram e saem do site)
         run: node tools/seo.mjs
+      - name: Índice da busca (notas entram na busca do site)
+        run: node tools/build-busca.mjs
       - name: Testes das páginas geradas (se falhar, nada é publicado)
         run: |
           node tests/validar-artigos.mjs
@@ -72,6 +74,7 @@ jobs:
           node tests/validar-producao.mjs
           node tests/validar-teia-layout.mjs
           node tests/validar-seo.mjs
+          node tests/validar-busca.mjs
       - name: Commit se houver mudanças
         run: |
           git config user.name  "github-actions[bot]"
@@ -80,7 +83,7 @@ jobs:
           if ! ls notas/*.html >/dev/null 2>&1; then
             echo "Pasta notas/ vazia — nada a publicar, abortando."; exit 0
           fi
-          git add teia-data.js teia.html notas/ artigos.html artigo-*.html sitemap.xml
+          git add teia-data.js teia.html notas/ artigos.html artigo-*.html sitemap.xml busca-data.js busca.html
           if git diff --staged --quiet; then
             echo "Sem mudanças na Teia."
           else
